@@ -1,0 +1,101 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    overflow: hidden;
+}
+
+/* 네비게이션 바 스타일 */
+.navbar {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    margin-left: 20px;
+    font-family: Arial, sans-serif;
+    transition: 0.3s;
+}
+
+.navbar a:hover {
+    color: #00ff0a;
+}
+
+/* 마우스를 따라다니는 파티클 스타일 */
+.particle {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    box-shadow: 0 0 10px white, 
+                0 0 20px white, 
+                0 0 40px white, 
+                0 0 60px white;
+    animation: fadeOut 1s linear forwards;
+}
+
+/* 파티클이 사라지는 애니메이션 */
+@keyframes fadeOut {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+
+/* 소개 섹션 스타일 */
+.about-content {
+    max-width: 800px;
+    margin: 100px auto;
+    padding: 20px;
+    color: white;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.about-content h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.about-content p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* 소셜 링크 스타일 */
+.social-links {
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+    text-align: center;
+}
+
+.social-links a {
+    color: white;
+    font-size: 18px;
+    text-decoration: none;
+    margin: 0 15px;
+    font-family: Arial, sans-serif;
+    transition: 0.3s;
+}
+
+.social-links a:hover {
+    color: #00ff0a;
+}
