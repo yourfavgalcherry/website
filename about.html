@@ -7,32 +7,101 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- 네비게이션 바 -->
-    <nav class="navbar">
-        <a href="index.html">Home</a>
-        <a href="projects.html">Projects</a>
-        <a href="blog.html">Blog</a>
-    </nav>
+<!-- 네비게이션 바 -->
+<nav class="navbar">
+    <a href="index.html">Home</a>
+    <div class="dropdown">
+        <a href="#" class="works-link">Works ▾</a>
+        <div class="dropdown-content">
+            <a href="works/projects.html">Projects</a>
+            <a href="works/commercials.html">Commercials</a>
+        </div>
+    </div>
+    <a href="blog.html">Blog</a>
+</nav>
 
-    <!-- 소개 텍스트 -->
-    <section class="about-content">
-        <h1>Chaery Yoon</h1>
-        <p>
-            Chaery Yoon is a visual artist and creative technologist specializing in interactive, real-time visuals and audio-visual experiences.
-            With a background in sculpture, she extends her practice into the digital realm, using tools such as AI, TouchDesigner, Unreal Engine, 
-            and sensors to craft immersive environments that respond to human interaction.
-        </p>
-        <p>
-            Synthesizing technology, humanities-based phenomena, and speculative narratives through worldbuilding methods, 
-            she focuses on creating sensory and emotional experiences that engage audiences.
-        </p>
-    </section>
+<!-- 소개 텍스트 -->
+<section class="about-content">
+    <h1>Chaery Yoon</h1>
 
-    <!-- 소셜 링크 -->
-    <footer class="social-links">
-        <a href="https://www.linkedin.com/in/cherryy" target="_blank">LinkedIn</a>
-        <a href="https://www.instagram.com/yourfavgalcherry" target="_blank">Instagram</a>
-        <a href="mailto:cheryyoun@gmail.com">Mail</a>
-    </footer>
+    <!-- Bio 내용 -->
+    <h2 class="bio-title">Bio</h2>
+    <p>
+        Chaery Yoon(She/Her) is a visual artist and creative technologist specializing in interactive, real-time visuals and audio-visual experiences.
+        With a background in sculpture, she extends her practice into the digital realm, using tools such as AI, TouchDesigner, Unreal Engine, 
+        and sensors to craft immersive environments that respond to human interaction.
+    </p>
+    <p>
+        Synthesizing technology, humanities-based phenomena, and speculative narratives through worldbuilding methods, 
+        she focuses on creating sensory and emotional experiences that engage audiences.
+    </p>
+
+    <!-- Publications, Exhibitions, Skills 내용 추가 -->
+
+    <h2 class="section-title">Exhibitions & Acts</h2>
+    <p>2025<br>MANIFEST:IO - 'Luminal' VR experience, DE</p>
+    <p>2024<br>AV Performance - Funkhaus, DE</p>
+    
+
+
+    <h2 class="section-title">Skills</h2>
+
+    <div class="skills">
+        <div class="skill">
+            <p class="skill-title">TouchDesigner</p>
+            <p class="skill-description">Real-time interactive media, generative art, OSC integration, hardware control.</p>
+        </div>
+        <div class="skill">
+            <p class="skill-title">Unreal Engine</p>
+            <p class="skill-description">3D worlds, VR, real-time rendering, custom materials, blueprint programming.</p>
+        </div>
+        <div class="skill">
+            <p class="skill-title">Arduino</p>
+            <p class="skill-description">Programming and interfacing sensors and microcontrollers.</p>
+        </div>
+        <div class="skill">
+            <p class="skill-title">AudioVisual</p>
+            <p class="skill-description">Sound and visuals integration for interactive and performance-based projects.</p>
+        </div>
+        <div class="skill">
+            <p class="skill-title">Blender</p>
+            <p class="skill-description">3D modeling, rigging, simulation, animation, cloth and fluid dynamics.</p>
+        </div>
+        <div class="skill">
+            <p class="skill-title">ComfyUI</p>
+            <p class="skill-description">Custom UI design for real-time applications.</p>
+        </div>
+        <div class="skill">
+            <p class="skill-title">Adobe Suite</p>
+            <p class="skill-description">Visual design, video editing, motion graphics, compositing, texture painting.</p>
+        </div>
+        <div class="skill">
+            <p class="skill-title">3D Printing (FDM/DLP)</p>
+            <p class="skill-description">Rapid prototyping, design, and printing of objects.</p>
+        </div>
+        <div class="skill">
+            <p class="skill-title">Web Development</p>
+            <p class="skill-description">Basic HTML, CSS, JavaScript for personal websites.</p>
+        </div>
+        <div class="skill">
+            <p class="skill-title">Sculpting & Welding</p>
+            <p class="skill-description">Physical model creation and welding for installations.</p>
+        </div>
+    </div>
+    
+
+    <h2 class="section-title">Publications</h2>
+<!--<p>Example publication 1: Title and Year</p>-->
+<!--<p>Example publication 2: Title and Year</p>-->
+    
+</section>
+
+<!-- 소셜 링크 -->
+<footer class="social-links">
+    <a href="https://www.linkedin.com/in/cherryy" target="_blank">LinkedIn</a>
+    <a href="https://www.instagram.com/yourfavgalcherry" target="_blank">Instagram</a>
+    <a href="mailto:cheryyoun@gmail.com">Mail</a>
+</footer>
+
 </body>
 </html>

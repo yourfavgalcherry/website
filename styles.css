@@ -1,3 +1,5 @@
+/* 기존 스타일 유지 */
+/* 모든 엘리먼트의 기본 마진, 패딩, 박스 모델 설정 */
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +8,14 @@
 
 body {
     background-color: black;
-    overflow: hidden;
+    overflow-y: scroll; /* 세로 스크롤을 활성화하지만 스크롤바를 보이지 않게 */
+    height: 100%; /* 페이지 높이를 100%로 설정하여 전체 콘텐츠가 스크롤 되도록 함 */
+}
+
+/* 스크롤바 숨기기 */
+::-webkit-scrollbar {
+    width: 0;  /* 세로 스크롤바 숨기기 */
+    height: 0; /* 가로 스크롤바 숨기기 */
 }
 
 /* 네비게이션 바 스타일 */
@@ -17,6 +26,48 @@ body {
     z-index: 10;
 }
 
+/* 드롭다운 컨테이너 */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Works 기본 스타일 */
+.dropdown a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    margin-left: 20px;
+    font-family: Arial, sans-serif;
+    transition: 0.3s;
+}
+
+/* 드롭다운 내용 숨기기 */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: rgba(0, 0, 0, 0);
+    min-width: 150px;
+    z-index: 1;
+    top: 20px;
+    right: 0;
+}
+
+/* 드롭다운 내부 링크 스타일 */
+.dropdown-content a {
+    color: white;
+    padding: 10px;
+    display: block;
+    text-align: left;
+    font-size: 16px;
+}
+
+/* Works에 호버하면 드롭다운 표시 */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* 일반 네비게이션 링크 스타일 */
 .navbar a {
     color: white;
     text-decoration: none;
@@ -57,14 +108,13 @@ body {
     }
 }
 
-
 /* 소개 섹션 스타일 */
 .about-content {
     max-width: 800px;
     margin: 100px auto;
     padding: 20px;
     color: white;
-    text-align: center;
+    text-align: left; /* 텍스트 왼쪽 정렬 */
     font-family: Arial, sans-serif;
 }
 
@@ -79,12 +129,29 @@ body {
     margin-bottom: 15px;
 }
 
+/* Bio 소제목 스타일 */
+.bio-title {
+    font-size: 20px;
+    color: #00ff0a; /* 인덱스 링크 호버 색상과 동일한 색상 */
+    margin-top: 20px;
+}
+
+/* Publications, Exhibitions, Skills 소제목 스타일 */
+.section-title {
+    font-size: 20px;
+    color: #00ff0a; /* 인덱스 링크 호버 색상과 동일한 색상 */
+    margin-top: 40px;
+}
+
 /* 소셜 링크 스타일 */
 .social-links {
-    position: absolute;
-    bottom: 50px;
-    width: 100%;
+    position: fixed;  /* fixed로 고정 */
+    bottom: 20px;     /* 화면 하단에서 20px 떨어지도록 */
+    left: 50%;        /* 화면 가운데에 배치 */
+    transform: translateX(-50%); /* 수평 중앙 정렬 */
+    width: auto;
     text-align: center;
+    padding: 20px 0; /* 여백 추가 */
 }
 
 .social-links a {
@@ -100,4 +167,122 @@ body {
     color: #00ff0a;
 }
 
+/* 메인 GIF 스타일 */
+.main-banner {
+    text-align: center;
+    margin-top: 80px;
+}
 
+.main-banner img {
+    width: 100%;
+    max-width: 1200px;
+    border-radius: 10px;
+}
+
+/* 프로젝트 리스트 스타일 */
+.projects-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    gap: 30px;
+    padding: 0 20px; 
+}
+
+.project {
+    width: 100%;
+    text-align: center;
+    max-width: 100%;
+    margin: 0 30px;
+    padding: 30px 100px;
+    box-sizing: border-box;  /* padding을 포함하여 크기 조정 */
+}
+
+.project img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  /* 비율을 유지하면서 꽉 채움 */
+    transition: transform 0.3s ease;
+    border-radius: 10px;  /* 필요시 둥근 모서리 추가 */
+}
+
+/* 모바일 화면에서 이미지가 적당히 보이도록 미디어 쿼리 */
+@media (max-width: 768px) {
+    .project {
+        margin: 10px;  /* 모바일에서 여백을 조금 더 줄임 */
+        padding: 10px;
+    }
+}
+
+.info {
+    color: white;
+    font-family: Arial, sans-serif;
+    margin-top: 10px;
+}
+
+.info h3 {
+    font-size: 22px;
+    font-family: Arial, sans-serif;
+    margin: 5px 0;
+}
+
+.info p {
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    color: gray;
+}
+
+/* 추가된 스타일 */
+
+/* Bio, Publications, Exhibitions, Skills 내용 왼쪽 정렬 */
+.about-content p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+/* Publications, Exhibitions, Skills 항목 */
+.about-content h2 {
+    font-size: 20px;
+    color: #00ff0a;
+    margin-top: 40px;
+}
+
+/* Publications, Exhibitions, Skills 항목 내용 스타일 */
+.about-content p {
+    font-size: 16px;
+    color: white;
+    margin-top: 5px;
+}
+
+/* 스킬 스타일 */
+.skills {
+    font-size: 16px;
+}
+
+.skill-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: -5px !important;
+}
+
+.skill-description {
+    font-size: 12px !important; /* 강제로 12px 적용 */
+    font-weight: 300 !important; /* 폰트 두께를 300으로 설정 */
+    color: #bbb !important; /* 약간 어두운 회색으로 설정 */
+    margin-top: 5px;
+    line-height: 1.4;
+    font-style: italic !important;
+     /* 들여쓰기 */
+}
+
+.skill {
+    margin-bottom: 20px !important;
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
