@@ -27,3 +27,15 @@ document.addEventListener("touchmove", function (e) {
         particle.remove();
     }, 1000);
 });
+
+
+
+
+
+
+
+
+
+
+
+

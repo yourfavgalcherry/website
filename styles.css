@@ -167,52 +167,113 @@ body {
     color: #00ff0a;
 }
 
-/* 메인 GIF 스타일 */
-.main-banner {
-    text-align: center;
-    margin-top: 80px;
+/* 기본 스타일 */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black !important;
+    font-family: Arial, sans-serif; /* 추가한 폰트 설정 */
 }
 
-.main-banner img {
-    width: 100%;
-    max-width: 1200px;
-    border-radius: 10px;
-}
-
-/* 프로젝트 리스트 스타일 */
+/* 프로젝트 리스트 스타일 - 갭 최소화 */
 .projects-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
-    gap: 30px;
-    padding: 0 20px; 
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: min-content; /* 내용물 높이에 맞게 조정 */
+    grid-auto-flow: dense; /* dense 속성 추가하여 빈공간 최소화 */
+    gap: 4px; /* 이미지 간격 축소 */
+    padding: 100px 5px 5px;
+    max-width: 98%;
+    margin: 0 auto;
 }
 
+/* 개별 프로젝트 스타일 */
 .project {
-    width: 100%;
-    text-align: center;
-    max-width: 100%;
-    margin: 0 30px;
-    padding: 30px 100px;
-    box-sizing: border-box;  /* padding을 포함하여 크기 조정 */
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    font-family: Arial, sans-serif; /* 폰트 설정 */
 }
 
+/* 다양한 크기의 프로젝트 정의 */
+.wide {
+    grid-column: span 2;
+}
+.tall {
+    grid-row: span 2;
+}
+.large {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+/* 이미지 스타일 - 채우기 방식 수정 */
 .project img {
     width: 100%;
     height: 100%;
-    object-fit: cover;  /* 비율을 유지하면서 꽉 채움 */
-    transition: transform 0.3s ease;
-    border-radius: 10px;  /* 필요시 둥근 모서리 추가 */
+    object-fit: cover; /* 이미지가 컨테이너를 채우도록 설정 */
+    display: block;
+    transition: filter 0.3s ease-in-out;
 }
 
-/* 모바일 화면에서 이미지가 적당히 보이도록 미디어 쿼리 */
-@media (max-width: 768px) {
-    .project {
-        margin: 10px;  /* 모바일에서 여백을 조금 더 줄임 */
-        padding: 10px;
+/* 호버 시 이미지 블러 효과 */
+/*   .project:hover img {
+    filter: blur(5px);
+}
+
+/* 호버 시 제목 표시 */
+/*   .project::after {
+    content: attr(data-title);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    white-space: nowrap;
+    z-index: 2;
+    font-family: Arial, sans-serif; /* 폰트 설정 
+}  */
+
+.project:hover::after {
+    opacity: 1;
+}
+
+/* 이미지 컨테이너 비율 조정 */
+.project a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* 화면 크기별 조정 */
+@media (max-width: 992px) {
+    .projects-container {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
+
+@media (max-width: 576px) {
+    .projects-container {
+        grid-template-columns: 1fr;
+        padding: 80px 3px 3px;
+    }
+    
+    .wide, .large {
+        grid-column: span 1;
+    }
+    
+    .tall, .large {
+        grid-row: span 1;
+    }
+}
+
+
 
 .info {
     color: white;

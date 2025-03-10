@@ -5,103 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects</title>
     <link rel="stylesheet" href="../styles.css">
-    <style>
-       body {
-            margin: 0;
-            padding: 0;
-            overflow-y: auto;
-            background-color: black;
-        }
-
-        /* 프로젝트 리스트 스타일 */
-.projects-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 50px;
-    padding: 100px 20px 20px; /* 첫 번째 프로젝트와 네비게이션 간격 조정 */
-    width: 100%;
-    height: 100vh; /* 화면의 전체 높이를 사용 */
-    max-width: 100%;
-    margin: 0 auto;
-    box-sizing: border-box; /* padding을 포함한 크기 조정 */
-}
-
-.project {
-    width: 100%;
-    text-align: center;
-}
-
-.project img {
-    width: 100%; /* 화면 크기에 맞게 이미지 크기 설정 */
-    height: auto; /* 이미지 높이는 자동으로 맞추기 */
-    object-fit: contain; /* 이미지 비율을 유지하며 표시 */
-    border-radius: 0px;
-}
-
-.project.vertical {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-}
-
-.project.vertical .images {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between; /* 이미지를 양쪽으로 정렬 */
-    gap: 5px;
-    width: 100%;
-}
-
-.project.vertical img {
-    width: 49%;
-    object-fit: contain; /* 비율을 유지하면서 이미지를 꽉 채우지 않음 */
-}
-
-/* 화면 크기가 커지면 이미지의 크기를 더 키우기 위한 미디어 쿼리 */
-@media (min-width: 1800px) {
-    .projects-container {
-        max-width: 1800px; /* 더 큰 화면에서 전체 너비를 제한 */
-    }
-    .project img {
-        width: 100%;
-        height: auto;
-        object-fit: contain; /* 큰 화면에서 이미지 비율 유지 */
-    }
-}
-
-    </style>
+    <link rel="stylesheet" href="projects.css">
 </head>
 <body>
-    <!-- 네비게이션 바 -->
     <nav class="navbar">
         <a href="../index.html">Home</a>
         <a href="../blog.html">Blog</a>
         <a href="../about.html">About</a>
     </nav>
 
-    <!-- 프로젝트 리스트 -->
     <div class="projects-container">
-        <div class="project">
+        <!-- 가로로 넓은 프로젝트 -->
+        <div class="project wide" data-title="Luminal">
             <a href="project1.html">
                 <img src="assets/project1.gif" alt="Luminal">
             </a>
         </div>
 
-        <div class="project vertical">
-            <div class="images">
-                <img src="assets/project2-1.gif" alt="Project 2 - Left">
-                <img src="assets/project2-2.gif" alt="Project 2 - Right">
-            </div>
-    <!--        <a href="project2.html">
-                <div class="info">
-                    <h3>Project Title 2</h3>
-                    <p>2023 · VR Experience</p>
-                </div> -->
+        <!-- 세로로 긴 프로젝트 -->
+        <div class="project tall" data-title="Project 2">
+            <!-- <a href="project2.html"> -->
+                <img src="assets/project2-2.gif" alt="Project 2">
             </a>
         </div>
+
+        <!-- 기본 크기 프로젝트 -->
+        <div class="project tall" data-title="Project 3">
+            <!-- <a href="project3.html"> -->
+                <img src="assets/project2-1.gif" alt="Project 3">
+            </a>
+        </div>
+
+        <!-- 큰 사이즈 프로젝트 -->
+        <div class="project wide" data-title="Project 4">
+            <!-- <a href="project4.html"> -->
+                <img src="assets/project3.gif" alt="Project 4">
+            </a>
+        </div>
+
+        <!-- 기본 크기 프로젝트 -->
+        <div class="project" data-title="Project 5">
+            <!-- <a href="project5.html"> -->
+                <img src="assets/project4.gif" alt="Project 5">
+            </a>
+        </div>
+
+
+
+
+
+
+
+        
+        <!-- 가로로 넓은 프로젝트 -->
+        <div class="project tall" data-title="Project 6">
+            <!-- <a href="project6.html"> -->
+                <img src="assets/project5.gif" alt="Project 6">
+            </a>
+        </div>
+
+
+         <!-- 가로로 넓은 프로젝트 -->
+        <div class="project tall" data-title="Project 8">
+            <!-- <a href="project6.html"> -->
+            <img src="assets/project6.gif" alt="Project 8">
+            </a>
+        </div>
+
+
+        <!-- 기본 크기 프로젝트 -->
+        <div class="project" data-title="Project 7">
+            <!-- <a href="project5.html"> -->
+                <img src="assets/project7.gif" alt="Project 7">
+            </a>
+        </div>
+
+        <!-- 기본 크기 프로젝트 -->
+        <div class="project" data-title="Project 7">
+            <!-- <a href="project5.html"> -->
+                <img src="assets/project8.gif" alt="Project 7">
+            </a>
+        </div>
+
+
+
+
+
+
+
+
+
     </div>
 </body>
 </html>
