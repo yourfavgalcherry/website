@@ -311,10 +311,15 @@ body {
 }
 
 /* Publications, Exhibitions, Skills 항목 내용 스타일 */
-.about-content p {
-    font-size: 16px;
-    color: white;
-    margin-top: 5px;
+.about-content a {
+    color: white; /* 기본 색상 유지 */
+    text-decoration: none; /* 밑줄 제거 */
+    transition: text-decoration 0.3s ease-in-out; /* 부드러운 효과 추가 */
+}
+
+/* 호버 시 밑줄 표시 */
+.about-content a:hover {
+    text-decoration: underline;
 }
 
 /* 스킬 스타일 */
