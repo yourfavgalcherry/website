@@ -78,7 +78,7 @@ body {
 }
 
 .navbar a:hover {
-    color: #00ff0a;
+    color: #003cff;
 }
 
 /* 마우스를 따라다니는 파티클 스타일 */
@@ -351,4 +351,21 @@ body {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
+}
+
+.intro-text {
+    max-width: 800px;
+    margin: 100px auto 20px auto; /* 상단 간격 100px */
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: rgb(212, 212, 212);
+    text-align: center;
+}
+
+.under-construction {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: gray;
+    margin: 60px 0 10px 0; /* 상단 간격 60px */
 }
