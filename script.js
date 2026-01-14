@@ -1,4 +1,6 @@
+// ============================
 // 빔 라이트 생성
+// ============================
 const beam = document.createElement("div");
 beam.classList.add("beam");
 document.body.appendChild(beam);
@@ -7,15 +9,17 @@ document.body.appendChild(beam);
 let mouseX = window.innerWidth / 2;
 let mouseY = window.innerHeight / 2;
 
-// 모바일 여부 체크
+// 모바일 체크
 const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
-// 모바일이면 처음에는 숨김
+// 모바일: 기본 숨김
 if (isMobile) {
     beam.style.display = "none";
 }
 
-// 마우스 이동 이벤트 (PC)
+// ============================
+// PC: 마우스 이동
+// ============================
 if (!isMobile) {
     document.addEventListener("mousemove", (e) => {
         mouseX = e.clientX;
@@ -23,23 +27,65 @@ if (!isMobile) {
     });
 }
 
-// 터치 이동 이벤트 (모바일)
-if (isMobile) {
-    document.addEventListener("touchmove", (e) => {
-        const touch = e.touches[0];
-        mouseX = touch.clientX;
-        mouseY = touch.clientY;
+// ============================
+// 모바일 터치 제어
+// ============================
+let isDragging = false;
+let pressStartTime = 0;
+let strobeInterval = null;
 
-        // 터치 시작 시 빔 라이트 보이기
-        if (beam.style.display === "none") {
-            beam.style.display = "block";
-            beam.style.width = "120px";   // 모바일에서 작게
-            beam.style.height = "120px";
-        }
-    });
+// 터치 시작 (꾹 누르기 시작)
+document.addEventListener("touchstart", (e) => {
+    pressStartTime = Date.now();
+
+    // 스트로브 시작 (처음엔 느리게)
+    startStrobe(300);
+});
+
+// 터치 이동 (드래그 중 → 빔 보이기)
+document.addEventListener("touchmove", (e) => {
+    const touch = e.touches[0];
+    mouseX = touch.clientX;
+    mouseY = touch.clientY;
+
+    isDragging = true;
+    beam.style.display = "block";
+});
+
+// 터치 종료
+document.addEventListener("touchend", () => {
+    isDragging = false;
+    beam.style.display = "none";
+
+    stopStrobe();
+});
+
+// ============================
+// 스트로브 로직
+// ============================
+function startStrobe(initialSpeed) {
+    let speed = initialSpeed;
+
+    strobeInterval = setInterval(() => {
+        screenStrobe();
+
+        // 누른 시간에 따라 점점 빨라짐
+        const heldTime = Date.now() - pressStartTime;
+        speed = Math.max(60, 300 - heldTime / 5);
+
+        clearInterval(strobeInterval);
+        startStrobe(speed);
+    }, speed);
 }
 
-// 화면 섬광 (클릭/터치용)
+function stopStrobe() {
+    clearInterval(strobeInterval);
+    strobeInterval = null;
+}
+
+// ============================
+// 화면 스트로브
+// ============================
 function screenStrobe() {
     const strobe = document.createElement("div");
     strobe.style.position = "fixed";
@@ -48,34 +94,37 @@ function screenStrobe() {
     strobe.style.width = "100%";
     strobe.style.height = "100%";
     strobe.style.backgroundColor = "white";
-    strobe.style.opacity = "0.9";
+    strobe.style.opacity = "0.85";
     strobe.style.zIndex = "9999";
     strobe.style.pointerEvents = "none";
-    strobe.style.transition = "opacity 0.05s ease-out";
+    strobe.style.transition = "opacity 0.05s linear";
+
     document.body.appendChild(strobe);
-    setTimeout(() => {
+
+    requestAnimationFrame(() => {
         strobe.style.opacity = "0";
-        setTimeout(() => strobe.remove(), 100);
-    }, 50);
+    });
+
+    setTimeout(() => strobe.remove(), 120);
 }
-document.addEventListener("click", screenStrobe);
-document.addEventListener("touchstart", screenStrobe);
 
-// 빔 라이트 애니메이션
+// ============================
+// 빔 애니메이션 (공통)
+// ============================
 function animateBeam() {
-    // 위치 따라다니기
-    const x = mouseX - beam.offsetWidth / 2;
-    const y = mouseY - beam.offsetHeight / 2;
-    beam.style.transform = `translate(${x}px, ${y}px)`;
+    if (!isMobile || isDragging) {
+        const x = mouseX - beam.offsetWidth / 2;
+        const y = mouseY - beam.offsetHeight / 2;
+        beam.style.transform = `translate(${x}px, ${y}px)`;
 
-    // 밝기 플리커링
-    const flicker = 0.7 + Math.random() * 0.3; // 0.7~1.0 밝기
-    beam.style.filter = isMobile 
-        ? `blur(40px) brightness(${flicker * 3})` // 모바일: 블러 낮게
-        : `blur(60px) brightness(${flicker * 3})`; // PC: 기본 블러
+        const flicker = 0.8 + Math.random() * 0.2;
+
+        beam.style.filter = isMobile
+            ? `blur(40px) brightness(${flicker})`
+            : `blur(60px) brightness(${flicker})`;
+    }
 
     requestAnimationFrame(animateBeam);
 }
 
-// 애니메이션 시작
 requestAnimationFrame(animateBeam);
