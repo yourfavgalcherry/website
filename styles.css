@@ -11,7 +11,7 @@
 
 body {
     background-color: black;
-    overflow-y: scroll;
+    overflow: hidden;
     height: 100%;
     font-family: Arial, sans-serif;
 }
