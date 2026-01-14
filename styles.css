@@ -1,5 +1,8 @@
-/* 기존 스타일 유지 */
-/* 모든 엘리먼트의 기본 마진, 패딩, 박스 모델 설정 */
+/* ======================== */
+/*        기존 CSS          */
+/* ======================== */
+
+/* 모든 엘리먼트 기본 설정 */
 * {
     margin: 0;
     padding: 0;
@@ -8,17 +11,18 @@
 
 body {
     background-color: black;
-    overflow-y: scroll; /* 세로 스크롤을 활성화하지만 스크롤바를 보이지 않게 */
-    height: 100%; /* 페이지 높이를 100%로 설정하여 전체 콘텐츠가 스크롤 되도록 함 */
+    overflow-y: scroll;
+    height: 100%;
+    font-family: Arial, sans-serif;
 }
 
 /* 스크롤바 숨기기 */
 ::-webkit-scrollbar {
-    width: 0;  /* 세로 스크롤바 숨기기 */
-    height: 0; /* 가로 스크롤바 숨기기 */
+    width: 0;
+    height: 0;
 }
 
-/* 네비게이션 바 스타일 */
+/* 네비게이션 바 */
 .navbar {
     position: fixed;
     top: 20px;
@@ -26,13 +30,7 @@ body {
     z-index: 10;
 }
 
-/* 드롭다운 컨테이너 */
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-/* Works 기본 스타일 */
+.dropdown { position: relative; display: inline-block; }
 .dropdown a {
     color: white;
     text-decoration: none;
@@ -41,19 +39,15 @@ body {
     font-family: Arial, sans-serif;
     transition: 0.3s;
 }
-
-/* 드롭다운 내용 숨기기 */
 .dropdown-content {
     display: none;
     position: absolute;
-    background: rgba(0, 0, 0, 0);
+    background: rgba(0,0,0,0);
     min-width: 150px;
     z-index: 1;
     top: 20px;
     right: 0;
 }
-
-/* 드롭다운 내부 링크 스타일 */
 .dropdown-content a {
     color: white;
     padding: 10px;
@@ -61,27 +55,11 @@ body {
     text-align: left;
     font-size: 16px;
 }
+.dropdown:hover .dropdown-content { display: block; }
 
-/* Works에 호버하면 드롭다운 표시 */
-.dropdown:hover .dropdown-content {
-    display: block;
-}
+.navbar a:hover { color: #003cff; }
 
-/* 일반 네비게이션 링크 스타일 */
-.navbar a {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    margin-left: 20px;
-    font-family: Arial, sans-serif;
-    transition: 0.3s;
-}
-
-.navbar a:hover {
-    color: #003cff;
-}
-
-/* 마우스를 따라다니는 파티클 스타일 */
+/* 파티클 */
 .particle {
     position: absolute;
     width: 15px;
@@ -89,296 +67,118 @@ body {
     background-color: white;
     border-radius: 50%;
     opacity: 0.8;
-    box-shadow: 0 0 10px white, 
-                0 0 20px white, 
-                0 0 40px white, 
-                0 0 60px white;
+    box-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white, 0 0 60px white;
     animation: fadeOut 1s linear forwards;
 }
-
-/* 파티클이 사라지는 애니메이션 */
 @keyframes fadeOut {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(2);
-        opacity: 0;
-    }
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
 }
 
-/* 소개 섹션 스타일 */
+/* 소개 섹션 */
 .about-content {
     max-width: 800px;
     margin: 100px auto;
     padding: 20px;
     color: white;
-    text-align: left; /* 텍스트 왼쪽 정렬 */
-    font-family: Arial, sans-serif;
+    text-align: left;
 }
+.about-content h1 { font-size: 32px; margin-bottom: 20px; }
 
-.about-content h1 {
-    font-size: 32px;
-    margin-bottom: 20px;
-}
+/* 소제목 */
+.bio-title, .section-title { font-size: 20px; color: #00ff0a; margin-top: 20px; }
 
-.about-content p {
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 15px;
-}
-
-/* Bio 소제목 스타일 */
-.bio-title {
-    font-size: 20px;
-    color: #00ff0a; /* 인덱스 링크 호버 색상과 동일한 색상 */
-    margin-top: 20px;
-}
-
-/* Publications, Exhibitions, Skills 소제목 스타일 */
-.section-title {
-    font-size: 20px;
-    color: #00ff0a; /* 인덱스 링크 호버 색상과 동일한 색상 */
-    margin-top: 40px;
-}
-
-/* 소셜 링크 스타일 */
+/* 소셜 링크 */
 .social-links {
-    position: fixed;  /* fixed로 고정 */
-    bottom: 20px;     /* 화면 하단에서 20px 떨어지도록 */
-    left: 50%;        /* 화면 가운데에 배치 */
-    transform: translateX(-50%); /* 수평 중앙 정렬 */
-    width: auto;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
-    padding: 20px 0; /* 여백 추가 */
+    padding: 20px 0;
 }
-
 .social-links a {
     color: white;
     font-size: 18px;
-    text-decoration: none;
     margin: 0 15px;
-    font-family: Arial, sans-serif;
     transition: 0.3s;
 }
+.social-links a:hover { color: #00ff0a; }
 
-.social-links a:hover {
-    color: #00ff0a;
-}
-
-/* 기본 스타일 */
-body {
-    margin: 0;
-    padding: 0;
-    background-color: black !important;
-    font-family: Arial, sans-serif; /* 추가한 폰트 설정 */
-}
-
-/* 프로젝트 리스트 스타일 - 갭 최소화 */
+/* 프로젝트 */
 .projects-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: min-content; /* 내용물 높이에 맞게 조정 */
-    grid-auto-flow: dense; /* dense 속성 추가하여 빈공간 최소화 */
-    gap: 4px; /* 이미지 간격 축소 */
+    grid-auto-rows: min-content;
+    grid-auto-flow: dense;
+    gap: 4px;
     padding: 100px 5px 5px;
     max-width: 98%;
     margin: 0 auto;
 }
+.project { position: relative; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; }
+.wide { grid-column: span 2; }
+.tall { grid-row: span 2; }
+.large { grid-column: span 2; grid-row: span 2; }
+.project img { width: 100%; height: 100%; object-fit: cover; display: block; transition: filter 0.3s ease-in-out; }
+.project:hover::after { opacity: 1; }
+.project a { display: block; width: 100%; height: 100%; }
 
-/* 개별 프로젝트 스타일 */
-.project {
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    font-family: Arial, sans-serif; /* 폰트 설정 */
-}
-
-/* 다양한 크기의 프로젝트 정의 */
-.wide {
-    grid-column: span 2;
-}
-.tall {
-    grid-row: span 2;
-}
-.large {
-    grid-column: span 2;
-    grid-row: span 2;
-}
-
-/* 이미지 스타일 - 채우기 방식 수정 */
-.project img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* 이미지가 컨테이너를 채우도록 설정 */
-    display: block;
-    transition: filter 0.3s ease-in-out;
-}
-
-/* 호버 시 이미지 블러 효과 */
-/*   .project:hover img {
-    filter: blur(5px);
-}
-
-/* 호버 시 제목 표시 */
-/*   .project::after {
-    content: attr(data-title);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-    white-space: nowrap;
-    z-index: 2;
-    font-family: Arial, sans-serif; /* 폰트 설정 
-}  */
-
-.project:hover::after {
-    opacity: 1;
-}
-
-/* 이미지 컨테이너 비율 조정 */
-.project a {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-
-/* 화면 크기별 조정 */
 @media (max-width: 992px) {
-    .projects-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    .projects-container { grid-template-columns: repeat(2, 1fr); }
 }
-
 @media (max-width: 576px) {
-    .projects-container {
-        grid-template-columns: 1fr;
-        padding: 80px 3px 3px;
-    }
-    
-    .wide, .large {
-        grid-column: span 1;
-    }
-    
-    .tall, .large {
-        grid-row: span 1;
-    }
+    .projects-container { grid-template-columns: 1fr; padding: 80px 3px 3px; }
+    .wide, .large { grid-column: span 1; }
+    .tall, .large { grid-row: span 1; }
 }
 
+/* 정보 텍스트 */
+.info { color: white; margin-top: 10px; }
+.info h3 { font-size: 22px; margin: 5px 0; }
+.info p { font-size: 16px; color: gray; }
 
+/* 스킬 */
+.skills { font-size: 16px; }
+.skill-title { font-size: 18px; font-weight: bold; margin-bottom: -5px !important; }
+.skill-description { font-size: 12px !important; font-weight: 300 !important; color: #bbb !important; margin-top: 5px; line-height: 1.4; font-style: italic !important; }
+.skill { margin-bottom: 20px !important; }
 
-.info {
-    color: white;
-    font-family: Arial, sans-serif;
-    margin-top: 10px;
-}
+/* 섹션 제목 */
+.section-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+.intro-text { max-width: 800px; margin: 100px auto 20px auto; font-size: 1.1rem; line-height: 1.6; color: rgb(212, 212, 212); text-align: left; }
+.under-construction { text-align: center; font-size: 2rem; font-weight: bold; color: gray; margin: 60px 0 10px 0; }
+.footer { position: fixed; bottom: 0; width: 100%; text-align: center; color: rgb(218, 218, 218); background-color: black; padding: 10px 0; font-family: Helvetica, sans-serif; font-size: 0.9rem; }
 
-.info h3 {
-    font-size: 22px;
-    font-family: Arial, sans-serif;
-    margin: 5px 0;
-}
-
-.info p {
-    font-size: 16px;
-    font-family: Arial, sans-serif;
-    color: gray;
-}
-
-/* 추가된 스타일 */
-
-/* Bio, Publications, Exhibitions, Skills 내용 왼쪽 정렬 */
-.about-content p {
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-/* Publications, Exhibitions, Skills 항목 */
-.about-content h2 {
-    font-size: 20px;
-    color: #00ff0a;
-    margin-top: 40px;
-}
-
-/* Publications, Exhibitions, Skills 항목 내용 스타일 */
-.about-content a {
-    color: white; /* 기본 색상 유지 */
-    text-decoration: none; /* 밑줄 제거 */
-    transition: text-decoration 0.3s ease-in-out; /* 부드러운 효과 추가 */
-}
-
-/* 호버 시 밑줄 표시 */
-.about-content a:hover {
-    text-decoration: underline;
-}
-
-/* 스킬 스타일 */
-.skills {
-    font-size: 16px;
-}
-
-.skill-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: -5px !important;
-}
-
-.skill-description {
-    font-size: 12px !important; /* 강제로 12px 적용 */
-    font-weight: 300 !important; /* 폰트 두께를 300으로 설정 */
-    color: #bbb !important; /* 약간 어두운 회색으로 설정 */
-    margin-top: 5px;
-    line-height: 1.4;
-    font-style: italic !important;
-     /* 들여쓰기 */
-}
-
-.skill {
-    margin-bottom: 20px !important;
-}
-
-.section-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.intro-text {
-    max-width: 800px;
-    margin: 100px auto 20px auto; /* 상단 간격 100px */
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: rgb(212, 212, 212);
-    text-align: left;
-}
-
-.under-construction {
-    text-align: center;
-    font-size: 2rem;
-    font-weight: bold;
-    color: gray;
-    margin: 60px 0 10px 0; /* 상단 간격 60px */
-}
-
-
-.footer {
+/* ======================== */
+/*        빔 라이트 CSS      */
+/* ======================== */
+.beam {
     position: fixed;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    color: rgb(218, 218, 218);
-    background-color: black; /* 배경색 맞춤 */
-    padding: 10px 0;
-    font-family: Helvetica, sans-serif;
-    font-size: 0.9rem;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+    border-radius: 50%;
+    background-color: white;
+    filter: blur(120px) brightness(1);
+    transform: translate(-50%, -50%);
+    z-index: 9998;
+
+    /* 부드러운 플리커링 애니메이션 */
+    animation: flicker 0.2s infinite;
+}
+@keyframes flicker {
+    0%   { filter: blur(120px) brightness(0.82); }
+    10%  { filter: blur(120px) brightness(0.84); }
+    20%  { filter: blur(120px) brightness(0.8); }
+    30%  { filter: blur(120px) brightness(0.85); }
+    40%  { filter: blur(120px) brightness(0.9); }
+    50%  { filter: blur(120px) brightness(0.95); }
+    60%  { filter: blur(120px) brightness(1); }
+    70%  { filter: blur(120px) brightness(0.95); }
+    80%  { filter: blur(120px) brightness(0.9); }
+    90%  { filter: blur(120px) brightness(0.8); }
+    100% { filter: blur(120px) brightness(0.92); }
 }
