@@ -34,7 +34,7 @@ body {
 .navbar a {
     color: gray; /* 초기 색상 */
     text-decoration: none;
-    font-size: 21px;
+    font-size: 19px;
     font-weight: 300; /* 얇은 글씨 */
     font-family: Helvetica, Arial, sans-serif;
     cursor: pointer;

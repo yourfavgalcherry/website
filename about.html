@@ -27,27 +27,29 @@
         /* ======================== */
         /*      네비게이션 바       */
         /* ======================== */
-        .navbar {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-        }
+.navbar {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+}
 
-        .navbar a {
-            color: gray;
-            text-decoration: none;
-            font-size: 21px;
-            font-weight: 300;
-            cursor: pointer;
-            transition: color 0.3s ease, text-shadow 0.3s ease;
-        }
+.navbar a {
+    color: gray; /* 초기 색상 */
+    text-decoration: none;
+    font-size: 19px;
+    font-weight: 300; /* 얇은 글씨 */
+    font-family: Helvetica, Arial, sans-serif;
+    cursor: pointer;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
 
-        .navbar a.beam-hover,
-        .navbar a:hover {
-            color: white !important;
-            text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
-        }
+/* 빔 가까이 접근 or 호버 시 글로우 */
+.navbar a.beam-hover,
+.navbar a:hover {
+    color: white !important;
+    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
+}
 
         /* ======================== */
         /*      소개 텍스트         */
