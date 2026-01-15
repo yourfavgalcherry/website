@@ -12,29 +12,37 @@ if (isMobile) beam.style.display = "none";
 
 let pressStartTime = 0;
 let lastStrobeTime = 0;
-
 let isMouseDown = false;
+
+// ============================
+// PC 마우스 제어
+// ============================
 if (!isMobile) {
     document.addEventListener("mousemove", e => {
         mouseX = e.clientX;
         mouseY = e.clientY;
     });
+
     document.addEventListener("mousedown", () => {
         isMouseDown = true;
         pressStartTime = Date.now();
         lastStrobeTime = 0;
     });
+
     document.addEventListener("mouseup", () => isMouseDown = false);
 }
 
-// 모바일 터치
+// ============================
+// 모바일 터치 제어
+// ============================
 let isDragging = false;
 let isStrobing = false;
 let longPressTimeout = null;
+
 const LONG_PRESS_DELAY = 500;
 const STROBE_DELAY_AFTER_DRAG = 400;
-const MIN_STROBE_INTERVAL = 80;   // 최소 간격 약간 늘림 → 너무 빨라보이지 않게
-const MAX_STROBE_INTERVAL = 400;  // 느리게 시작
+const MIN_STROBE_INTERVAL = 80;
+const MAX_STROBE_INTERVAL = 400;
 
 document.addEventListener("touchstart", e => {
     e.preventDefault();
@@ -75,7 +83,7 @@ document.addEventListener("touchend", () => {
 }, { passive: false });
 
 // ============================
-// 스트로브
+// 전체 화면 스트로브
 // ============================
 function handleStrobe(timestamp) {
     const active = (!isMobile && isMouseDown) || (isMobile && isStrobing);
@@ -83,9 +91,10 @@ function handleStrobe(timestamp) {
 
     const heldTime = Date.now() - pressStartTime;
 
-    // 클릭시 점진적 가속, 너무 빠르지 않게 MIN_STROBE_INTERVAL 조정
+    // 점진적 가속 + 랜덤 템포
     let interval = MAX_STROBE_INTERVAL - heldTime / 4;
     interval = Math.max(interval, MIN_STROBE_INTERVAL);
+    interval += Math.random() * 50; // 약간 랜덤하게
 
     if (!lastStrobeTime || timestamp - lastStrobeTime > interval) {
         screenStrobe();
@@ -112,9 +121,15 @@ function screenStrobe() {
 }
 
 // ============================
-// ABOUT 버튼 빔 반응
+// About 버튼 반응 & 클릭
 // ============================
-const aboutBtn = document.getElementById("about");
+const aboutBtn = document.querySelector(".navbar a");
+
+if (aboutBtn) {
+    aboutBtn.addEventListener("click", () => {
+        window.location.href = "about.html"; // 실제 About 페이지 연결
+    });
+}
 
 function animateBeam(timestamp) {
     if (!isMobile || isDragging) {
@@ -133,13 +148,10 @@ function animateBeam(timestamp) {
             const btnY = rect.top + rect.height / 2;
             const distance = Math.hypot(mouseX - btnX, mouseY - btnY);
 
-            // 150px 이내면 글로우 적용
             if (distance < 150) {
-                aboutBtn.style.color = "white";
-                aboutBtn.style.textShadow = "0 0 10px white, 0 0 20px white, 0 0 40px white";
+                aboutBtn.classList.add("beam-hover");
             } else {
-                aboutBtn.style.color = "gray";
-                aboutBtn.style.textShadow = "none";
+                aboutBtn.classList.remove("beam-hover");
             }
         }
     }
