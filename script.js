@@ -13,17 +13,33 @@ let mouseY = window.innerHeight / 2;
 const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
 // 모바일: 기본 숨김
-if (isMobile) {
-    beam.style.display = "none";
-}
+if (isMobile) beam.style.display = "none";
 
 // ============================
-// PC: 마우스 이동
+// 공통 상태
 // ============================
+let pressStartTime = 0;
+let lastStrobeTime = 0;
+
+// ============================
+// PC 제어
+// ============================
+let isMouseDown = false;
+
 if (!isMobile) {
     document.addEventListener("mousemove", (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
+    });
+
+    document.addEventListener("mousedown", () => {
+        isMouseDown = true;
+        pressStartTime = Date.now();
+        lastStrobeTime = 0;
+    });
+
+    document.addEventListener("mouseup", () => {
+        isMouseDown = false;
     });
 }
 
@@ -31,56 +47,79 @@ if (!isMobile) {
 // 모바일 터치 제어
 // ============================
 let isDragging = false;
-let pressStartTime = 0;
-let strobeInterval = null;
+let isStrobing = false;
+let longPressTimeout = null;
 
-// 터치 시작 (꾹 누르기 시작)
-document.addEventListener("touchstart", (e) => {
-    pressStartTime = Date.now();
+const LONG_PRESS_DELAY = 500;
 
-    // 스트로브 시작 (처음엔 느리게)
-    startStrobe(300);
-});
+document.addEventListener(
+    "touchstart",
+    (e) => {
+        e.preventDefault();
 
-// 터치 이동 (드래그 중 → 빔 보이기)
-document.addEventListener("touchmove", (e) => {
-    const touch = e.touches[0];
-    mouseX = touch.clientX;
-    mouseY = touch.clientY;
+        pressStartTime = Date.now();
+        isDragging = false;
+        isStrobing = false;
 
-    isDragging = true;
-    beam.style.display = "block";
-});
+        longPressTimeout = setTimeout(() => {
+            isStrobing = true;
+            lastStrobeTime = 0;
+        }, LONG_PRESS_DELAY);
+    },
+    { passive: false }
+);
 
-// 터치 종료
-document.addEventListener("touchend", () => {
-    isDragging = false;
-    beam.style.display = "none";
+document.addEventListener(
+    "touchmove",
+    (e) => {
+        e.preventDefault();
 
-    stopStrobe();
-});
+        const touch = e.touches[0];
+        mouseX = touch.clientX;
+        mouseY = touch.clientY;
+
+        isDragging = true;
+        beam.style.display = "block";
+    },
+    { passive: false }
+);
+
+document.addEventListener(
+    "touchend",
+    () => {
+        isDragging = false;
+        isStrobing = false;
+        beam.style.display = "none";
+
+        clearTimeout(longPressTimeout);
+    },
+    { passive: false }
+);
 
 // ============================
-// 스트로브 로직
+// 스트로브 처리 (PC + 모바일 공통)
 // ============================
-function startStrobe(initialSpeed) {
-    let speed = initialSpeed;
+function handleStrobe(timestamp) {
+    const active =
+        (!isMobile && isMouseDown) ||
+        (isMobile && isStrobing);
 
-    strobeInterval = setInterval(() => {
+    if (!active) return;
+
+    const heldTime = Date.now() - pressStartTime;
+
+    // 🔥 점진적 가속
+    const minInterval = 50;
+    const maxInterval = 300;
+    const interval = Math.max(
+        minInterval,
+        maxInterval - heldTime / 5
+    );
+
+    if (!lastStrobeTime || timestamp - lastStrobeTime > interval) {
         screenStrobe();
-
-        // 누른 시간에 따라 점점 빨라짐
-        const heldTime = Date.now() - pressStartTime;
-        speed = Math.max(60, 300 - heldTime / 5);
-
-        clearInterval(strobeInterval);
-        startStrobe(speed);
-    }, speed);
-}
-
-function stopStrobe() {
-    clearInterval(strobeInterval);
-    strobeInterval = null;
+        lastStrobeTime = timestamp;
+    }
 }
 
 // ============================
@@ -109,9 +148,9 @@ function screenStrobe() {
 }
 
 // ============================
-// 빔 애니메이션 (공통)
+// 빔 애니메이션 루프
 // ============================
-function animateBeam() {
+function animateBeam(timestamp) {
     if (!isMobile || isDragging) {
         const x = mouseX - beam.offsetWidth / 2;
         const y = mouseY - beam.offsetHeight / 2;
@@ -124,6 +163,7 @@ function animateBeam() {
             : `blur(60px) brightness(${flicker})`;
     }
 
+    handleStrobe(timestamp);
     requestAnimationFrame(animateBeam);
 }
 
