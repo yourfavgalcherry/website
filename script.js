@@ -50,7 +50,8 @@ let isDragging = false;
 let isStrobing = false;
 let longPressTimeout = null;
 
-const LONG_PRESS_DELAY = 500;
+const LONG_PRESS_DELAY = 500;  // 기본 롱프레스 판별
+const STROBE_DELAY_AFTER_DRAG = 300; // 빔 라이트 보여주고 딜레이 후 스트로브
 
 document.addEventListener(
     "touchstart",
@@ -61,9 +62,18 @@ document.addEventListener(
         isDragging = false;
         isStrobing = false;
 
+        // 롱프레스 시작
         longPressTimeout = setTimeout(() => {
-            isStrobing = true;
-            lastStrobeTime = 0;
+            // 스트로브를 바로 켜지 않고 빔 라이트 보여주고 잠깐 대기
+            if (isDragging) {
+                setTimeout(() => {
+                    isStrobing = true;
+                    lastStrobeTime = 0;
+                }, STROBE_DELAY_AFTER_DRAG);
+            } else {
+                isStrobing = true;
+                lastStrobeTime = 0;
+            }
         }, LONG_PRESS_DELAY);
     },
     { passive: false }
