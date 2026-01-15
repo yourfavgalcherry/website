@@ -92,9 +92,9 @@ function handleStrobe(timestamp) {
     const heldTime = Date.now() - pressStartTime;
 
     // 점진적 가속 + 랜덤 템포
-    let interval = MAX_STROBE_INTERVAL - heldTime / 4;
+    let interval = MAX_STROBE_INTERVAL - heldTime / 5;
     interval = Math.max(interval, MIN_STROBE_INTERVAL);
-    interval += Math.random() * 50; // 약간 랜덤하게
+    interval += Math.random() * 60; // 약간 랜덤하게
 
     if (!lastStrobeTime || timestamp - lastStrobeTime > interval) {
         screenStrobe();
