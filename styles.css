@@ -32,7 +32,7 @@ body {
 }
 
 .navbar a {
-    color: rgb(255, 255, 255); /* 초기 회색 */
+    color: gray; /* 초기 회색 */
     text-decoration: none;
     font-size: 21px;
     font-weight: 300; /* 얇은 글씨 */
@@ -44,7 +44,7 @@ body {
 /* 빔이 가까워지거나 호버 시 빛나는 효과 */
 .navbar a.beam-hover,
 .navbar a:hover {
-    color: #000000;
+    color: white;
     text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
 }
 
@@ -96,9 +96,9 @@ body {
         0%   { filter: blur(50px) brightness(0.8); }
         10%  { filter: blur(50px) brightness(0.85); }
         20%  { filter: blur(50px) brightness(0.9); }
-        30%  { filter: blur(50px) brightness(1); }
-        40%  { filter: blur(50px) brightness(0.92); }
-        50%  { filter: blur(50px) brightness(0.88); }
+        30%  { filter: blur(50px) brightness(0.95); }
+        40%  { filter: blur(50px) brightness(1); }
+        50%  { filter: blur(50px) brightness(0.92); }
         60%  { filter: blur(50px) brightness(0.9); }
         70%  { filter: blur(50px) brightness(0.95); }
         80%  { filter: blur(50px) brightness(1); }
