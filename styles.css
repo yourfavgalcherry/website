@@ -1,8 +1,6 @@
 /* ======================== */
-/*        기존 CSS          */
+/*        기본 스타일       */
 /* ======================== */
-
-/* 모든 엘리먼트 기본 설정 */
 * {
     margin: 0;
     padding: 0;
@@ -12,8 +10,9 @@
 body {
     background-color: black;
     overflow: hidden;
+    font-family: Helvetica, Arial, sans-serif;
+    color: white;
     height: 100%;
-    font-family: Helvetica, sans-serif;
 }
 
 /* 스크롤바 숨기기 */
@@ -22,57 +21,36 @@ body {
     height: 0;
 }
 
-/* 네비게이션 바 */
+/* ======================== */
+/*      오른쪽 상단 About   */
+/* ======================== */
 .navbar {
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 10;
+    z-index: 10000;
 }
 
-.dropdown { position: relative; display: inline-block; }
-.dropdown a {
-    color: white;
+.navbar a {
+    color: rgb(255, 255, 255); /* 초기 회색 */
     text-decoration: none;
-    font-size: 18px;
-    margin-left: 20px;
-    font-family: Helvetica, sans-serif;
-    transition: 0.3s;
+    font-size: 21px;
+    font-weight: 300; /* 얇은 글씨 */
+    font-family: Helvetica, Arial, sans-serif;
+    cursor: pointer;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
 }
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background: rgba(0,0,0,0);
-    min-width: 150px;
-    z-index: 1;
-    top: 20px;
-    right: 0;
-}
-.dropdown-content a {
-    color: white;
-    padding: 10px;
-    display: block;
-    text-align: left;
-    font-size: 16px;
-}
-.dropdown:hover .dropdown-content { display: block; }
 
-.navbar a:hover { color: #003cff; }
-/* 소개 섹션 */
-.about-content {
-    max-width: 800px;
-    margin: 100px auto;
-    padding: 20px;
-    color: white;
-    text-align: left;
+/* 빔이 가까워지거나 호버 시 빛나는 효과 */
+.navbar a.beam-hover,
+.navbar a:hover {
+    color: #000000;
+    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
 }
-.about-content h1 { font-size: 32px; margin-bottom: 20px; }
-
 
 /* ======================== */
 /*        빔 라이트 CSS      */
 /* ======================== */
-/* PC 빔 라이트 */
 .beam {
     position: fixed;
     top: 0;
@@ -82,7 +60,7 @@ body {
     pointer-events: none;
     border-radius: 50%;
     background-color: white;
-    filter: blur(90%) brightness(1);
+    filter: blur(90px) brightness(1);
     transform: translate(-50%, -50%);
     z-index: 9998;
     animation: flickerPC 0.25s infinite;
