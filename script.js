@@ -50,21 +50,20 @@ let isDragging = false;
 let isStrobing = false;
 let longPressTimeout = null;
 
-const LONG_PRESS_DELAY = 500;  // 기본 롱프레스 판별
-const STROBE_DELAY_AFTER_DRAG = 300; // 빔 라이트 보여주고 딜레이 후 스트로브
+const LONG_PRESS_DELAY = 500;           // 롱프레스 판별
+const STROBE_DELAY_AFTER_DRAG = 400;    // 빔 보여주고 스트로브 딜레이
+const MIN_STROBE_INTERVAL = 80;         // 최소 깜빡임 간격 (너무 빠른 깜빡임 방지)
+const MAX_STROBE_INTERVAL = 300;        // 초기 깜빡임 간격
 
 document.addEventListener(
     "touchstart",
     (e) => {
         e.preventDefault();
-
         pressStartTime = Date.now();
         isDragging = false;
         isStrobing = false;
 
-        // 롱프레스 시작
         longPressTimeout = setTimeout(() => {
-            // 스트로브를 바로 켜지 않고 빔 라이트 보여주고 잠깐 대기
             if (isDragging) {
                 setTimeout(() => {
                     isStrobing = true;
@@ -83,13 +82,16 @@ document.addEventListener(
     "touchmove",
     (e) => {
         e.preventDefault();
-
         const touch = e.touches[0];
         mouseX = touch.clientX;
         mouseY = touch.clientY;
 
         isDragging = true;
+
+        // 모바일 빔 크기 작게 + 밝기 조정
         beam.style.display = "block";
+        beam.style.width = "100px";
+        beam.style.height = "100px";
     },
     { passive: false }
 );
@@ -110,21 +112,19 @@ document.addEventListener(
 // 스트로브 처리 (PC + 모바일 공통)
 // ============================
 function handleStrobe(timestamp) {
-    const active =
-        (!isMobile && isMouseDown) ||
-        (isMobile && isStrobing);
-
+    const active = (!isMobile && isMouseDown) || (isMobile && isStrobing);
     if (!active) return;
 
     const heldTime = Date.now() - pressStartTime;
 
-    // 🔥 점진적 가속
-    const minInterval = 50;
-    const maxInterval = 300;
-    const interval = Math.max(
-        minInterval,
-        maxInterval - heldTime / 5
+    // 점진적 가속, 모바일/PC 공통
+    let interval = Math.max(
+        MIN_STROBE_INTERVAL,
+        MAX_STROBE_INTERVAL - heldTime / 5
     );
+
+    // 최소 interval 제한
+    interval = Math.max(interval, MIN_STROBE_INTERVAL);
 
     if (!lastStrobeTime || timestamp - lastStrobeTime > interval) {
         screenStrobe();
@@ -166,6 +166,7 @@ function animateBeam(timestamp) {
         const y = mouseY - beam.offsetHeight / 2;
         beam.style.transform = `translate(${x}px, ${y}px)`;
 
+        // 밝기 범위 조정: 모바일 0.8~1.0, PC 0.8~1.0
         const flicker = 0.8 + Math.random() * 0.2;
 
         beam.style.filter = isMobile

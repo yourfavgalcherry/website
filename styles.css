@@ -13,7 +13,7 @@ body {
     background-color: black;
     overflow: hidden;
     height: 100%;
-    font-family: Arial, sans-serif;
+    font-family: Helvetica, sans-serif;
 }
 
 /* 스크롤바 숨기기 */
@@ -36,7 +36,7 @@ body {
     text-decoration: none;
     font-size: 18px;
     margin-left: 20px;
-    font-family: Arial, sans-serif;
+    font-family: Helvetica, sans-serif;
     transition: 0.3s;
 }
 .dropdown-content {
@@ -58,23 +58,6 @@ body {
 .dropdown:hover .dropdown-content { display: block; }
 
 .navbar a:hover { color: #003cff; }
-
-/* 파티클 */
-.particle {
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    background-color: white;
-    border-radius: 50%;
-    opacity: 0.8;
-    box-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white, 0 0 60px white;
-    animation: fadeOut 1s linear forwards;
-}
-@keyframes fadeOut {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(2); opacity: 0; }
-}
-
 /* 소개 섹션 */
 .about-content {
     max-width: 800px;
@@ -85,70 +68,6 @@ body {
 }
 .about-content h1 { font-size: 32px; margin-bottom: 20px; }
 
-/* 소제목 */
-.bio-title, .section-title { font-size: 20px; color: #00ff0a; margin-top: 20px; }
-
-/* 소셜 링크 */
-.social-links {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    padding: 20px 0;
-}
-.social-links a {
-    color: white;
-    font-size: 18px;
-    margin: 0 15px;
-    transition: 0.3s;
-}
-.social-links a:hover { color: #00ff0a; }
-
-/* 프로젝트 */
-.projects-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: min-content;
-    grid-auto-flow: dense;
-    gap: 4px;
-    padding: 100px 5px 5px;
-    max-width: 98%;
-    margin: 0 auto;
-}
-.project { position: relative; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; }
-.wide { grid-column: span 2; }
-.tall { grid-row: span 2; }
-.large { grid-column: span 2; grid-row: span 2; }
-.project img { width: 100%; height: 100%; object-fit: cover; display: block; transition: filter 0.3s ease-in-out; }
-.project:hover::after { opacity: 1; }
-.project a { display: block; width: 100%; height: 100%; }
-
-@media (max-width: 992px) {
-    .projects-container { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 576px) {
-    .projects-container { grid-template-columns: 1fr; padding: 80px 3px 3px; }
-    .wide, .large { grid-column: span 1; }
-    .tall, .large { grid-row: span 1; }
-}
-
-/* 정보 텍스트 */
-.info { color: white; margin-top: 10px; }
-.info h3 { font-size: 22px; margin: 5px 0; }
-.info p { font-size: 16px; color: gray; }
-
-/* 스킬 */
-.skills { font-size: 16px; }
-.skill-title { font-size: 18px; font-weight: bold; margin-bottom: -5px !important; }
-.skill-description { font-size: 12px !important; font-weight: 300 !important; color: #bbb !important; margin-top: 5px; line-height: 1.4; font-style: italic !important; }
-.skill { margin-bottom: 20px !important; }
-
-/* 섹션 제목 */
-.section-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
-.intro-text { max-width: 800px; margin: 100px auto 20px auto; font-size: 1.1rem; line-height: 1.6; color: rgb(212, 212, 212); text-align: left; }
-.under-construction { text-align: center; font-size: 2rem; font-weight: bold; color: gray; margin: 60px 0 10px 0; }
-.footer { position: fixed; bottom: 0; width: 100%; text-align: center; color: rgb(218, 218, 218); background-color: black; padding: 10px 0; font-family: Helvetica, sans-serif; font-size: 0.9rem; }
 
 /* ======================== */
 /*        빔 라이트 CSS      */
@@ -163,12 +82,10 @@ body {
     pointer-events: none;
     border-radius: 50%;
     background-color: white;
-    filter: blur(110px) brightness(1);
+    filter: blur(90%) brightness(1);
     transform: translate(-50%, -50%);
     z-index: 9998;
-
-    /* 부드러운 플리커링 */
-    animation: flicker 0.2s infinite;
+    animation: flickerPC 0.25s infinite;
 }
 
 /* 모바일 빔 라이트 */
@@ -176,39 +93,42 @@ body {
     .beam {
         width: 60px;
         height: 60px;
-        filter: blur(90px) brightness(1);
+        filter: blur(50px) brightness(1);
     }
 }
 
-/* 🌟 부드러운 플리커링 (0.8 ~ 1) */
-@keyframes flicker {
-    0%   { filter: blur(110px) brightness(0.91); }
-    10%  { filter: blur(110px) brightness(0.83); }
-    20%  { filter: blur(110px) brightness(0.86); }
-    30%  { filter: blur(110px) brightness(0.9); }
-    40%  { filter: blur(110px) brightness(0.94); }
-    50%  { filter: blur(110px) brightness(1); }
-    60%  { filter: blur(110px) brightness(0.96); }
-    70%  { filter: blur(110px) brightness(0.92); }
-    80%  { filter: blur(110px) brightness(0.88); }
-    90%  { filter: blur(110px) brightness(0.97); }
-    100% { filter: blur(110px) brightness(0.85); }
+/* PC 플리커링 */
+@keyframes flickerPC {
+    0%   { filter: blur(90px) brightness(0.85); }
+    10%  { filter: blur(90px) brightness(0.9); }
+    20%  { filter: blur(90px) brightness(0.95); }
+    30%  { filter: blur(90px) brightness(1); }
+    40%  { filter: blur(90px) brightness(0.92); }
+    50%  { filter: blur(90px) brightness(0.87); }
+    60%  { filter: blur(90px) brightness(0.9); }
+    70%  { filter: blur(90px) brightness(0.95); }
+    80%  { filter: blur(90px) brightness(1); }
+    90%  { filter: blur(90px) brightness(0.9); }
+    100% { filter: blur(90px) brightness(0.85); }
 }
 
-/* 모바일용 동일 밝기 범위 */
+/* 모바일 플리커링 */
 @media (max-width: 768px) {
-    @keyframes flicker {
-        0%   { filter: blur(90px) brightness(0.8); }
-        10%  { filter: blur(90px) brightness(0.83); }
-        20%  { filter: blur(90px) brightness(0.86); }
-        30%  { filter: blur(90px) brightness(0.9); }
-        40%  { filter: blur(90px) brightness(0.94); }
-        50%  { filter: blur(90px) brightness(1); }
-        60%  { filter: blur(90px) brightness(0.96); }
-        70%  { filter: blur(90px) brightness(0.92); }
-        80%  { filter: blur(90px) brightness(0.88); }
-        90%  { filter: blur(90px) brightness(0.84); }
-        100% { filter: blur(90px) brightness(0.8); }
+    @keyframes flickerMobile {
+        0%   { filter: blur(50px) brightness(0.8); }
+        10%  { filter: blur(50px) brightness(0.85); }
+        20%  { filter: blur(50px) brightness(0.9); }
+        30%  { filter: blur(50px) brightness(1); }
+        40%  { filter: blur(50px) brightness(0.92); }
+        50%  { filter: blur(50px) brightness(0.88); }
+        60%  { filter: blur(50px) brightness(0.9); }
+        70%  { filter: blur(50px) brightness(0.95); }
+        80%  { filter: blur(50px) brightness(1); }
+        90%  { filter: blur(50px) brightness(0.9); }
+        100% { filter: blur(50px) brightness(0.85); }
+    }
+
+    .beam {
+        animation: flickerMobile 0.25s infinite;
     }
 }
-
