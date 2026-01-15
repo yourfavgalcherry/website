@@ -16,23 +16,20 @@ body {
     margin: 0;
     padding: 0;
     overflow-y: hidden;
+    cursor: none;             /* 커서 숨김 */
+    user-select: none;        /* 드래그/복사 방지 */
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
-::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-}
+::-webkit-scrollbar { width: 0; height: 0; }
 
-/* ======================== */
-/*        네비게이션        */
-/* ======================== */
 .navbar {
     position: fixed;
     top: 20px;
     right: 20px;
     z-index: 10000;
 }
-
 .navbar a {
     color: gray;
     text-decoration: none;
@@ -40,7 +37,6 @@ body {
     font-weight: 300;
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
-
 .navbar a:hover {
     color: white;
     text-shadow: 0 0 10px white, 0 0 20px white;
@@ -53,21 +49,20 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 180px;
-    height: 180px;
+    width: 160px;              /* 범위 확대 */
+    height: 160px;
     border-radius: 50%;
     background: white;
     pointer-events: none;
-    filter: blur(80px) brightness(0.9);
+    filter: blur(90px) brightness(0.9);
     transform: translate(-50%, -50%);
     z-index: 9998;
     animation: flicker 0.25s infinite;
 }
-
 @keyframes flicker {
-    0%   { filter: blur(80px) brightness(0.8); }
-    50%  { filter: blur(80px) brightness(1); }
-    100% { filter: blur(80px) brightness(0.85); }
+    0%   { filter: blur(90px) brightness(0.8); }
+    50%  { filter: blur(90px) brightness(1); }
+    100% { filter: blur(90px) brightness(0.85); }
 }
 
 /* ======================== */
@@ -78,8 +73,8 @@ body {
     margin: 100px auto 40px auto;
     font-size: 1.1rem;
     line-height: 1.6;
+    white-space: pre-wrap;
 }
-
 .intro-text p {
     margin-bottom: 1.6em;
 }
@@ -89,13 +84,14 @@ body {
     display: inline-block;
     transition: color 0.25s ease, text-shadow 0.25s ease;
 }
-
-/* 빔 안에 들어온 알파벳 */
 .char.glow {
     color: white;
     text-shadow:
         0 0 6px rgba(255,255,255,0.9),
-        0 0 14px rgba(255,255,255,0.7);
+        0 0 14px rgba(255,255,255,0.7),
+        0 0 28px rgba(255,255,255,0.6),
+        0 0 48px rgba(255,255,255,0.35);
+    filter: blur(0.3px);
 }
 
 /* ======================== */
@@ -108,7 +104,6 @@ body {
     color: gray;
     margin-bottom: 40px;
 }
-
 .footer {
     position: fixed;
     bottom: 0;
@@ -130,40 +125,37 @@ body {
     }
 
     .beam {
-        display: none;
+        display: block;  /* 모바일에서도 표시 */
     }
 
     .intro-text {
         padding: 20px;
         font-size: 0.95rem;
         margin-top: 80px;
+        white-space: pre-wrap;
     }
 }
 </style>
 </head>
 
 <body>
-
 <nav class="navbar">
     <a href="index.html">Home</a>
 </nav>
 
 <div class="beam"></div>
-
 <div class="intro-text" id="text">
-
-<p>
-Chaery Yoon is a Seoul-born, Berlin-based visual artist and creative technologist whose practice focuses on interactive, light-based visuals and real-time audiovisual environments. Coming from a sculptural background, she extends her artistic inquiry into digital forms by constructing immersive and responsive spaces through the use of TouchDesigner, Unreal Engine, AI, sensors, and lighting systems. Her works explore human-centered phenomena and speculative narratives in the creation of emotionally resonant worlds through sensory storytelling and spatial composition.
-</p>
-
-<p>
-Her visual language merges atmospheric abstractions with precise real-time control, often responding directly to sound, performance, and audience movement. For her, light is both the material and the metaphor, while intensity, rhythm, and texture are the sculptural elements that will shape emotional and physical presence across both physical and digital environments. She has presented her work internationally, in collaboration with experimental musicians, DJs, and performance artists.
-</p>
-
-<p>
-In 2024, her VR work Luminal premiered at Manifest:IO Symposium in Berlin, and a narrative version was later presented in TOO SOON TO SAY – Expanded Video Narratives, curated by Nebyula for Various Others at Bayerischer Hof in Munich. She also made a light-based campaign for RE:PUBLICA and has worked as a lighting designer for projects with Ableton, Creamcake, ASID, and LUNA. Treating light as substance and narrative conduit, her practice merges art, technology, and emotive storytelling into an invitation for audiences to enter speculative spaces in which the visuals transcend perception.
-</p>
-
+<p>Chaery Yoon is a Seoul-born, Berlin-based Light Designer and Creative Technologist.
+She focuses on interactive, light-based visuals and real-time audiovisual environments. 
+Coming from a sculptural background, she creates immersive and responsive spaces that 
+explore human-centered phenomena and speculative narratives.</p><p>Her visual language combines atmospheric abstractions with real-time control, responding to sound, 
+performance, and audience movement. Light is both the material and the metaphor, while intensity,
+rhythm, and texture act as sculptural elements in both physical and digital spaces.
+She works with TouchDesigner, Unreal Engine, sensors, and lighting systems (GrandMA2/3, Capture).</p><p>In 2024, her VR work Luminal premiered at the Manifest:IO Symposium at Haus der Visionäre 
+in Berlin. A narrative version was later presented in TOO SOON TO SAY, curated by Nebyula 
+for Various Others at Bayerischer Hof in Munich. 
+She has also created a light-based campaign for RE:PUBLICA and worked as a lighting designer 
+on projects with Ableton, Creamcake, ASID, LUNA, and Club[8].</p>
 </div>
 
 <div class="under-construction">Under Construction</div>
@@ -176,53 +168,56 @@ In 2024, her VR work Luminal premiered at Manifest:IO Symposium in Berlin, and a
 </footer>
 
 <script>
+// 드래그/선택/컨텍스트 메뉴 방지
+document.addEventListener("selectstart", e => e.preventDefault());
+document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("touchstart", e => e.preventDefault(), { passive: false });
 
-document.addEventListener("selectstart", e => e.preventDefault());   
-/* ======================== */
-/*  p 태그 단위 알파벳 분해 */
-/* ======================== */
+// ========================
+// p 태그 단위 알파벳 분해
+// ========================
 function wrapText(p) {
     const text = p.textContent;
     p.textContent = "";
 
-    [...text].forEach(char => {
-        if (char === " ") {
-            p.appendChild(document.createTextNode(" "));
+    [...text].forEach(c => {
+        if (c === " " || c === "\n") {
+            p.appendChild(document.createTextNode(c)); // 공백/줄바꿈은 그대로
         } else {
             const span = document.createElement("span");
             span.className = "char";
-            span.textContent = char;
+            span.textContent = c;
             p.appendChild(span);
         }
     });
 }
 
-document.querySelectorAll(".intro-text p").forEach(p => {
-    wrapText(p);
-});
+document.querySelectorAll(".intro-text p").forEach(wrapText);
 
 const chars = document.querySelectorAll(".char");
 const beam = document.querySelector(".beam");
-const BEAM_RADIUS = 70;
+const BEAM_RADIUS = 90; // 웹에서는 범위 넓힘
 
-/* ======================== */
-/*     마우스 추적 로직     */
-/* ======================== */
-document.addEventListener("mousemove", (e) => {
-    const mouseX = e.clientX;
-    const mouseY = e.clientY;
-
-    beam.style.transform = `translate(${mouseX - 90}px, ${mouseY - 90}px)`;
-
+// ========================
+// 마우스 & 터치 추적 로직
+// ========================
+function updateBeam(x, y) {
+    beam.style.transform = `translate(${x - 100}px, ${y - 100}px)`;
     chars.forEach(char => {
         const rect = char.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-
-        const dist = Math.hypot(mouseX - cx, mouseY - cy);
+        const cx = rect.left + rect.width/2;
+        const cy = rect.top + rect.height/2;
+        const dist = Math.hypot(x - cx, y - cy);
         char.classList.toggle("glow", dist < BEAM_RADIUS);
     });
-});
+}
+
+document.addEventListener("mousemove", e => updateBeam(e.clientX, e.clientY));
+document.addEventListener("touchmove", e => {
+    const touch = e.touches[0];
+    if(!touch) return;
+    updateBeam(touch.clientX, touch.clientY);
+}, { passive: false });
 </script>
 
 </body>
