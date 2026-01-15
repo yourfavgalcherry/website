@@ -15,9 +15,9 @@ body {
     color: rgb(180,180,180);
     margin: 0;
     padding: 0;
-    overflow-y: hidden;
-    cursor: none;             /* 커서 숨김 */
-    user-select: none;        /* 드래그/복사 방지 */
+    overflow-y: hidden;         /* 웹 기본: 스크롤 없음 */
+    cursor: none;               /* 커서 숨김 */
+    user-select: none;          /* 드래그/복사 방지 */
     -webkit-user-select: none;
     -ms-user-select: none;
 }
@@ -49,7 +49,7 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 160px;              /* 웹 빔 범위 */
+    width: 160px;              
     height: 160px;
     border-radius: 50%;
     background: white;
@@ -73,7 +73,7 @@ body {
     margin: 100px auto 40px auto;
     font-size: 1.1rem;
     line-height: 1.6;
-    white-space: pre-wrap;     /* 줄바꿈 유지 */
+    white-space: pre-wrap;     
 }
 .intro-text p {
     margin-bottom: 1.6em;
@@ -120,20 +120,20 @@ body {
 /* ======================== */
 @media (max-width: 768px) {
     body {
-        overflow-y: auto;               /* 스크롤 가능 */
+        overflow-y: auto;               /* 모바일 스크롤 가능 */
         -webkit-overflow-scrolling: touch;
     }
 
     .intro-text {
         padding: 15px;
-        font-size: 0.85rem;             /* 폰트 작게 */
+        font-size: 0.85rem;             
         line-height: 1.5;
         margin-top: 60px;
-        white-space: pre-wrap;
+        white-space: normal;            /* 모바일에서 자동 줄바꿈 */
     }
 
     .beam {
-        width: 100px;                   /* 모바일 빔 작게 */
+        width: 100px;                   
         height: 100px;
         filter: blur(60px) brightness(0.9);
     }
@@ -173,10 +173,11 @@ ASID, LUNA, and Club[8].</p>
 </footer>
 
 <script>
-// 드래그/선택/컨텍스트 메뉴 방지
+// ========================
+// 드래그/선택/컨텍스트 메뉴 방지 (웹에서만)
+// ========================
 document.addEventListener("selectstart", e => e.preventDefault());
 document.addEventListener("contextmenu", e => e.preventDefault());
-document.addEventListener("touchstart", e => e.preventDefault(), { passive: false });
 
 // ========================
 // p 태그 단위 알파벳 분해
@@ -185,9 +186,8 @@ function wrapText(p) {
     const text = p.textContent;
     p.textContent = "";
     [...text].forEach(c => {
-        if (c === " " || c === "\n") {
-            p.appendChild(document.createTextNode(c));
-        } else {
+        if (c === " " || c === "\n") p.appendChild(document.createTextNode(c));
+        else {
             const span = document.createElement("span");
             span.className = "char";
             span.textContent = c;
@@ -195,7 +195,6 @@ function wrapText(p) {
         }
     });
 }
-
 document.querySelectorAll(".intro-text p").forEach(wrapText);
 
 const chars = document.querySelectorAll(".char");
@@ -218,12 +217,15 @@ function updateBeam(x, y) {
     });
 }
 
+// 웹 마우스 추적
 document.addEventListener("mousemove", e => updateBeam(e.clientX, e.clientY));
+
+// 모바일 터치 추적
 document.addEventListener("touchmove", e => {
     const touch = e.touches[0];
     if(!touch) return;
     updateBeam(touch.clientX, touch.clientY);
-}, { passive: false });
+}, { passive: true }); // passive true로 스크롤 방지 안함
 </script>
 
 </body>
