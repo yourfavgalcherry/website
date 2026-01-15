@@ -45,7 +45,10 @@ const MIN_STROBE_INTERVAL = 80;
 const MAX_STROBE_INTERVAL = 400;
 
 document.addEventListener("touchstart", e => {
-    e.preventDefault();
+    // About 버튼 터치 시 스트로브 무시하고 기본 동작 허용
+    if (e.target.closest(".navbar a")) return; // 링크는 터치 막지 않음
+
+    e.preventDefault(); // 링크 아닌 영역만 터치 막음
     pressStartTime = Date.now();
     isDragging = false;
     isStrobing = false;
@@ -109,16 +112,42 @@ function screenStrobe() {
     strobe.style.left = "0";
     strobe.style.width = "100%";
     strobe.style.height = "100%";
-    strobe.style.backgroundColor = "white";
-    strobe.style.opacity = "0.85";
-    strobe.style.zIndex = "9999";
     strobe.style.pointerEvents = "none";
-    strobe.style.transition = "opacity 0.05s linear";
+    strobe.style.zIndex = "9999";
+
+    // 초기 상태: 투명 + 밑에서 위로 밝아지는 그라데이션
+    strobe.style.background = `
+        linear-gradient(to top,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.7) 30%,
+        rgba(255,255,255,1) 50%,
+        rgba(255,255,255,0.7) 70%,
+        rgba(255,255,255,0) 100%)`;
+    strobe.style.opacity = "0";
+    strobe.style.transition = "opacity 0.1s linear, background-position 0.1s linear";
+
     document.body.appendChild(strobe);
 
-    requestAnimationFrame(() => strobe.style.opacity = "0");
-    setTimeout(() => strobe.remove(), 120);
+    // 플래시 시작: opacity 증가
+    requestAnimationFrame(() => strobe.style.opacity = "1");
+
+    // 배경 위치를 살짝 위로 이동시키면서 밑→위 그라데이션 느낌 강화
+    setTimeout(() => {
+        strobe.style.backgroundPosition = "0 -50%";
+    }, 50);
+
+    // 중간 구간에서는 전체 화면 화이트
+    setTimeout(() => {
+        strobe.style.background = "rgba(255,255,255,1)";
+    }, 70);
+
+    // 끝나면서 서서히 사라짐
+    setTimeout(() => strobe.style.opacity = "0", 100);
+
+    // 제거
+    setTimeout(() => strobe.remove(), 150);
 }
+
 
 // ============================
 // About 버튼 반응 & 클릭
