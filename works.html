@@ -6,12 +6,16 @@
 <title>Works</title>
 
 <style>
+/* ======================== */
+/*        기본 스타일       */
+/* ======================== */
 body {
     margin: 0;
     background: black;
     font-family: Helvetica, Arial, sans-serif;
     color: rgb(180,180,180);
     cursor: none;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
     overflow-y: hidden;
 }
 
@@ -32,6 +36,9 @@ body {
 }
 .navbar a:hover { color: white; }
 
+/* ======================== */
+/*        빔 라이트         */
+/* ======================== */
 .beam {
     position: fixed;
     top: 0;
@@ -46,6 +53,9 @@ body {
     z-index: 100; /* 이미지 아래로 */
 }
 
+/* ======================== */
+/*      Works 레이아웃      */
+/* ======================== */
 .works-wrapper { padding: 110px 50px 60px; }
 .works-grid {
     display: grid;
@@ -82,13 +92,24 @@ body {
     pointer-events: none;
 }
 
+/* ======================== */
+/*        모바일 처리       */
+/* ======================== */
 @media (max-width: 768px) {
     body {
         cursor: default;
-        overflow-y: auto;
+        overflow-x: hidden; /* 가로 스크롤 막기 */
+        overflow-y: auto;   /* 세로 스크롤 허용 */
         -webkit-overflow-scrolling: touch;
     }
-    .works-wrapper { padding: 90px 20px 40px; }
+
+    .works-wrapper { padding: 90px 15px 40px; }
+
+    .works-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+        gap: 24px;
+    }
+
     .beam {
         width: 180px;
         height: 180px;
@@ -124,7 +145,6 @@ body {
             <img class="img-color" src="works/assets/Club8.jpg" alt="Club8">
         </a>
 
-
     </div>
 </div>
 
@@ -132,9 +152,9 @@ body {
 const beam = document.querySelector(".beam");
 const cards = document.querySelectorAll(".work-card");
 
-// 빔 범위 확대
-const DESKTOP_RADIUS = 450; // 웹 반경
-const MOBILE_RADIUS = 180;  // 모바일 반경
+// 빔 범위
+const DESKTOP_RADIUS = 450;
+const MOBILE_RADIUS = 220;
 
 function updateBeam(x, y) {
     beam.style.transform = `translate(${x - beam.offsetWidth/2}px, ${y - beam.offsetHeight/2}px)`;
