@@ -13,7 +13,15 @@ body {
     font-family: Helvetica, Arial, sans-serif;
     color: white;
     height: 100%;
+    cursor: none;
+    -webkit-user-select: none; /* Chrome / Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE */
+    user-select: none;         /* Standard */
 }
+
+
+
 
 /* 스크롤바 숨기기 */
 ::-webkit-scrollbar {
@@ -109,4 +117,17 @@ body {
     .beam {
         animation: flickerMobile 0.25s infinite;
     }
+}
+
+/* 단어 기본 상태 */
+.word {
+    transition: color 0.15s linear, text-shadow 0.15s linear;
+}
+
+/* 빔 안에 들어온 단어 */
+.word.glow {
+    color: white;
+    text-shadow:
+        0 0 6px rgba(255,255,255,0.8),
+        0 0 14px rgba(255,255,255,0.5);
 }

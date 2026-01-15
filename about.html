@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* ======================== */
-        /*        기본 스타일       */
-        /* ======================== */
-        body {
-            background-color: black;
-            font-family: Helvetica, sans-serif;
-            color: white;
-            margin: 0;
-            padding: 0;
-            overflow-y: hidden; /* 기본 스크롤 숨김 */
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About</title>
 
-        /* 스크롤바 숨기기 */
-        ::-webkit-scrollbar {
-            width: 0;
-            height: 0;
-        }
+<style>
+/* ======================== */
+/*        기본 스타일       */
+/* ======================== */
+body {
+    background-color: black;
+    font-family: Helvetica, Arial, sans-serif;
+    color: rgb(180,180,180);
+    margin: 0;
+    padding: 0;
+    overflow-y: hidden;
+}
 
-        /* ======================== */
-        /*      네비게이션 바       */
-        /* ======================== */
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+/* ======================== */
+/*        네비게이션        */
+/* ======================== */
 .navbar {
     position: fixed;
     top: 20px;
@@ -35,113 +34,196 @@
 }
 
 .navbar a {
-    color: gray; /* 초기 색상 */
+    color: gray;
     text-decoration: none;
     font-size: 19px;
-    font-weight: 300; /* 얇은 글씨 */
-    font-family: Helvetica, Arial, sans-serif;
-    cursor: pointer;
+    font-weight: 300;
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
-/* 빔 가까이 접근 or 호버 시 글로우 */
-.navbar a.beam-hover,
 .navbar a:hover {
-    color: white !important;
-    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
+    color: white;
+    text-shadow: 0 0 10px white, 0 0 20px white;
 }
 
-        /* ======================== */
-        /*      소개 텍스트         */
-        /* ======================== */
-        .intro-text {
-            max-width: 800px;
-            margin: 100px auto 20px auto;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: rgb(212, 212, 212);
-            text-align: left;
-            white-space: pre-line; /* 줄바꿈 유지 */
-        }
+/* ======================== */
+/*        빔 라이트         */
+/* ======================== */
+.beam {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: white;
+    pointer-events: none;
+    filter: blur(80px) brightness(0.9);
+    transform: translate(-50%, -50%);
+    z-index: 9998;
+    animation: flicker 0.25s infinite;
+}
 
-        .under-construction {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: bold;
-            color: gray;
-            margin: 20px 0 10px 0;
-        }
+@keyframes flicker {
+    0%   { filter: blur(80px) brightness(0.8); }
+    50%  { filter: blur(80px) brightness(1); }
+    100% { filter: blur(80px) brightness(0.85); }
+}
 
-        .footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            text-align: center;
-            color: rgb(218, 218, 218);
-            background-color: black;
-            padding: 10px 0;
-            font-size: 0.9rem;
-        }
+/* ======================== */
+/*        텍스트 영역       */
+/* ======================== */
+.intro-text {
+    max-width: 800px;
+    margin: 100px auto 40px auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
 
-        /* ======================== */
-        /*      모바일 최적화       */
-        /* ======================== */
-        @media (max-width: 768px) {
-            body {
-                overflow-y: auto; /* 모바일 스크롤 허용 */
-                -webkit-overflow-scrolling: touch;
-            }
+.intro-text p {
+    margin-bottom: 1.6em;
+}
 
-            body::-webkit-scrollbar {
-                width: 0;
-                height: 0;
-            }
+/* 알파벳 단위 */
+.char {
+    display: inline-block;
+    transition: color 0.25s ease, text-shadow 0.25s ease;
+}
 
-            .intro-text {
-                padding: 20px;
-                font-size: 0.95rem;
-                line-height: 1.4;
-                max-width: 95%;
-                margin: 80px auto 20px auto;
-            }
+/* 빔 안에 들어온 알파벳 */
+.char.glow {
+    color: white;
+    text-shadow:
+        0 0 6px rgba(255,255,255,0.9),
+        0 0 14px rgba(255,255,255,0.7);
+}
 
-            .under-construction {
-                font-size: 1.5rem;
-                margin: 15px 0 10px 0;
-            }
+/* ======================== */
+/*        기타 UI           */
+/* ======================== */
+.under-construction {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: gray;
+    margin-bottom: 40px;
+}
 
-            .footer {
-                font-size: 0.8rem;
-                padding: 8px 0;
-            }
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background: black;
+    padding: 10px 0;
+    font-size: 0.9rem;
+    color: rgb(218,218,218);
+}
 
-            .navbar a {
-                font-size: 18px;
-            }
-        }
-    </style>
+/* ======================== */
+/*        모바일 처리       */
+/* ======================== */
+@media (max-width: 768px) {
+    body {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .beam {
+        display: none;
+    }
+
+    .intro-text {
+        padding: 20px;
+        font-size: 0.95rem;
+        margin-top: 80px;
+    }
+}
+</style>
 </head>
+
 <body>
-    <!-- 네비게이션 바 -->
-    <nav class="navbar">
-        <a href="index.html">Home</a>
-    </nav>
 
-    <!-- 소개 텍스트 -->
-    <div class="intro-text">
+<nav class="navbar">
+    <a href="index.html">Home</a>
+</nav>
+
+<div class="beam"></div>
+
+<div class="intro-text" id="text">
+
+<p>
 Chaery Yoon is a Seoul-born, Berlin-based visual artist and creative technologist whose practice focuses on interactive, light-based visuals and real-time audiovisual environments. Coming from a sculptural background, she extends her artistic inquiry into digital forms by constructing immersive and responsive spaces through the use of TouchDesigner, Unreal Engine, AI, sensors, and lighting systems. Her works explore human-centered phenomena and speculative narratives in the creation of emotionally resonant worlds through sensory storytelling and spatial composition.
+</p>
 
+<p>
 Her visual language merges atmospheric abstractions with precise real-time control, often responding directly to sound, performance, and audience movement. For her, light is both the material and the metaphor, while intensity, rhythm, and texture are the sculptural elements that will shape emotional and physical presence across both physical and digital environments. She has presented her work internationally, in collaboration with experimental musicians, DJs, and performance artists.
+</p>
 
-In 2024, her VR work <strong>Luminal</strong> premiered at Manifest:IO Symposium in Berlin, and a narrative version was later presented in TOO SOON TO SAY – Expanded Video Narratives, curated by Nebyula for Various Others at Bayerischer Hof in Munich. She also made a light-based campaign for RE:PUBLICA and has worked as a lighting designer for projects with Ableton, Creamcake, ASID, and LUNA. Treating light as substance and narrative conduit, her practice merges art, technology, and emotive storytelling into an invitation for audiences to enter speculative spaces in which the visuals transcend perception.
-    </div>
+<p>
+In 2024, her VR work Luminal premiered at Manifest:IO Symposium in Berlin, and a narrative version was later presented in TOO SOON TO SAY – Expanded Video Narratives, curated by Nebyula for Various Others at Bayerischer Hof in Munich. She also made a light-based campaign for RE:PUBLICA and has worked as a lighting designer for projects with Ableton, Creamcake, ASID, and LUNA. Treating light as substance and narrative conduit, her practice merges art, technology, and emotive storytelling into an invitation for audiences to enter speculative spaces in which the visuals transcend perception.
+</p>
 
-    <!-- Under Construction -->
-    <div class="under-construction">Under Construction</div>
+</div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        Any inquiries: <a href="mailto:chaeryyoon.de@gmail.com" style="color: gray; text-decoration: underline;">chaeryyoon.de@gmail.com</a>
-    </footer>
+<div class="under-construction">Under Construction</div>
+
+<footer class="footer">
+    Any inquiries:
+    <a href="mailto:chaeryyoon.de@gmail.com" style="color: gray; text-decoration: underline;">
+        chaeryyoon.de@gmail.com
+    </a>
+</footer>
+
+<script>
+
+document.addEventListener("selectstart", e => e.preventDefault());   
+/* ======================== */
+/*  p 태그 단위 알파벳 분해 */
+/* ======================== */
+function wrapText(p) {
+    const text = p.textContent;
+    p.textContent = "";
+
+    [...text].forEach(char => {
+        if (char === " ") {
+            p.appendChild(document.createTextNode(" "));
+        } else {
+            const span = document.createElement("span");
+            span.className = "char";
+            span.textContent = char;
+            p.appendChild(span);
+        }
+    });
+}
+
+document.querySelectorAll(".intro-text p").forEach(p => {
+    wrapText(p);
+});
+
+const chars = document.querySelectorAll(".char");
+const beam = document.querySelector(".beam");
+const BEAM_RADIUS = 70;
+
+/* ======================== */
+/*     마우스 추적 로직     */
+/* ======================== */
+document.addEventListener("mousemove", (e) => {
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+
+    beam.style.transform = `translate(${mouseX - 90}px, ${mouseY - 90}px)`;
+
+    chars.forEach(char => {
+        const rect = char.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+
+        const dist = Math.hypot(mouseX - cx, mouseY - cy);
+        char.classList.toggle("glow", dist < BEAM_RADIUS);
+    });
+});
+</script>
+
 </body>
 </html>
