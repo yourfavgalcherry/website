@@ -15,9 +15,9 @@ body {
     color: rgb(180,180,180);
     margin: 0;
     padding: 0;
-    overflow-y: hidden;         /* 웹 기본: 스크롤 없음 */
-    cursor: none;               /* 커서 숨김 */
-    user-select: none;          /* 드래그/복사 방지 */
+    overflow-y: hidden;
+    cursor: none;
+    user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
 }
@@ -49,7 +49,7 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 160px;              
+    width: 160px;
     height: 160px;
     border-radius: 50%;
     background: white;
@@ -73,10 +73,15 @@ body {
     margin: 100px auto 40px auto;
     font-size: 1.1rem;
     line-height: 1.6;
-    white-space: pre-wrap;     
+    white-space: pre-wrap;
 }
 .intro-text p {
     margin-bottom: 1.6em;
+}
+
+/* 🔹 기본 상태: 모바일 텍스트 숨김 */
+#mobile-text {
+    display: none;
 }
 
 /* 알파벳 단위 */
@@ -120,20 +125,31 @@ body {
 /* ======================== */
 @media (max-width: 768px) {
     body {
-        overflow-y: auto;               /* 모바일 스크롤 가능 */
+        overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        cursor: default;
+    }
+
+    /* 🔹 모바일에서는 데스크톱 텍스트 숨기고 */
+    #desktop-text {
+        display: none;
+    }
+
+    /* 🔹 모바일 텍스트 표시 */
+    #mobile-text {
+        display: block;
     }
 
     .intro-text {
         padding: 15px;
-        font-size: 0.85rem;             
+        font-size: 0.85rem;
         line-height: 1.5;
         margin-top: 60px;
-        white-space: normal;            /* 모바일에서 자동 줄바꿈 */
+        white-space: normal;
     }
 
     .beam {
-        width: 100px;                   
+        width: 100px;
         height: 100px;
         filter: blur(60px) brightness(0.9);
     }
@@ -148,7 +164,8 @@ body {
 
 <div class="beam"></div>
 
-<div class="intro-text" id="text">
+<!-- 데스크톱 텍스트 -->
+<div class="intro-text" id="desktop-text">
 <p>Chaery Yoon is a Seoul-born, Berlin-based Light Designer and Creative Technologist.
 She focuses on interactive, light-based visuals and real-time audiovisual environments.
 Coming from a sculptural background, she creates immersive and responsive spaces that
@@ -156,11 +173,33 @@ explore human-centered phenomena and speculative narratives.</p><p>Her visual la
 responding to sound, performance, and audience movement. Light is both the material
 and the metaphor, while intensity, rhythm, and texture act as sculptural elements
 in both physical and digital spaces. She works with TouchDesigner, Unreal Engine,
-sensors, and lighting systems (GrandMA2/3, Capture).</p><p>In 2024, her VR work Luminal premiered at the Manifest:IO Symposium at Haus der Visionäre
+sensors, and lighting systems (GrandMA2/3, Capture).</p><p>In 2024, her VR work 'Luminal' premiered at the Manifest:IO Symposium at Haus der Visionäre
 in Berlin. A narrative version was later presented in TOO SOON TO SAY, curated by Nebyula
 for Various Others at Bayerischer Hof in Munich. She has also created a light-based campaign
-for RE:PUBLICA and worked as a lighting designer on projects with Ableton, Creamcake,
+for RE:PUBLICA/Tincon and worked as a lighting designer on projects with Ableton, Creamcake,
 ASID, LUNA, and Club[8].</p>
+</div>
+
+<!-- 모바일 텍스트 -->
+<div class="intro-text" id="mobile-text">
+<p>Chaery Yoon is a Seoul-born, Berlin-based Light Designer
+and Creative Technologist. She focuses on interactive, 
+light-based visuals and real-time audiovisual environments.
+Coming from a sculptural background, she creates immersive
+and responsive spaces that explore human-centered 
+phenomena and speculative narratives.</p><p>Her visual language combines atmospheric abstractions 
+with real-time control, responding to sound, performance, 
+and audience movement. Light is both the material and 
+the metaphor, while intensity, rhythm, and texture act as 
+sculptural elements in both physical and digital spaces. 
+She works with TouchDesigner, Unreal Engine, sensors, and 
+lighting systems (GrandMA2/3, Capture).</p><p>In 2024, her VR work 'Luminal' premiered at the Manifest:IO 
+at Haus der Visionäre in Berlin. A narrative version was 
+later presented in TOO SOON TO SAY, curated by Nebyula for 
+Various Others at Bayerischer Hof in Munich. She has also 
+created a light-based campaign for RE:PUBLICA/Tincon and 
+worked as a lighting designer on projects with Ableton, 
+Creamcake, ASID, LUNA, and Club[8].</p>
 </div>
 
 <div class="under-construction">© 2026 Chaery Yoon. All rights reserved.</div>
@@ -173,21 +212,16 @@ ASID, LUNA, and Club[8].</p>
 </footer>
 
 <script>
-// ========================
-// 드래그/선택/컨텍스트 메뉴 방지 (웹에서만)
-// ========================
 document.addEventListener("selectstart", e => e.preventDefault());
 document.addEventListener("contextmenu", e => e.preventDefault());
 
-// ========================
-// p 태그 단위 알파벳 분해
-// ========================
 function wrapText(p) {
     const text = p.textContent;
     p.textContent = "";
     [...text].forEach(c => {
-        if (c === " " || c === "\n") p.appendChild(document.createTextNode(c));
-        else {
+        if (c === " " || c === "\n") {
+            p.appendChild(document.createTextNode(c));
+        } else {
             const span = document.createElement("span");
             span.className = "char";
             span.textContent = c;
@@ -202,30 +236,24 @@ const beam = document.querySelector(".beam");
 const BEAM_RADIUS = 90;
 const MOBILE_BEAM_RADIUS = 50;
 
-// ========================
-// 마우스 & 터치 추적 로직
-// ========================
 function updateBeam(x, y) {
     beam.style.transform = `translate(${x - beam.offsetWidth/2}px, ${y - beam.offsetHeight/2}px)`;
     const radius = window.innerWidth <= 768 ? MOBILE_BEAM_RADIUS : BEAM_RADIUS;
     chars.forEach(char => {
         const rect = char.getBoundingClientRect();
-        const cx = rect.left + rect.width/2;
-        const cy = rect.top + rect.height/2;
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
         const dist = Math.hypot(x - cx, y - cy);
         char.classList.toggle("glow", dist < radius);
     });
 }
 
-// 웹 마우스 추적
 document.addEventListener("mousemove", e => updateBeam(e.clientX, e.clientY));
-
-// 모바일 터치 추적
 document.addEventListener("touchmove", e => {
-    const touch = e.touches[0];
-    if(!touch) return;
-    updateBeam(touch.clientX, touch.clientY);
-}, { passive: true }); // passive true로 스크롤 방지 안함
+    const t = e.touches[0];
+    if (!t) return;
+    updateBeam(t.clientX, t.clientY);
+}, { passive: true });
 </script>
 
 </body>
