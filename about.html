@@ -49,20 +49,60 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    background: white;
+    width: 200px;
+    height: 200px;
     pointer-events: none;
-    filter: blur(90px) brightness(0.9);
+    border-radius: 50%;
+    background-color: white;
+    filter: blur(90px) brightness(1);
     transform: translate(-50%, -50%);
     z-index: 9998;
-    animation: flicker 0.25s infinite;
+    animation: flickerPC 0.25s infinite;
 }
-@keyframes flicker {
-    0%   { filter: blur(90px) brightness(0.8); }
-    50%  { filter: blur(90px) brightness(1); }
+
+/* 모바일 빔 라이트 */
+@media (max-width: 768px) {
+    .beam {
+        width: 60px;
+        height: 60px;
+        filter: blur(50px) brightness(1);
+    }
+}
+
+/* PC 플리커링 */
+@keyframes flickerPC {
+    0%   { filter: blur(90px) brightness(0.85); }
+    10%  { filter: blur(90px) brightness(0.9); }
+    20%  { filter: blur(90px) brightness(0.95); }
+    30%  { filter: blur(90px) brightness(1); }
+    40%  { filter: blur(90px) brightness(0.92); }
+    50%  { filter: blur(90px) brightness(0.87); }
+    60%  { filter: blur(90px) brightness(0.9); }
+    70%  { filter: blur(90px) brightness(0.95); }
+    80%  { filter: blur(90px) brightness(1); }
+    90%  { filter: blur(90px) brightness(0.9); }
     100% { filter: blur(90px) brightness(0.85); }
+}
+
+/* 모바일 플리커링 */
+@media (max-width: 768px) {
+    @keyframes flickerMobile {
+        0%   { filter: blur(50px) brightness(0.8); }
+        10%  { filter: blur(50px) brightness(0.85); }
+        20%  { filter: blur(50px) brightness(0.9); }
+        30%  { filter: blur(50px) brightness(0.95); }
+        40%  { filter: blur(50px) brightness(1); }
+        50%  { filter: blur(50px) brightness(0.92); }
+        60%  { filter: blur(50px) brightness(0.9); }
+        70%  { filter: blur(50px) brightness(0.95); }
+        80%  { filter: blur(50px) brightness(1); }
+        90%  { filter: blur(50px) brightness(0.9); }
+        100% { filter: blur(50px) brightness(0.85); }
+    }
+
+    .beam {
+        animation: flickerMobile 0.25s infinite;
+    }
 }
 
 /* ======================== */
