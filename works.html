@@ -31,10 +31,13 @@ body {
     color: gray;
     text-decoration: none;
     font-size: 19px;
-    margin-left: 18px;
     font-weight: 300;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
 }
-.navbar a:hover { color: white; }
+.navbar a:hover {
+    color: white;
+    text-shadow: 0 0 10px white, 0 0 20px white;
+}
 
 /* ======================== */
 /*        빔 라이트         */
@@ -43,14 +46,20 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 220px; 
-    height: 220px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.2); /* 흐리게 표시 */
+    background: white;
     pointer-events: none;
-    filter: blur(90px) brightness(0.9);
+    filter: blur(90px) brightness(0.2);
     transform: translate(-50%, -50%);
-    z-index: 100; /* 이미지 아래로 */
+    z-index: 9998;
+    animation: flicker 0.5s infinite;
+}
+@keyframes flicker {
+    0%   { filter: blur(90px) brightness(0.0); }
+    50%  { filter: blur(90px) brightness(0.2); }
+    100% { filter: blur(90px) brightness(0.1); }
 }
 
 /* ======================== */

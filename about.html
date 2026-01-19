@@ -145,14 +145,32 @@ body {
         font-size: 0.85rem;
         line-height: 1.5;
         margin-top: 60px;
-        white-space: normal;
-    }
+        white-space: pre-wrap;
+        }
 
     .beam {
         width: 100px;
         height: 100px;
         filter: blur(60px) brightness(0.9);
     }
+
+        .under-construction {
+        position: fixed;
+        bottom: 36px;              /* footer 위 */
+        left: 0;
+        width: 100%;
+        margin: 0;
+        font-size: 0.7rem;
+        color: rgb(130,130,130);
+        pointer-events: none;
+    }
+
+    .footer {
+        font-size: 0.75rem;
+        padding: 8px 0;
+    }
+
+
 }
 </style>
 </head>
