@@ -14,6 +14,15 @@ let pressStartTime = 0;
 let lastStrobeTime = 0;
 let isMouseDown = false;
 
+const customCursor = document.querySelector(".cursor");
+
+document.addEventListener("mousemove", e => {
+    customCursor.style.left = e.clientX + "px";
+    customCursor.style.top = e.clientY + "px";
+});
+
+
+
 // ============================
 // PC 마우스 제어
 // ============================
@@ -31,6 +40,8 @@ if (!isMobile) {
 
     document.addEventListener("mouseup", () => isMouseDown = false);
 }
+
+
 
 // ============================
 // 모바일 터치 제어
@@ -190,3 +201,5 @@ function animateBeam(timestamp) {
 }
 
 requestAnimationFrame(animateBeam);
+
+

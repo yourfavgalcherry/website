@@ -5,19 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Works</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
 /* ======================== */
 /*        기본 스타일       */
 /* ======================== */
 body {
-    margin: 0;
-    background: black;
-    font-family: Helvetica, Arial, sans-serif;
+    background-color: black;
+    font-family: 'Inter', sans-serif;;
+    font-size: 16px;
     color: rgb(180,180,180);
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
     cursor: none;
-    overflow-x: hidden; /* 가로 스크롤 방지 */
-    overflow-y: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;        /* 🔹 기본 볼드감 */
+    letter-spacing: -0.01em;
 }
+
 
 ::-webkit-scrollbar { display: none; }
 
@@ -27,17 +35,37 @@ body {
     right: 20px;
     z-index: 10000;
 }
+
 .navbar a {
-    color: gray;
+    color: gray; 
     text-decoration: none;
     font-size: 19px;
-    font-weight: 300;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    cursor: none;
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
+
+/* 빔 가까이 접근 or 호버 시 글로우 */
+/* 빔 가까이 접근 or 호버 시 글로우 */
+.navbar a.beam-hover,
 .navbar a:hover {
-    color: white;
-    text-shadow: 0 0 10px white, 0 0 20px white;
+    color: white !important;
+    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
 }
+
+/* 커서 반응 영역 확장 (보이지 않지만 커서 감지 가능) */
+.navbar a::before {
+    content: '';
+    position: absolute;
+    top: -30px;       /* 위쪽 여유 */
+    left: -50px;      /* 왼쪽 여유 */
+    width: calc(100% + 60px);  /* 오른쪽 포함 */
+    height: calc(100% + 40px); /* 아래쪽 포함 */
+    pointer-events: auto;      /* 커서 감지 가능 */
+    cursor: url('works/UI/Star.png'), auto;
+}
+
 
 /* ======================== */
 /*        빔 라이트         */

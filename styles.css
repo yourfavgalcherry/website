@@ -9,21 +9,67 @@
 
 body {
     background-color: black;
+    font-family: 'Inter', sans-serif;;
+    font-size: 16px;
+    color: rgb(180,180,180);
+    margin: 0;
+    padding: 0;
     overflow: hidden;
-    font-family: Helvetica, Arial, sans-serif;
-    color: white;
-    height: 100%;
     cursor: none;
-    -webkit-user-select: none; /* Chrome / Safari */
-    -moz-user-select: none;    /* Firefox */
-    -ms-user-select: none;     /* IE */
-    user-select: none;         /* Standard */
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;        
+    letter-spacing: -0.01em;
 }
 
 
+/* 커스텀 커서 */
+.cursor {
+    position: fixed;
+    width: 32px; /* 원하는 이미지 크기 */
+    height: 32px;
+    background: url('your-cursor.png') no-repeat center center;
+    background-size: contain;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 20000;
+    opacity: 0; /* 기본은 안보이게 */
+    transition: opacity 0.2s ease, transform 0.1s ease;
+}
 
 
-/* 스크롤바 숨기기 */
+/* ======================== */
+/*       배경 CLICK 텍스트   */
+/* ======================== */
+.bg-click {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: "Arial Narrow", "Helvetica Neue Condensed", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+
+    font-size: 28vw;          /* 화면 전체 채우기 */
+    letter-spacing: 0.02em;
+
+    color: #ffffff;
+    opacity: 0.05;            /* 매우 연하게 */
+
+    transform: scaleY(1.6);   /* 세로로 늘리기 */
+    white-space: nowrap;
+
+    z-index: 1;               /* 음수 금지 */
+    pointer-events: none;
+    cursor: none;
+    user-select: none;
+}
+
+/* ======================== */
+/*     스크롤바 숨기기       */
+/* ======================== */
 ::-webkit-scrollbar {
     width: 0;
     height: 0;
@@ -40,20 +86,33 @@ body {
 }
 
 .navbar a {
-    color: gray; /* 초기 색상 */
+    color: gray; 
     text-decoration: none;
     font-size: 19px;
-    font-weight: 300; /* 얇은 글씨 */
-    font-family: Helvetica, Arial, sans-serif;
-    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    cursor: none;
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
+/* 빔 가까이 접근 or 호버 시 글로우 */
 /* 빔 가까이 접근 or 호버 시 글로우 */
 .navbar a.beam-hover,
 .navbar a:hover {
     color: white !important;
     text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
+}
+
+/* 커서 반응 영역 확장 (보이지 않지만 커서 감지 가능) */
+.navbar a::before {
+    content: '';
+    position: absolute;
+    top: -30px;       /* 위쪽 여유 */
+    left: -50px;      /* 왼쪽 여유 */
+    width: calc(100% + 60px);  /* 오른쪽 포함 */
+    height: calc(100% + 40px); /* 아래쪽 포함 */
+    pointer-events: auto;      /* 커서 감지 가능 */
+    cursor: url('works/UI/Star.png'), auto;
 }
 
 /* ======================== */
@@ -132,5 +191,24 @@ body {
         0 0 14px rgba(255,255,255,0.5);
 }
 
+/* ======================== */
+/* 클릭 가능한 요소 커서 보이게 */
+/* ======================== */
+a,
+button,
+input,
+textarea,
+select {
+    cursor: url('works/UI/Star.png'), auto !important;
+    
+}
 
+body, html {
+    cursor: none !important;
+}
+
+.container,
+.bg-click {
+    pointer-events: none;
+}
 
