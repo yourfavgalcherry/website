@@ -70,8 +70,22 @@ body {
 
 @media (max-width: 768px) {
     .bg-click {
-        font-size: 35vw;      /* 모바일 화면 기준으로 더 크게 */
-        transform: scaleY(2.0); /* 세로로 더 길게 늘림 */
+
+        /* 세로 기준으로 크기 맞춤 → 잘림 방지 */
+        font-size: 22vh;
+
+        /* 세로 길게 */
+        transform: scaleY(2.3) scaleX(0.9);
+
+        /* 글자 얇게 보이도록 */
+        letter-spacing: -0.01em;
+
+        /* 좌우 잘림 방지 */
+        max-width: 100vw;
+        overflow: hidden;
+
+        /* 화면 꽉차게 */
+        line-height: 0.8;
     }
 }
 
