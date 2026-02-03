@@ -40,12 +40,12 @@ body {
     font-weight: 700;
 
     font-size: 28vw;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.02em;
 
     color: #ffffff;
     opacity: 0.05;
 
-    transform: scaleY(2.5);
+    transform: scaleY(1.6);
     white-space: nowrap;
 
     z-index: 1;
@@ -56,28 +56,34 @@ body {
 }
 
 @media (max-width: 768px) {
+
     .bg-click {
+        position: fixed;
+        inset: 0;
+
         display: flex;
         align-items: center;
         justify-content: center;
-        text-align: center;
 
-        width: 100vw;
-        height: 100vh;
+        /* 🔥 진짜 화면 기준 크기 */
+        font-size: 42vh;        /* ← 핵심 */
+        line-height: 0.72;
+
+        /* 🔥 세로 길쭉 느낌 */
+        letter-spacing: -0.03em;
+        font-weight: 900;
+
+        white-space: nowrap;
+
         margin: 0;
         padding: 0;
 
-        /* 폰트 기준 키우기 */
-        font-size: 32vw;            /* vw 기준으로 크게 */
-        line-height: 1;
-        white-space: nowrap;
-        overflow: visible;
-
-        /* 세로/가로 비율 조절 */
-        transform: scaleY(6) scaleX(0.8);  /* 세로 훨씬 늘리고, 가로 조금 확대 */
-        transform-origin: center center;
+        /* transform 제거 */
+        transform: none;
     }
+
 }
+
 
 
 /* ======================== */
