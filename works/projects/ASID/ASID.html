@@ -14,7 +14,7 @@ body {
     font-family: 'Inter', sans-serif;
     color: rgb(200,200,200);
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: hidden; /* 초기 상태 */
 }
 
 ::-webkit-scrollbar { display: none; }
@@ -33,13 +33,11 @@ body {
     cursor: none;
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
-
 .navbar a.beam-hover,
 .navbar a:hover {
     color: white !important;
     text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
 }
-
 .navbar a::before {
     content: '';
     position: absolute;
@@ -58,7 +56,6 @@ body {
     transition: transform 0.5s ease;
     cursor: url('../../UI/down arrow.png'), auto;
 }
-
 .slides img {
     width: 100%;
     height: 100%;
@@ -72,7 +69,6 @@ body {
     text-decoration: none;
     transition: color 0.2s ease, text-shadow 0.2s ease;
 }
-
 .inline-link:hover {
     color: white;
     text-shadow:
@@ -80,12 +76,11 @@ body {
         0 0 16px rgba(255,255,255,0.6);
 }
 
-
 /* 모바일 */
 @media (max-width: 768px) {
     .slider { height: auto; }
     .slides img { height: auto; }
-    body { overflow-y: auto; }
+    body { overflow-y: auto !important; } /* 모바일 스크롤 허용 */
 }
 
 .text-wrapper {
@@ -95,20 +90,17 @@ body {
     font-size: 1.05rem;
     line-height: 1.6;
 }
-
 .project-title {
     font-size: 1.5rem;
     font-weight: 600;
     color: white;
     margin-bottom: 8px;
 }
-
 .project-meta {
     font-size: 0.9rem;
     color: rgb(150,150,150);
     margin-bottom: 24px;
 }
-
 .text-wrapper p { margin-bottom: 1.5em; }
 
 @media (max-width: 768px) {
@@ -127,12 +119,12 @@ body {
 
 <section class="slider">
     <div class="slides">
-        <img src="1.png">
-        <img src="2.gif">
-        <img src="3.gif">
-        <img src="4.gif">
-        <img src="5.gif">
-        <img src="6.gif">
+        <img src="1.png" alt="ASID Drowned God 01">
+        <img src="2.gif" alt="ASID Drowned God 02">
+        <img src="3.gif" alt="ASID Drowned God 03">
+        <img src="4.gif" alt="ASID Drowned God 04">
+        <img src="5.gif" alt="ASID Drowned God 05">
+        <img src="6.gif" alt="ASID Drowned God 06">
     </div>
 </section>
 
@@ -140,9 +132,9 @@ body {
     <div class="project-title">Light Design | ASID: Drowned God, Berlin</div>
     <div class="project-meta">October, 2025</div>
     <p>
-        Responsible for lighting programming and live operation using GrandMA2 during the Drowned God event at <i>Musikbrauerei</i>, Berlin,organized by <i>Fetchish, EWASTE, 
-<a href="https://www.instagram.com/aphoticsignals/" target="_blank" class="inline-link">ASID</a>,</i> 
-and <i>Tear City.</i> Executed real-time lighting control across multiple live performances, integrating scenographic and audiovisual elements within the industrial architecture of the venue.
+        Lighting programming, design, and live operation using GrandMA2 during the Drowned God event at <i>Musikbrauerei</i>, Berlin, organized by <i>Fetchish, EWASTE, 
+        <a href="https://www.instagram.com/aphoticsignals/" target="_blank" class="inline-link">ASID</a>,</i> 
+        and <i>Tear City.</i> Executed real-time lighting control across multiple live performances, integrating scenographic and audiovisual elements within the industrial architecture of the venue.
     </p>
 </section>
 
@@ -152,18 +144,19 @@ const slideImages = document.querySelectorAll('.slides img');
 let currentIndex = 0;
 const maxIndex = slideImages.length - 1;
 
+// ----------------------
+// PC: 휠 이벤트 슬라이드
+// ----------------------
 window.addEventListener('wheel', e => {
-    if (window.innerWidth <= 768) return;
+    if (window.innerWidth <= 768) return; // 모바일 제외
 
     const delta = e.deltaY;
 
     if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
         e.preventDefault();
-
         currentIndex = delta > 0 
             ? Math.min(currentIndex + 1, maxIndex)
             : Math.max(currentIndex - 1, 0);
-
         slides.style.transform = `translateX(-${currentIndex * 100}%)`;
     }
 
@@ -178,6 +171,9 @@ window.addEventListener('wheel', e => {
     }
 });
 
+// ----------------------
+// 모바일 터치 슬라이드
+// ----------------------
 let isDragging = false;
 let startX = 0;
 
