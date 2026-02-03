@@ -209,13 +209,19 @@ const MOBILE_RADIUS = 220;
 function updateBeam(x, y) {
     const radius = window.innerWidth <= 768 ? MOBILE_RADIUS : DESKTOP_RADIUS;
 
+    // 스크롤 보정 적용
+    const scrollX = window.scrollX || window.pageXOffset;
+    const scrollY = window.scrollY || window.pageYOffset;
+
     beam.style.transform = `translate(${x - beam.offsetWidth/2}px, ${y - beam.offsetHeight/2}px)`;
 
     cards.forEach(card=>{
         const rect = card.getBoundingClientRect();
         const colorImg = card.querySelector(".img-color");
-        const localX = x - rect.left;
-        const localY = y - rect.top;
+
+        // scroll 보정 적용
+        const localX = x - (rect.left + scrollX);
+        const localY = y - (rect.top + scrollY);
 
         if(localX>=0 && localX<=rect.width && localY>=0 && localY<=rect.height){
             colorImg.style.maskImage = `radial-gradient(circle ${radius}px at ${localX}px ${localY}px, black 0%, transparent 60%)`;
@@ -226,6 +232,7 @@ function updateBeam(x, y) {
         }
     });
 }
+
 
 // PC 마우스
 document.addEventListener("mousemove", e => updateBeam(e.clientX, e.clientY));

@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Creamcake 3hd 2025: Vertigo</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -14,9 +13,10 @@ body {
     font-family: 'Inter', sans-serif;
     color: rgb(200,200,200);
     overflow-x: hidden;
-    overflow-y: hidden; /* 초기 상태 */
+    overflow-y: hidden;
 }
 
+/* 스크롤 숨기기 */
 ::-webkit-scrollbar { display: none; }
 
 .navbar {
@@ -34,28 +34,23 @@ body {
     cursor: none;
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
-.navbar a.beam-hover,
 .navbar a:hover {
     color: white !important;
     text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
 }
-.navbar a::before {
-    content: '';
-    position: absolute;
-    top: -30px;
-    left: -50px;
-    width: calc(100% + 60px);
-    height: calc(100% + 40px);
-    pointer-events: auto;
-    cursor: url('../../UI/Star.png'), auto;
-}
 
+/* 슬라이드 스타일 */
+.slider {
+    width: 100%;
+    height: 100vh; /* 모바일에서 화면 꽉 채우기 */
+    overflow: hidden;
+    position: relative;
+}
 .slides {
     display: flex;
     width: 100%;
     height: 100%;
-    transition: transform 0.5s ease;
-    cursor: url('../../UI/down arrow.png'), auto;
+    transition: transform 0.3s ease;
 }
 .slides img {
     width: 100%;
@@ -64,26 +59,7 @@ body {
     flex-shrink: 0;
 }
 
-/* 본문 링크 글로우 */
-.inline-link {
-    color: rgb(210,210,210);
-    text-decoration: none;
-    transition: color 0.2s ease, text-shadow 0.2s ease;
-}
-.inline-link:hover {
-    color: white;
-    text-shadow:
-        0 0 6px rgba(255,255,255,0.9),
-        0 0 16px rgba(255,255,255,0.6);
-}
-
-/* 모바일 */
-@media (max-width: 768px) {
-    .slider { height: auto; }
-    .slides img { height: auto; }
-    body { overflow-y: auto !important; } /* 모바일 스크롤 허용 */
-}
-
+/* 본문 */
 .text-wrapper {
     max-width: 820px;
     margin: 40px auto 120px;
@@ -105,7 +81,8 @@ body {
 .text-wrapper p { margin-bottom: 1.5em; }
 
 @media (max-width: 768px) {
-    .text-wrapper { margin: 30px auto 100px; font-size: 0.95rem; }
+    .slider { height: 60vh; } /* 모바일 화면 일부만 슬라이드 */
+    .text-wrapper { margin: 20px auto 100px; font-size: 0.95rem; }
     .project-title { font-size: 1.3rem; }
     .project-meta { font-size: 0.8rem; }
 }
@@ -135,7 +112,7 @@ body {
     <div class="project-meta">Berlin, 2025</div>
     <p>
         GrandMA3 lighting programming, and live laser and lighting operation throughout the 3hd 2025: Vertigo festival in Berlin. Worked with performing artists including TOURS, Mug (Ludwig Wandinger & Yves B Golden), Star & Stan, and Kinlaw developing site-specific lighting compositions and immersive stage environments aligned with 
-        <a href="https://creamcake.de" target="_blank" class="inline-link">Creamcake</a>’s curatorial vision.
+        <a href="https://creamcake.de" target="_blank" style="color: #ccc; text-decoration: underline;">Creamcake</a>’s curatorial vision.
     </p>
 </section>
 
@@ -146,42 +123,31 @@ let currentIndex = 0;
 const maxIndex = slideImages.length - 1;
 
 // ----------------------
-// PC: 휠 이벤트 슬라이드
+// PC 휠 슬라이드
 // ----------------------
 window.addEventListener('wheel', e => {
     if (window.innerWidth <= 768) return; // 모바일 제외
 
     const delta = e.deltaY;
-
     if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
         e.preventDefault();
-        currentIndex = delta > 0 
-            ? Math.min(currentIndex + 1, maxIndex)
-            : Math.max(currentIndex - 1, 0);
-        slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+        currentIndex = delta > 0 ? Math.min(currentIndex+1,maxIndex) : Math.max(currentIndex-1,0);
+        slides.style.transform = `translateX(-${currentIndex*100}%)`;
     }
 
-    // 마지막 슬라이드에서만 페이지 스크롤 허용
-    if (currentIndex === maxIndex && delta > 0) {
+    // 첫/마지막 슬라이드 체크
+    if ((currentIndex === 0 && delta<0) || (currentIndex===maxIndex && delta>0)) {
         document.body.style.overflowY = 'auto';
     } else {
         document.body.style.overflowY = 'hidden';
-    }
-
-    // 맨 처음 슬라이드 위로 스크롤하면 페이지 스크롤 허용
-    if (currentIndex === 0 && delta < 0) {
-        document.body.style.overflowY = 'auto';
     }
 });
 
 // ----------------------
 // 모바일 터치 슬라이드
 // ----------------------
-// ----------------------
-// 모바일 터치 슬라이드
-// ----------------------
-let isDragging = false;
 let startX = 0;
+let isDragging = false;
 
 slides.addEventListener('touchstart', e => {
     startX = e.touches[0].clientX;
@@ -190,42 +156,27 @@ slides.addEventListener('touchstart', e => {
 
 slides.addEventListener('touchmove', e => {
     if (!isDragging) return;
-
     const x = e.touches[0].clientX;
     const walk = startX - x;
 
-    // 좌우 스와이프 조건 (30px 이상)
+    // 슬라이드 중일 때 세로 스크롤 막기
+    if (currentIndex !== 0 && currentIndex !== maxIndex) e.preventDefault();
+
     if (walk > 30 && currentIndex < maxIndex) { // 오른쪽 스와이프
-        e.preventDefault(); // 세로 스크롤 막기
         currentIndex++;
-        slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+        slides.style.transform = `translateX(-${currentIndex*100}%)`;
         isDragging = false;
     } else if (walk < -30 && currentIndex > 0) { // 왼쪽 스와이프
-        e.preventDefault(); // 세로 스크롤 막기
         currentIndex--;
-        slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+        slides.style.transform = `translateX(-${currentIndex*100}%)`;
         isDragging = false;
-    }
-
-    // 슬라이드 중/끝 체크
-    if (currentIndex === 0 || currentIndex === maxIndex) {
-        document.body.style.overflowY = 'auto'; // 첫/마지막: 세로 스크롤 허용
-    } else {
-        document.body.style.overflowY = 'hidden'; // 중간 슬라이드: 세로 스크롤 막기
     }
 });
 
 slides.addEventListener('touchend', () => {
     isDragging = false;
-
-    // 스와이프 종료 후에도 현재 슬라이드 위치 체크
-    if (currentIndex === 0 || currentIndex === maxIndex) {
-        document.body.style.overflowY = 'auto';
-    } else {
-        document.body.style.overflowY = 'hidden';
-    }
 });
-
 </script>
+
 </body>
 </html>
