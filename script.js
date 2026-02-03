@@ -176,33 +176,44 @@ if (aboutBtn) {
 }
 
 function animateBeam(timestamp) {
-    if (!isMobile || isDragging) {
+    // PC: 항상 마우스 따라감
+    if (!isMobile) {
         const x = mouseX - beam.offsetWidth / 2;
         const y = mouseY - beam.offsetHeight / 2;
         beam.style.transform = `translate(${x}px, ${y}px)`;
 
         const flicker = 0.8 + Math.random() * 0.2;
-        beam.style.filter = isMobile
-            ? `blur(40px) brightness(${flicker})`
-            : `blur(60px) brightness(${flicker})`;
+        beam.style.filter = `blur(60px) brightness(${flicker})`;
+    }
 
-        if (aboutBtn) {
-            const rect = aboutBtn.getBoundingClientRect();
-            const btnX = rect.left + rect.width / 2;
-            const btnY = rect.top + rect.height / 2;
-            const distance = Math.hypot(mouseX - btnX, mouseY - btnY);
+    // 모바일: 터치 중일 때만 움직임
+    if (isMobile && isDragging) {
+        const x = mouseX - beam.offsetWidth / 2;
+        const y = mouseY - beam.offsetHeight / 2;
+        beam.style.transform = `translate(${x}px, ${y}px)`;
 
-            if (distance < 150) {
-                aboutBtn.classList.add("beam-hover");
-            } else {
-                aboutBtn.classList.remove("beam-hover");
-            }
+        const flicker = 0.8 + Math.random() * 0.2;
+        beam.style.filter = `blur(40px) brightness(${flicker})`;
+    }
+
+    // About 버튼 glow 처리 (PC/모바일 공통)
+    if (aboutBtn) {
+        const rect = aboutBtn.getBoundingClientRect();
+        const btnX = rect.left + rect.width / 2;
+        const btnY = rect.top + rect.height / 2;
+        const distance = Math.hypot(mouseX - btnX, mouseY - btnY);
+
+        if (distance < 150) {
+            aboutBtn.classList.add("beam-hover");
+        } else {
+            aboutBtn.classList.remove("beam-hover");
         }
     }
 
     handleStrobe(timestamp);
     requestAnimationFrame(animateBeam);
 }
+
 
 requestAnimationFrame(animateBeam);
 

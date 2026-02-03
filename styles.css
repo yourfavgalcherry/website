@@ -57,17 +57,25 @@ body {
 
 @media (max-width: 768px) {
     .bg-click {
-        font-size: 26vh;            /* 세로 기준 꽉차도록 */
-        line-height: 1;             /* 세로 간격 최소화 */
-        transform: scaleY(4.5) scaleX(0.45); /* 세로 줄이고, 가로 살짝 확대 */
-        letter-spacing: -0.03em;   /* 알파벳 간격 최소화 */
-        white-space: nowrap;        /* 한 줄 유지 */
+        font-size: 27vh;              /* 살짝 키움 */
+        line-height: 1;
+
+        /* 세로 덜 늘리고 / 가로 더 채움 */
+        transform: scaleY(4.5) scaleX(0.60);
+
+        letter-spacing: -0.035em;
+        white-space: nowrap;
         overflow: visible;
+
         display: flex;
         align-items: center;
         justify-content: center;
+
+        /* 👇 화면에서 조금 아래로 */
+        margin-top: 6vh;
     }
 }
+
 
 
 
