@@ -20,11 +20,11 @@ body{
     font-size:16px;
     color:rgb(180,180,180);
     overflow-x:hidden;
-    cursor:none;              /* ✅ 그대로 유지 */
+    cursor:none;              
     user-select:none;
 }
 
-/* 링크 밑줄 건들지 않음 (기존 유지) */
+/* 링크 밑줄 건들지 않음 */
 a{
     color:inherit;
     text-decoration:none;
@@ -52,25 +52,23 @@ a{
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
-/* 빔 가까이 접근 or 호버 시 글로우 */
-/* 빔 가까이 접근 or 호버 시 글로우 */
 .navbar a.beam-hover,
 .navbar a:hover {
     color: white !important;
     text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
 }
 
-/* 커서 반응 영역 확장 (보이지 않지만 커서 감지 가능) */
 .navbar a::before {
     content: '';
     position: absolute;
-    top: -30px;       /* 위쪽 여유 */
-    left: -50px;      /* 왼쪽 여유 */
-    width: calc(100% + 60px);  /* 오른쪽 포함 */
-    height: calc(100% + 40px); /* 아래쪽 포함 */
-    pointer-events: auto;      /* 커서 감지 가능 */
+    top: -30px;
+    left: -50px;
+    width: calc(100% + 60px);
+    height: calc(100% + 40px);
+    pointer-events: auto;
     cursor: url('works/UI/Star.png'), auto;
 }
+
 /* ================= BEAM (PC) ================= */
 .beam{
     position:fixed;
@@ -139,16 +137,17 @@ a{
     transition:.25s;
     cursor:url('works/UI/Star.png'), auto;
     z-index:9999;
+    padding:0 12px; /* 글씨 좌우 padding 추가 */
+    text-align:center;
 }
 
-/* ✅ hover 영역 확장 */
+/* hover 영역 확장 */
 .work-text::before{
     content:"";
     position:absolute;
-    inset:-40px -80px;   /* ← 여기 숫자로 영역 키움 */
+    inset:-40px -80px;
     pointer-events:auto;
 }
-
 
 .work-card:hover .work-text{
     opacity:1;
@@ -163,41 +162,34 @@ a{
 /* ================= MOBILE ================= */
 @media(max-width:768px){
 
-/* ❗ 커서 절대 건들지 않음 */
+    /* 빔 제거 */
+    .beam{
+        display:none;
+    }
 
-/* 빔만 제거 */
-.beam{
-    display:none;
-}
+    /* 카드 전체 클릭 시 컬러 + 글씨 표시 */
+    .img-color{
+        mask:none;
+        -webkit-mask:none;
+        opacity:0;
+        transition:.35s;
+    }
 
-/* 모바일은 전체 컬러 reveal */
-.img-color{
-    mask:none;
-    -webkit-mask:none;
-    opacity:0;
-    transition:.35s;
-}
-.work-card:active .img-color{
-    opacity:1;
-}
+    .work-text{
+        opacity:0;
+        bottom:24px;
+        font-size:14px;
+        color:white;
+        width:calc(100% - 24px); /* 좌우 여유 */
+    }
 
-/* 텍스트 항상 표시 */
-.work-text{
-    opacity:1;
-    bottom:24px;
-    font-size:13px;
-    color:white;
-}
-
-/* grid */
-.works-wrapper{
-    padding:90px 15px 40px;
-}
-.works-grid{
-    grid-template-columns:1fr;
-    gap:24px;
-}
-
+    .works-wrapper{
+        padding:90px 15px 40px;
+    }
+    .works-grid{
+        grid-template-columns:1fr;
+        gap:24px;
+    }
 }
 </style>
 </head>
@@ -243,31 +235,50 @@ ASID: Drowned God
 <script>
 /* ===== PC beam interaction only ===== */
 if(window.innerWidth > 768){
+    const beam=document.querySelector(".beam");
+    const cards=document.querySelectorAll(".work-card");
 
-const beam=document.querySelector(".beam");
-const cards=document.querySelectorAll(".work-card");
+    document.addEventListener("mousemove",e=>{
+        const x=e.clientX;
+        const y=e.clientY;
 
-document.addEventListener("mousemove",e=>{
-const x=e.clientX;
-const y=e.clientY;
+        beam.style.transform=`translate(${x-180}px,${y-180}px)`;
 
-beam.style.transform=`translate(${x-180}px,${y-180}px)`;
+        cards.forEach(card=>{
+            const rect=card.getBoundingClientRect();
+            const img=card.querySelector(".img-color");
+            const lx=x-rect.left;
+            const ly=y-rect.top;
 
-cards.forEach(card=>{
-const rect=card.getBoundingClientRect();
-const img=card.querySelector(".img-color");
-const lx=x-rect.left;
-const ly=y-rect.top;
-
-if(lx>=0 && lx<=rect.width && ly>=0 && ly<=rect.height){
-img.style.maskImage=`radial-gradient(circle 450px at ${lx}px ${ly}px, black 0%, transparent 60%)`;
-img.style.webkitMaskImage=img.style.maskImage;
-}else{
-img.style.maskImage=`radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%)`;
-img.style.webkitMaskImage=img.style.maskImage;
+            if(lx>=0 && lx<=rect.width && ly>=0 && ly<=rect.height){
+                img.style.maskImage=`radial-gradient(circle 450px at ${lx}px ${ly}px, black 0%, transparent 60%)`;
+                img.style.webkitMaskImage=img.style.maskImage;
+            }else{
+                img.style.maskImage=`radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%)`;
+                img.style.webkitMaskImage=img.style.maskImage;
+            }
+        });
+    });
 }
-});
-});
+
+/* ===== MOBILE click to reveal color + text ===== */
+if(window.innerWidth <= 768){
+    const cards = document.querySelectorAll(".work-card");
+    cards.forEach(card=>{
+        const colorImg = card.querySelector(".img-color");
+        const text = card.querySelector(".work-text");
+
+        card.addEventListener("click",()=>{
+            const isActive = colorImg.style.opacity=="1";
+            if(!isActive){
+                colorImg.style.opacity="1";
+                text.style.opacity="1";
+            }else{
+                colorImg.style.opacity="0";
+                text.style.opacity="0";
+            }
+        });
+    });
 }
 </script>
 

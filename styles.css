@@ -57,24 +57,23 @@ body {
 
 @media (max-width: 768px) {
     .bg-click {
-        font-size: 27vh;              /* 살짝 키움 */
+        font-size: clamp(12vw, 15vh, 20vw); /* 화면 크기에 따라 최소-최대 조정 */
         line-height: 1;
-
-        /* 세로 덜 늘리고 / 가로 더 채움 */
-        transform: scaleY(4.5) scaleX(0.80);
-
-        letter-spacing: -0.035em;
         white-space: nowrap;
-        overflow: visible;
+        overflow: hidden;
 
         display: flex;
         align-items: center;
         justify-content: center;
+        text-align: center;
 
-        /* 👇 화면에서 조금 아래로 */
+        width: 100vw;   /* 화면 전체 폭 */
         margin-top: 6vh;
+        transform: none;
     }
 }
+
+
 
 
 
