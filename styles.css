@@ -57,28 +57,31 @@ body {
 
 @media (max-width: 768px) {
     .bg-click {
-        font-size: clamp(12vw, 15vh, 20vw); /* 화면 크기에 따라 최소-최대 조정 */
-        line-height: 1;
-        white-space: nowrap;
-        overflow: hidden;
-
+        /* 화면 전체를 채우는 flex 박스 */
         display: flex;
         align-items: center;
         justify-content: center;
         text-align: center;
 
-        width: 100vw;   /* 화면 전체 폭 */
-        margin-top: 6vh;
-        transform: none;
+        /* 화면 크기에 맞게 폭/높이 */
+        width: 100vw;
+        height: 100vh;
+
+        /* 여백 제거 */
+        margin: 0;
+        padding: 0;
+
+        /* 글자 세로/가로 비율 크게 늘리기 */
+        font-size: 20vw;          /* 기본 글자 크기 */
+        line-height: 1;           /* 글자 간격 최소화 */
+        white-space: nowrap;      /* 한 줄로 유지 */
+        overflow: visible;
+
+        /* 화면 맞춤 스케일 */
+        transform: scaleY(3.5) scaleX(1.1); /* 세로 크게, 가로 조금 확대 */
+        transform-origin: center center;    /* 중심 기준 확대 */
     }
 }
-
-
-
-
-
-
-
 
 
 /* ======================== */

@@ -24,7 +24,6 @@ body{
     user-select:none;
 }
 
-/* 링크 밑줄 건들지 않음 */
 a{
     color:inherit;
     text-decoration:none;
@@ -121,7 +120,7 @@ a{
     pointer-events:none;
     mask-image:radial-gradient(circle 0px at 50% 50%,black 0%,transparent 100%);
     -webkit-mask-image:radial-gradient(circle 0px at 50% 50%,black 0%,transparent 100%);
-    transition:.25s;
+    transition:.35s;
 }
 
 /* text */
@@ -131,17 +130,16 @@ a{
     left:50%;
     transform:translateX(-50%);
     font-weight:200;
-    font-size:18px;
-    color:rgba(255,255,255,.25);
-    opacity:0;
-    transition:.25s;
+    font-size:17px;
+    color:rgba(255,255,255,0);
+    transition:.35s;
     cursor:url('works/UI/Star.png'), auto;
     z-index:9999;
-    padding:0 12px; /* 글씨 좌우 padding 추가 */
+    padding:0 8px; /* 좌우 여백 좁힘 */
     text-align:center;
+    word-break: break-word;
 }
 
-/* hover 영역 확장 */
 .work-text::before{
     content:"";
     position:absolute;
@@ -167,22 +165,22 @@ a{
         display:none;
     }
 
-    /* 카드 전체 클릭 시 컬러 + 글씨 표시 */
+    /* 모바일: 글씨 기본 숨김 */
+    .work-text{
+        opacity:0;
+        font-size:14px; /* 글씨 조금 줄임 */
+        bottom:24px;
+        width:calc(100% - 16px); /* 좌우 여백 좁힘 */
+    }
+
+    /* 모바일: 이미지 기본 컬러 숨김 */
     .img-color{
         mask:none;
         -webkit-mask:none;
         opacity:0;
-        transition:.35s;
     }
 
-    .work-text{
-        opacity:0;
-        bottom:24px;
-        font-size:14px;
-        color:white;
-        width:calc(100% - 24px); /* 좌우 여유 */
-    }
-
+    /* grid */
     .works-wrapper{
         padding:90px 15px 40px;
     }
@@ -268,7 +266,11 @@ if(window.innerWidth <= 768){
         const colorImg = card.querySelector(".img-color");
         const text = card.querySelector(".work-text");
 
+        colorImg.style.opacity = "0";
+        text.style.opacity = "0";
+
         card.addEventListener("click",()=>{
+            // 토글
             const isActive = colorImg.style.opacity=="1";
             if(!isActive){
                 colorImg.style.opacity="1";
