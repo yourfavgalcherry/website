@@ -65,7 +65,17 @@ body {
     pointer-events: none;
     cursor: none;
     user-select: none;
+    
 }
+
+@media (max-width: 768px) {
+    .bg-click {
+        font-size: 35vw;      /* 모바일 화면 기준으로 더 크게 */
+        transform: scaleY(2.0); /* 세로로 더 길게 늘림 */
+    }
+}
+
+
 
 /* ======================== */
 /*     스크롤바 숨기기       */
@@ -141,6 +151,7 @@ body {
         filter: blur(50px) brightness(1);
     }
 }
+
 
 /* PC 플리커링 */
 @keyframes flickerPC {
