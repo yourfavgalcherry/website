@@ -57,33 +57,17 @@ body {
 
 @media (max-width: 768px) {
     .bg-click {
-
-        position: fixed;
-        inset: 0;
-
+        font-size: 29vh;           /* 세로 기준 꽉차도록 */
+        line-height: 1;             /* 세로 간격 최소화 */
+        transform: scaleY(4.5) scaleX(0.55); /* 세로 줄이고, 가로 살짝 확대 */
+        letter-spacing: -0.03em;   /* 알파벳 간격 최소화 */
+        white-space: nowrap;        /* 한 줄 유지 */
+        overflow: visible;
         display: flex;
         align-items: center;
         justify-content: center;
-
-        /* ✅ 세로 기준으로 크게 */
-        font-size: 42vh;
-
-        /* ✅ 강제 포스터 스트레치 */
-        transform: scaleY(3.2) scaleX(0.42);
-
-        /* ✅ 여백 제거 */
-        line-height: 0.55;
-        letter-spacing: -0.06em;
-
-        white-space: nowrap;
-        overflow: visible;
-
-        margin: 0;
-        padding: 0;
     }
 }
-
-
 
 
 
