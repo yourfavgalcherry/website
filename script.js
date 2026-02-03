@@ -64,6 +64,8 @@ document.addEventListener("touchstart", e => {
     isDragging = false;
     isStrobing = false;
 
+    beam.style.display = "block";
+
     longPressTimeout = setTimeout(() => {
         if (isDragging) {
             setTimeout(() => {
