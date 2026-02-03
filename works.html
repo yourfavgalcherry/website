@@ -183,7 +183,15 @@ body {
 @media (max-width: 768px) {
     .works-wrapper { padding: 90px 15px 40px; }
     .works-grid { grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); gap: 24px; }
-    .work-text { font-size: 16px; bottom: 8px; right: 8px; }
+
+    /* 글씨 조금 작게, 아래에서 위로 올림 */
+    .work-text {
+        font-size: 14px;     /* 조금 더 작게 */
+        bottom: 20px;        /* 위로 올림 (기존 8px → 20px) */
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;         /* 오른쪽 제거, 가운데 정렬 */
+    }
 }
 
 </style>
@@ -203,7 +211,7 @@ body {
         <div class="work-card">
             <img class="img-gray" src="works/assets/Creamcake1.jpg" alt="Creamcake">
             <img class="img-color" src="works/assets/Creamcake1.jpg" alt="Creamcake">
-            <a href="Creamcake.html" class="work-text">Creamcake 3hd 2025: Vertigo</a>
+            <a href="works/projects/creamcake/creamcake.html" class="work-text">Creamcake 3hd 2025: Vertigo</a>
         </div>
 
         <div class="work-card">

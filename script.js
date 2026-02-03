@@ -41,8 +41,6 @@ if (!isMobile) {
     document.addEventListener("mouseup", () => isMouseDown = false);
 }
 
-
-
 // ============================
 // 모바일 터치 제어
 // ============================
@@ -55,17 +53,18 @@ const STROBE_DELAY_AFTER_DRAG = 400;
 const MIN_STROBE_INTERVAL = 80;
 const MAX_STROBE_INTERVAL = 400;
 
+// 터치 시작
 document.addEventListener("touchstart", e => {
-    // About 버튼 터치 시 스트로브 무시하고 기본 동작 허용
-    if (e.target.closest(".navbar a")) return; // 링크는 터치 막지 않음
+    if (e.target.closest(".navbar a")) return; // 링크 터치 시 무시
 
-    e.preventDefault(); // 링크 아닌 영역만 터치 막음
+    e.preventDefault();
     pressStartTime = Date.now();
     isDragging = false;
     isStrobing = false;
 
-    beam.style.display = "block";
+    beam.style.display = "block"; // 터치 시작 시만 보이게
 
+    // 롱프레스 시 스트로브
     longPressTimeout = setTimeout(() => {
         if (isDragging) {
             setTimeout(() => {
@@ -79,22 +78,25 @@ document.addEventListener("touchstart", e => {
     }, LONG_PRESS_DELAY);
 }, { passive: false });
 
+// 터치 이동
 document.addEventListener("touchmove", e => {
     e.preventDefault();
     const touch = e.touches[0];
+    if (!touch) return;
+
     mouseX = touch.clientX;
     mouseY = touch.clientY;
 
     isDragging = true;
-    beam.style.display = "block";
-    beam.style.width = "100px";
-    beam.style.height = "100px";
+    // 여기서는 display 변경하지 않음! 이미 touchstart에서 block 처리
 }, { passive: false });
 
+// 터치 종료
 document.addEventListener("touchend", () => {
     isDragging = false;
     isStrobing = false;
-    beam.style.display = "none";
+
+    beam.style.display = "none"; // 터치 끝나면 숨김
     clearTimeout(longPressTimeout);
 }, { passive: false });
 
