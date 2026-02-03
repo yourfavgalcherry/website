@@ -61,7 +61,7 @@ body {
         line-height: 1;
 
         /* 세로 덜 늘리고 / 가로 더 채움 */
-        transform: scaleY(4.5) scaleX(0.60);
+        transform: scaleY(4.5) scaleX(0.80);
 
         letter-spacing: -0.035em;
         white-space: nowrap;

@@ -29,6 +29,7 @@ body {
     color: gray; 
     text-decoration: none;
     font-size: 19px;
+    font-family: 'Inter', sans-serif;
     font-weight: 500;
     cursor: none;
     transition: color 0.3s ease, text-shadow 0.3s ease;
@@ -76,13 +77,36 @@ body {
         0 0 16px rgba(255,255,255,0.6);
 }
 
-/* 모바일 */
+/* ------------------ 모바일 전용 슬라이드 최적화 ------------------ */
 @media (max-width: 768px) {
-    .slider { height: auto; }
-    .slides img { height: auto; }
-    body { overflow-y: auto !important; } /* 모바일 스크롤 허용 */
+    body {
+        overflow-y: auto;
+    }
+
+    .slider {
+        height: 70vh; /* 화면 비율에 맞게 조정 */
+        overflow-x: auto; /* 가로 스크롤 허용 */
+        overflow-y: hidden; /* 세로 스크롤은 슬라이드 안에서만 */
+        white-space: nowrap;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .slides {
+        display: inline-flex;
+        height: 100%;
+    }
+
+    .slides img {
+        width: 100vw; /* 화면 가득 */
+        height: 100%;
+        object-fit: cover;
+        flex-shrink: 0;
+        scroll-snap-align: start;
+    }
 }
 
+/* ------------------ 텍스트 영역 ------------------ */
 .text-wrapper {
     max-width: 820px;
     margin: 40px auto 120px;
