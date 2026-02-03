@@ -167,19 +167,23 @@ a{
 
     /* 모바일: 글씨 기본 숨김 */
     .work-text{
-        opacity:0;
-        font-size:14px; /* 글씨 조금 줄임 */
+        opacity:1;              /* 항상 보이게 */
+        color: rgba(255,255,255,0.2); /* 아주 연하게 */
+        font-size:14px;          /* 약간 작게 */
         bottom:24px;
-        width:calc(100% - 16px); /* 좌우 여백 좁힘 */
+        width:calc(100% - 16px); 
+        text-align:center;
+        transition: color .35s; /* 클릭 시 색상 전환 */
+        pointer-events: auto;   /* 링크 클릭 가능 */
     }
 
-    /* 모바일: 이미지 기본 컬러 숨김 */
+    /* 이미지 기본 컬러 숨김 */
     .img-color{
+        opacity:0;
         mask:none;
         -webkit-mask:none;
-        opacity:0;
+        transition:.35s;
     }
-
     /* grid */
     .works-wrapper{
         padding:90px 15px 40px;
@@ -266,22 +270,19 @@ if(window.innerWidth <= 768){
         const colorImg = card.querySelector(".img-color");
         const text = card.querySelector(".work-text");
 
-        colorImg.style.opacity = "0";
-        text.style.opacity = "0";
-
         card.addEventListener("click",()=>{
-            // 토글
             const isActive = colorImg.style.opacity=="1";
             if(!isActive){
-                colorImg.style.opacity="1";
-                text.style.opacity="1";
+                colorImg.style.opacity="1";           // 컬러 이미지 나타남
+                text.style.color="white";             // 글씨 화이트
             }else{
-                colorImg.style.opacity="0";
-                text.style.opacity="0";
+                colorImg.style.opacity="0";           // 다시 흑백
+                text.style.color="rgba(255,255,255,0.2)"; // 글씨 연하게
             }
         });
     });
 }
+
 </script>
 
 </body>
