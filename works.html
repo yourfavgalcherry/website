@@ -239,6 +239,14 @@ unguarded x LUNA
 </a>
 </div>
 
+<div class="work-card">
+<img class="img-gray" src="works/assets/Thesis.png">
+<img class="img-color" src="works/assets/Thesis.png">
+<a href="works/projects/Thesis/Thesis.html" class="work-text">
+The Semiotics of Light
+</a>
+</div>
+
 </div>
 </div>
 
@@ -283,13 +291,16 @@ if(window.innerWidth <= 768){
             if(!isActive){
                 colorImg.style.opacity="1";           // 컬러 이미지 나타남
                 text.style.color="white";             // 글씨 화이트
+                text.style.textShadow = "0 0 10px white, 0 0 20px white, 0 0 40px white"; // 글로우
             }else{
                 colorImg.style.opacity="0";           // 다시 흑백
                 text.style.color="rgba(255,255,255,0.2)"; // 글씨 연하게
+                text.style.textShadow = "none";       // 글로우 제거
             }
         });
     });
 }
+
 
 </script>
 

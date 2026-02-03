@@ -40,12 +40,12 @@ body {
     font-weight: 700;
 
     font-size: 28vw;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
 
     color: #ffffff;
     opacity: 0.05;
 
-    transform: scaleY(1.6);
+    transform: scaleY(2.5);
     white-space: nowrap;
 
     z-index: 1;
@@ -68,13 +68,13 @@ body {
         padding: 0;
 
         /* 폰트 기준 키우기 */
-        font-size: 25vw;            /* vw 기준으로 크게 */
+        font-size: 32vw;            /* vw 기준으로 크게 */
         line-height: 1;
         white-space: nowrap;
         overflow: visible;
 
         /* 세로/가로 비율 조절 */
-        transform: scaleY(5) scaleX(1.2);  /* 세로 훨씬 늘리고, 가로 조금 확대 */
+        transform: scaleY(6) scaleX(0.8);  /* 세로 훨씬 늘리고, 가로 조금 확대 */
         transform-origin: center center;
     }
 }
