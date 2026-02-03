@@ -65,15 +65,15 @@ body {
         align-items: center;
         justify-content: center;
 
-        /* 🔥 기본 폰트 크게 */
-        font-size: 34vw;
+        /* ✅ 세로 기준으로 크게 */
+        font-size: 42vh;
 
-        /* 🔥 디자인 찌그러뜨리기 */
-        transform: scaleY(6.2) scaleX(0.55);
+        /* ✅ 강제 포스터 스트레치 */
+        transform: scaleY(3.2) scaleX(0.42);
 
-        /* 🔥 여백 없애기 */
-        line-height: 0.7;
-        letter-spacing: -0.05em;
+        /* ✅ 여백 제거 */
+        line-height: 0.55;
+        letter-spacing: -0.06em;
 
         white-space: nowrap;
         overflow: visible;
@@ -82,6 +82,7 @@ body {
         padding: 0;
     }
 }
+
 
 
 

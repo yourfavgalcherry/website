@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luna x Unguarded | Berlin, 2025</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../pages.css">
+
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a href="/works.html">Works</a>
+</nav>
+
+<!-- ================= LUNA x UNGUARDED SLIDES ================= -->
+<section class="slider">
+    <div class="slides">
+        <img src="1.jpg" alt="Luna x Unguarded 01">
+        <img src="2.gif" alt="Luna x Unguarded 02">
+        <img src="3.jpg" alt="Luna x Unguarded 03">
+        <img src="4.gif" alt="Luna x Unguarded 04">
+        <img src="5.jpg" alt="Luna x Unguarded 05">
+        <img src="6.jpg" alt="Luna x Unguarded 04">
+        <img src="7.jpg" alt="Luna x Unguarded 05">
+
+    </div>
+</section>
+
+<section class="text-wrapper">
+    <div class="project-title">Screening | Luminal</div>
+    <div class="project-meta">
+        Munich, 2025 | 
+    </div>
+    <p>
+    The first-person vr project <i>Luminal</i> appears to be a re-edited version of a video installation, showcasing a single-channel video format. This work will be shown in collaboration with the Nebula Gallery at the Cinema Hall of the Bayerischer Hof, a renowned venue in Munich, Germany.
+    </p>
+</section>
+
+<script>
+// ---------------------- PC 휠 슬라이드 ----------------------
+const slides = document.querySelectorAll('.slides');
+
+slides.forEach(slider => {
+    const slideImages = slider.querySelectorAll('img');
+    let currentIndex = 0;
+    const maxIndex = slideImages.length - 1;
+
+    if(window.innerWidth > 768){
+        window.addEventListener('wheel', e => {
+            if (!slider.contains(e.target)) return;
+
+            const delta = e.deltaY;
+
+            if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
+                e.preventDefault();
+                currentIndex = delta > 0 
+                    ? Math.min(currentIndex + 1, maxIndex)
+                    : Math.max(currentIndex - 1, 0);
+                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }
+
+            if ((currentIndex === maxIndex && delta > 0) || (currentIndex === 0 && delta < 0)) {
+                document.body.style.overflowY = 'auto';
+            } else {
+                document.body.style.overflowY = 'hidden';
+            }
+        });
+    }
+});
+
+// ---------------------- 모바일 슬라이드 + 세로스크롤 제어 ----------------------
+if(window.innerWidth <= 768){
+    slides.forEach(slider => {
+        function updateVerticalScrollLock() {
+            const atStart = slider.scrollLeft <= 2;
+            const atEnd = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 2;
+
+            if (atStart || atEnd) {
+                document.body.style.overflowY = 'auto';
+            } else {
+                document.body.style.overflowY = 'hidden';
+            }
+        }
+
+        slider.addEventListener('scroll', updateVerticalScrollLock);
+        updateVerticalScrollLock();
+    });
+}
+</script>
+
+</body>
+</html>
