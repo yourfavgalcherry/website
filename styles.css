@@ -71,26 +71,23 @@ body {
 
 @media (max-width: 768px) {
     .bg-click {
-
-        /* 화면 높이 기준으로 크게 */
-        font-size: 26vh;
-
-        /* 진짜 세로 꽉차게 */
-        line-height: 1;
-
-        /* 위아래로 더 길게 */
-        transform: scaleY(3.0) scaleX(0.85);
-
-        /* 얇게 보이도록 */
+        /* 화면 세로 꽉 채우기 */
+        font-size: 35vh;  /* 기존 26vh → 더 크게 */
+        line-height: 1;   /* 글자 겹치지 않게 */
         letter-spacing: -0.03em;
 
-        /* 좌우 잘림 방지 */
-        white-space: nowrap;
-        overflow: visible;
-
-        /* 중앙 고정 */
+        /* 세로 중심, 가로 중앙 */
+        display: flex;
         align-items: center;
         justify-content: center;
+
+        /* 가로 길이는 조금 줄임 */
+        transform: scaleX(0.85);  /* scaleY 제거, 글자 자연스러움 */
+
+        /* 글자 줄바꿈 방지 */
+        white-space: nowrap;
+        overflow: visible;
+        text-align: center;
     }
 }
 
