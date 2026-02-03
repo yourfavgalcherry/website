@@ -191,30 +191,26 @@ window.addEventListener('wheel', e => {
     }
 });
 
-// ---------------------- 모바일 가로 스크롤 최적화 ----------------------
+// ---------------------- 모바일 슬라이드 + 세로스크롤 제어 ----------------------
 if (window.innerWidth <= 768) {
     const slider = document.querySelector('.slider');
-    let isDragging = false;
-    let startX = 0;
 
-    slider.addEventListener('touchstart', e => {
-        startX = e.touches[0].clientX;
-        isDragging = true;
-    });
+    function updateVerticalScrollLock() {
+        const atStart = slider.scrollLeft <= 2;
+        const atEnd = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 2;
 
-    slider.addEventListener('touchmove', e => {
-        if (!isDragging) return;
-        const x = e.touches[0].clientX;
-        const walk = startX - x;
+        if (atStart || atEnd) {
+            document.body.style.overflowY = 'auto';   // 텍스트로 내려가기 허용
+        } else {
+            document.body.style.overflowY = 'hidden'; // 슬라이드 중에는 막기
+        }
+    }
 
-        // 슬라이드 중에는 페이지 스크롤 막기
-        if (walk !== 0) e.stopPropagation();
-    }, { passive: true });
-
-    slider.addEventListener('touchend', () => {
-        isDragging = false;
-    });
+    slider.addEventListener('scroll', updateVerticalScrollLock);
+    updateVerticalScrollLock();
 }
+
+
 </script>
 </body>
 </html>

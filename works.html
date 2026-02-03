@@ -8,234 +8,247 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* ======================== */
-/*        기본 스타일       */
-/* ======================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-body {
-    background-color: black;
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    color: rgb(180,180,180);
-    overflow-x: hidden;
-    cursor: none;
-    user-select: none;
-    letter-spacing: -0.01em;
+body{
+    background:black;
+    font-family:'Inter',sans-serif;
+    font-size:16px;
+    color:rgb(180,180,180);
+    overflow-x:hidden;
+    cursor:none;              /* ✅ 그대로 유지 */
+    user-select:none;
 }
 
-::-webkit-scrollbar { width: 0; height: 0; }
-
-/* ======================== */
-/*       네비게이션         */
-/* ======================== */
-.navbar {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 10000;
-}
-.navbar a {
-    color: gray;
-    text-decoration: none;
-    font-size: 19px;
-    font-weight: 500;
-    cursor: none;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-.navbar a:hover,
-.navbar a.beam-hover {
-    color: white !important;
-    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
-}
-.navbar a::before {
-    content: '';
-    position: absolute;
-    top: -30px;
-    left: -50px;
-    width: calc(100% + 60px);
-    height: calc(100% + 40px);
-    pointer-events: auto;
-    cursor: url('works/UI/Star.png'), auto;
+/* 링크 밑줄 건들지 않음 (기존 유지) */
+a{
+    color:inherit;
+    text-decoration:none;
 }
 
-/* ======================== */
-/*        빔 라이트         */
-/* ======================== */
-.beam {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 360px;
-    height: 360px;
-    pointer-events: none;
-    border-radius: 50%;
-    background-color: rgba(255,255,255,0.2);
-    filter: blur(100px) brightness(1);
-    transform: translate(-50%, -50%);
-    z-index: 9998;
-    animation: flickerPC 0.8s infinite;
+::-webkit-scrollbar{width:0;height:0;}
+
+/* ================= NAV ================= */
+.navbar{
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:10000;
+}
+.navbar a{
+    color:gray;
+    font-size:19px;
+    font-weight:500;
+    cursor:none;
+    transition:.3s;
+}
+.navbar a:hover{
+    color:white;
+    text-shadow:0 0 10px white,0 0 20px white,0 0 40px white;
 }
 
-@keyframes flickerPC {
-    0%,100%{filter:blur(90px) brightness(0.85);}
-    10%,60%{filter:blur(90px) brightness(0.9);}
-    20%,70%{filter:blur(90px) brightness(0.95);}
-    30%,80%{filter:blur(90px) brightness(1);}
-    40%,50%,90%{filter:blur(90px) brightness(0.92);}
+/* ================= BEAM (PC) ================= */
+.beam{
+    position:fixed;
+    top:0;
+    left:0;
+    width:360px;
+    height:360px;
+    border-radius:50%;
+    pointer-events:none;
+    background:rgba(255,255,255,.22);
+    filter:blur(95px);
+    z-index:9998;
+    animation:flicker .9s infinite;
+}
+@keyframes flicker{
+    0%,100%{opacity:.85}
+    50%{opacity:1}
 }
 
-/* 모바일 빔 */
-@media(max-width:768px){
-    .beam{
-        width: 180px;
-        height: 180px;
-        filter: blur(60px) brightness(0.9);
-    }
+/* ================= GRID ================= */
+.works-wrapper{
+    padding:110px 50px 60px;
+}
+.works-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(460px,1fr));
+    gap:40px;
+}
+.work-card{
+    position:relative;
+    overflow:hidden;
+    aspect-ratio:4/5;
 }
 
-/* ======================== */
-/*      Works 레이아웃      */
-/* ======================== */
-.works-wrapper { padding: 110px 50px 60px; }
-.works-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
-    gap: 40px;
-}
-.work-card {
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 4/5;
-}
-.work-card img.img-gray {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(100%) brightness(0.85);
-}
-.work-card img.img-color {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    mask-image: radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%);
-    -webkit-mask-image: radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%);
-    transition: mask-size 0.15s ease, opacity 0.25s ease;
-    pointer-events: none;
+/* gray base */
+.img-gray{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:grayscale(100%) brightness(.85);
 }
 
-/* ======================== */
-/*      텍스트 스타일       */
-/* ======================== */
-.work-text {
-    position: absolute;
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: 'Inter', sans-serif;
-    font-weight: 200;
-    font-size: 18px;
-    color: rgba(255,255,255,0.25);
-    opacity: 0;
-    pointer-events: auto;
-    text-decoration: none;
-    transition: opacity 0.25s ease, color 0.25s ease, text-shadow 0.25s ease;
+/* color layer (PC mask) */
+.img-color{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    pointer-events:none;
+    mask-image:radial-gradient(circle 0px at 50% 50%,black 0%,transparent 100%);
+    -webkit-mask-image:radial-gradient(circle 0px at 50% 50%,black 0%,transparent 100%);
+    transition:.25s;
+}
+
+/* text */
+.work-text{
+    position:absolute;
+    bottom:50px;
+    left:50%;
+    transform:translateX(-50%);
+    font-weight:200;
+    font-size:18px;
+    color:rgba(255,255,255,.25);
+    opacity:0;
+    transition:.25s;
+    cursor:url('works/UI/Star.png'), auto;
+    z-index:9999;
+}
+
+/* ✅ hover 영역 확장 */
+.work-text::before{
+    content:"";
+    position:absolute;
+    inset:-40px -80px;   /* ← 여기 숫자로 영역 키움 */
+    pointer-events:auto;
+}
+
+
+.work-card:hover .work-text{
+    opacity:1;
+}
+.work-text:hover{
+    color:white;
+    text-shadow:0 0 10px white,0 0 20px white,0 0 40px white;
     cursor: url('works/UI/Star.png'), auto;
     z-index: 9999;
 }
-.work-card:hover .work-text { opacity:1; text-shadow:none; }
-.work-text:hover{
-    color:white !important;
-    text-shadow:0 0 10px white,0 0 20px white,0 0 40px white !important;
+
+/* ================= MOBILE ================= */
+@media(max-width:768px){
+
+/* ❗ 커서 절대 건들지 않음 */
+
+/* 빔만 제거 */
+.beam{
+    display:none;
 }
 
-/* 모바일 처리 */
-@media(max-width:768px){
-    .works-wrapper { padding:90px 15px 40px; }
-    .works-grid { grid-template-columns: repeat(auto-fill,minmax(100%,1fr)); gap:24px; }
-    .work-card { overflow: visible; }
-    .work-text{
-        font-size:12.5px;
-        bottom:24px;
-        opacity:1;
-    }
-    .work-text::before { display:none; }
+/* 모바일은 전체 컬러 reveal */
+.img-color{
+    mask:none;
+    -webkit-mask:none;
+    opacity:0;
+    transition:.35s;
+}
+.work-card:active .img-color{
+    opacity:1;
+}
+
+/* 텍스트 항상 표시 */
+.work-text{
+    opacity:1;
+    bottom:24px;
+    font-size:13px;
+    color:white;
+}
+
+/* grid */
+.works-wrapper{
+    padding:90px 15px 40px;
+}
+.works-grid{
+    grid-template-columns:1fr;
+    gap:24px;
+}
+
 }
 </style>
 </head>
+
 <body>
 
 <nav class="navbar">
-    <a href="index.html">Home</a>
+<a href="index.html">Home</a>
 </nav>
 
 <div class="beam"></div>
 
 <div class="works-wrapper">
-    <div class="works-grid">
-        <div class="work-card">
-            <img class="img-gray" src="works/assets/Creamcake1.jpg" alt="Creamcake">
-            <img class="img-color" src="works/assets/Creamcake1.jpg" alt="Creamcake">
-            <a href="works/projects/creamcake/creamcake.html" class="work-text">Creamcake 3hd 2025: Vertigo</a>
-        </div>
+<div class="works-grid">
 
-        <div class="work-card">
-            <img class="img-gray" src="works/assets/ASID1.jpg" alt="ASID">
-            <img class="img-color" src="works/assets/ASID1.jpg" alt="ASID">
-            <a href="works/projects/ASID/ASID.html" class="work-text">ASID: Drowned God</a>
-        </div>
+<div class="work-card">
+<img class="img-gray" src="works/assets/Creamcake1.jpg">
+<img class="img-color" src="works/assets/Creamcake1.jpg">
+<a href="works/projects/creamcake/creamcake.html" class="work-text">
+Creamcake 3hd 2025: Vertigo
+</a>
+</div>
 
-        <div class="work-card">
-            <img class="img-gray" src="works/assets/Club8.jpg" alt="Club8">
-            <img class="img-color" src="works/assets/Club8.jpg" alt="Club8">
-            <a href="works/projects/club8/club8.html" class="work-text">[8]: MASSIVE GAIN & Kontext</a>
-        </div>
-    </div>
+<div class="work-card">
+<img class="img-gray" src="works/assets/ASID1.jpg">
+<img class="img-color" src="works/assets/ASID1.jpg">
+<a href="works/projects/ASID/ASID.html" class="work-text">
+ASID: Drowned God
+</a>
+</div>
+
+<div class="work-card">
+<img class="img-gray" src="works/assets/Club8.jpg">
+<img class="img-color" src="works/assets/Club8.jpg">
+<a href="works/projects/club8/club8.html" class="work-text">
+[8]: MASSIVE GAIN & Kontext
+</a>
+</div>
+
+</div>
 </div>
 
 <script>
-const beam = document.querySelector(".beam");
-const cards = document.querySelectorAll(".work-card");
+/* ===== PC beam interaction only ===== */
+if(window.innerWidth > 768){
 
-const DESKTOP_RADIUS = 450;
-const MOBILE_RADIUS = 220;
+const beam=document.querySelector(".beam");
+const cards=document.querySelectorAll(".work-card");
 
-function updateBeam(x, y) {
-    const radius = window.innerWidth <= 768 ? MOBILE_RADIUS : DESKTOP_RADIUS;
+document.addEventListener("mousemove",e=>{
+const x=e.clientX;
+const y=e.clientY;
 
-    beam.style.transform = `translate(${x - beam.offsetWidth/2}px, ${y - beam.offsetHeight/2}px)`;
+beam.style.transform=`translate(${x-180}px,${y-180}px)`;
 
-    cards.forEach(card=>{
-        const rect = card.getBoundingClientRect();
-        const colorImg = card.querySelector(".img-color");
-        const localX = x - rect.left;
-        const localY = y - rect.top;
+cards.forEach(card=>{
+const rect=card.getBoundingClientRect();
+const img=card.querySelector(".img-color");
+const lx=x-rect.left;
+const ly=y-rect.top;
 
-        if(localX>=0 && localX<=rect.width && localY>=0 && localY<=rect.height){
-            colorImg.style.maskImage = `radial-gradient(circle ${radius}px at ${localX}px ${localY}px, black 0%, transparent 60%)`;
-            colorImg.style.webkitMaskImage = colorImg.style.maskImage;
-        } else {
-            colorImg.style.maskImage = `radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%)`;
-            colorImg.style.webkitMaskImage = colorImg.style.maskImage;
-        }
-    });
+if(lx>=0 && lx<=rect.width && ly>=0 && ly<=rect.height){
+img.style.maskImage=`radial-gradient(circle 450px at ${lx}px ${ly}px, black 0%, transparent 60%)`;
+img.style.webkitMaskImage=img.style.maskImage;
+}else{
+img.style.maskImage=`radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%)`;
+img.style.webkitMaskImage=img.style.maskImage;
 }
-
-// PC 마우스
-document.addEventListener("mousemove", e => updateBeam(e.clientX, e.clientY));
-
-// 모바일 터치
-document.addEventListener("touchmove", e=>{
-    const t = e.touches[0];
-    if(!t) return;
-    updateBeam(t.clientX, t.clientY);
-}, {passive:true});
+});
+});
+}
 </script>
 
 </body>

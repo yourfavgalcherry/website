@@ -139,16 +139,14 @@ body {
 </section>
 
 <script>
+// ---------------------- PC 휠 슬라이드 (변경 없음) ----------------------
 const slides = document.querySelector('.slides');
 const slideImages = document.querySelectorAll('.slides img');
 let currentIndex = 0;
 const maxIndex = slideImages.length - 1;
 
-// ----------------------
-// PC: 휠 이벤트 슬라이드
-// ----------------------
 window.addEventListener('wheel', e => {
-    if (window.innerWidth <= 768) return; // 모바일 제외
+    if (window.innerWidth <= 768) return;
 
     const delta = e.deltaY;
 
@@ -162,63 +160,33 @@ window.addEventListener('wheel', e => {
 
     if (currentIndex === maxIndex && delta > 0) {
         document.body.style.overflowY = 'auto';
+    } else if (currentIndex === 0 && delta < 0) {
+        document.body.style.overflowY = 'auto';
     } else {
         document.body.style.overflowY = 'hidden';
     }
-
-    if (currentIndex === 0 && delta < 0) {
-        document.body.style.overflowY = 'auto';
-    }
 });
 
-// ----------------------
-// 모바일 터치 슬라이드
-// ----------------------
-// ----------------------
-// 모바일 터치 슬라이드
-// ----------------------
-// ----------------------
-// 모바일 터치 슬라이드 (세로 스크롤 유지)
-// ----------------------
-let isDragging = false;
-let startX = 0;
-let startY = 0;
 
-slides.addEventListener('touchstart', e => {
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    isDragging = true;
-});
+// ---------------------- 모바일 슬라이드 + 세로스크롤 제어 ----------------------
+if (window.innerWidth <= 768) {
+    const slider = document.querySelector('.slider');
 
-slides.addEventListener('touchmove', e => {
-    if (!isDragging) return;
+    function updateVerticalScrollLock() {
+        const atStart = slider.scrollLeft <= 2;
+        const atEnd = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 2;
 
-    const x = e.touches[0].clientX;
-    const y = e.touches[0].clientY;
-
-    const walkX = startX - x;
-    const walkY = startY - y;
-
-    // 수평 스와이프가 수직 이동보다 클 때만 슬라이드
-    if (Math.abs(walkX) > Math.abs(walkY) && Math.abs(walkX) > 30) {
-        e.preventDefault(); // 가로 이동 시만 페이지 스크롤 막기
-        if (walkX > 0 && currentIndex < maxIndex) { // 오른쪽 스와이프
-            currentIndex++;
-        } else if (walkX < 0 && currentIndex > 0) { // 왼쪽 스와이프
-            currentIndex--;
+        if (atStart || atEnd) {
+            document.body.style.overflowY = 'auto';   // 텍스트로 내려가기 허용
+        } else {
+            document.body.style.overflowY = 'hidden'; // 슬라이드 중에는 막기
         }
-        slides.style.transform = `translateX(-${currentIndex * 100}%)`;
-        isDragging = false;
     }
-});
 
-slides.addEventListener('touchend', () => {
-    isDragging = false;
-});
+    slider.addEventListener('scroll', updateVerticalScrollLock);
+    updateVerticalScrollLock();
+}
 
-
-
-slides.addEventListener('touchend', () => { isDragging = false; });
 </script>
 
 </body>
