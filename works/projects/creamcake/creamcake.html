@@ -71,6 +71,21 @@ body {
     flex-shrink: 0;
 }
 
+/* 본문 링크 글로우 */
+.inline-link {
+    color: rgb(210,210,210);
+    text-decoration: none;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.inline-link:hover {
+    color: white;
+    text-shadow:
+        0 0 6px rgba(255,255,255,0.9),
+        0 0 16px rgba(255,255,255,0.6);
+}
+
+
 /* 모바일 */
 @media (max-width: 768px) {
     .slider { height: auto; }
@@ -131,7 +146,9 @@ body {
     <div class="project-title">Light Design | Creamcake 3hd 2025: Vertigo</div>
     <div class="project-meta">Berlin, 2025</div>
     <p>
-        GrandMA3 lighting programming, and live laser and lighting operation throughout the 3hd 2025: Vertigo festival in Berlin. Worked with performing artists including TOURS, Mug (Ludwig Wandinger & Yves B Golden), Star & Stan, and Kinlaw developing site-specific lighting compositions and immersive stage environments aligned with Creamcake’s curatorial vision.
+        GrandMA3 lighting programming, and live laser and lighting operation throughout the 3hd 2025: Vertigo festival in Berlin. Worked with performing artists including TOURS, Mug (Ludwig Wandinger & Yves B Golden), Star & Stan, and Kinlaw developing site-specific lighting compositions and immersive stage environments aligned with 
+<a href="https://creamcake.de" target="_blank" class="inline-link">Creamcake</a>’s curatorial vision.
+
     </p>
 </section>
 

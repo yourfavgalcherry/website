@@ -181,18 +181,35 @@ body {
 
 /* 모바일 처리 */
 @media (max-width: 768px) {
-    .works-wrapper { padding: 90px 15px 40px; }
-    .works-grid { grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); gap: 24px; }
 
-    /* 글씨 조금 작게, 아래에서 위로 올림 */
+    .works-wrapper { padding: 90px 15px 40px; }
+    .works-grid { 
+        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); 
+        gap: 24px; 
+    }
+
+    /* ✅ 텍스트 잘림 방지 */
+    .work-card {
+        overflow: visible;
+    }
+
+    /* ✅ 모바일은 hover 없으니까 항상 보이게 */
     .work-text {
-        font-size: 12.5px;     /* 조금 더 작게 */
-        bottom: 60px;        /* 위로 올림 (기존 8px → 20px) */
+        font-size: 12.5px;
+        bottom: 24px;
         left: 50%;
         transform: translateX(-50%);
-        right: auto;         /* 오른쪽 제거, 가운데 정렬 */
+        opacity: 1;
+        pointer-events: auto;
     }
+
+    /* ✅ 클릭 막는 가상영역 제거 */
+    .work-text::before {
+        display: none;
+    }
+
 }
+
 
 </style>
 </head>
