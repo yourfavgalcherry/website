@@ -56,8 +56,8 @@ body {
 }
 
 @media (max-width: 768px) {
-
     .bg-click {
+
         position: fixed;
         inset: 0;
 
@@ -65,24 +65,27 @@ body {
         align-items: center;
         justify-content: center;
 
-        /* 🔥 진짜 화면 기준 크기 */
-        font-size: 42vh;        /* ← 핵심 */
-        line-height: 0.72;
+        /* 🔥 기본 폰트 크게 */
+        font-size: 34vw;
 
-        /* 🔥 세로 길쭉 느낌 */
-        letter-spacing: -0.03em;
-        font-weight: 900;
+        /* 🔥 디자인 찌그러뜨리기 */
+        transform: scaleY(6.2) scaleX(0.55);
+
+        /* 🔥 여백 없애기 */
+        line-height: 0.7;
+        letter-spacing: -0.05em;
 
         white-space: nowrap;
+        overflow: visible;
 
         margin: 0;
         padding: 0;
-
-        /* transform 제거 */
-        transform: none;
     }
-
 }
+
+
+
+
 
 
 
