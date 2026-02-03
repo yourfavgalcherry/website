@@ -140,16 +140,16 @@ body {
 </section>
 
 <script>
+
+    
+// ---------------------- PC 휠 슬라이드 (변경 없음) ----------------------
 const slides = document.querySelector('.slides');
 const slideImages = document.querySelectorAll('.slides img');
 let currentIndex = 0;
 const maxIndex = slideImages.length - 1;
 
-// ----------------------
-// PC: 휠 이벤트 슬라이드
-// ----------------------
 window.addEventListener('wheel', e => {
-    if (window.innerWidth <= 768) return; // 모바일 제외
+    if (window.innerWidth <= 768) return;
 
     const delta = e.deltaY;
 
@@ -163,14 +163,13 @@ window.addEventListener('wheel', e => {
 
     if (currentIndex === maxIndex && delta > 0) {
         document.body.style.overflowY = 'auto';
+    } else if (currentIndex === 0 && delta < 0) {
+        document.body.style.overflowY = 'auto';
     } else {
         document.body.style.overflowY = 'hidden';
     }
-
-    if (currentIndex === 0 && delta < 0) {
-        document.body.style.overflowY = 'auto';
-    }
 });
+
 
 // ---------------------- 모바일 슬라이드 + 세로스크롤 제어 ----------------------
 if (window.innerWidth <= 768) {
@@ -190,6 +189,7 @@ if (window.innerWidth <= 768) {
     slider.addEventListener('scroll', updateVerticalScrollLock);
     updateVerticalScrollLock();
 }
+
 
 </script>
 

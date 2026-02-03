@@ -23,19 +23,6 @@ body {
 }
 
 
-/* 커스텀 커서 */
-.cursor {
-    position: fixed;
-    width: 32px; /* 원하는 이미지 크기 */
-    height: 32px;
-    background: url('your-cursor.png') no-repeat center center;
-    background-size: contain;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    z-index: 20000;
-    opacity: 0; /* 기본은 안보이게 */
-    transition: opacity 0.2s ease, transform 0.1s ease;
-}
 
 
 /* ======================== */

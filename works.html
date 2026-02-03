@@ -32,25 +32,45 @@ a{
 
 ::-webkit-scrollbar{width:0;height:0;}
 
-/* ================= NAV ================= */
-.navbar{
-    position:fixed;
-    top:20px;
-    right:20px;
-    z-index:10000;
-}
-.navbar a{
-    color:gray;
-    font-size:19px;
-    font-weight:500;
-    cursor:none;
-    transition:.3s;
-}
-.navbar a:hover{
-    color:white;
-    text-shadow:0 0 10px white,0 0 20px white,0 0 40px white;
+/* ======================== */
+/*      오른쪽 상단 About   */
+/* ======================== */
+.navbar {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
 }
 
+.navbar a {
+    color: gray; 
+    text-decoration: none;
+    font-size: 19px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    cursor: none;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+/* 빔 가까이 접근 or 호버 시 글로우 */
+/* 빔 가까이 접근 or 호버 시 글로우 */
+.navbar a.beam-hover,
+.navbar a:hover {
+    color: white !important;
+    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
+}
+
+/* 커서 반응 영역 확장 (보이지 않지만 커서 감지 가능) */
+.navbar a::before {
+    content: '';
+    position: absolute;
+    top: -30px;       /* 위쪽 여유 */
+    left: -50px;      /* 왼쪽 여유 */
+    width: calc(100% + 60px);  /* 오른쪽 포함 */
+    height: calc(100% + 40px); /* 아래쪽 포함 */
+    pointer-events: auto;      /* 커서 감지 가능 */
+    cursor: url('works/UI/Star.png'), auto;
+}
 /* ================= BEAM (PC) ================= */
 .beam{
     position:fixed;
