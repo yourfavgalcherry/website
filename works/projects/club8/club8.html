@@ -175,8 +175,8 @@ window.addEventListener('wheel', e => {
 // ----------------------
 // 모바일 터치 슬라이드
 // ----------------------
-let isDragging = false;
 let startX = 0;
+let isDragging = false;
 
 slides.addEventListener('touchstart', e => {
     startX = e.touches[0].clientX;
@@ -188,15 +188,15 @@ slides.addEventListener('touchmove', e => {
     const x = e.touches[0].clientX;
     const walk = startX - x;
 
-    if (walk > 50) {
+    if (walk > 50) { // 왼쪽 스와이프
         currentIndex = Math.min(currentIndex + 1, maxIndex);
         isDragging = false;
-    } else if (walk < -50) {
+        updateSlidePosition();
+    } else if (walk < -50) { // 오른쪽 스와이프
         currentIndex = Math.max(currentIndex - 1, 0);
         isDragging = false;
+        updateSlidePosition();
     }
-
-    slides.style.transform = `translateX(-${currentIndex * 100}%)`;
 });
 
 slides.addEventListener('touchend', () => { isDragging = false; });

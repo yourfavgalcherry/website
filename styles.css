@@ -72,9 +72,9 @@ body {
 @media (max-width: 768px) {
     .bg-click {
         /* 화면 세로 꽉 채우기 */
-        font-size: 35vh;  /* 기존 26vh → 더 크게 */
+        font-size: 45vh;  /* 기존 26vh → 더 크게 */
         line-height: 1;   /* 글자 겹치지 않게 */
-        letter-spacing: -0.03em;
+        letter-spacing: -0.1em;
 
         /* 세로 중심, 가로 중앙 */
         display: flex;
@@ -82,7 +82,7 @@ body {
         justify-content: center;
 
         /* 가로 길이는 조금 줄임 */
-        transform: scaleX(0.85);  /* scaleY 제거, 글자 자연스러움 */
+        transform: scaleX(0.70);  /* scaleY 제거, 글자 자연스러움 */
 
         /* 글자 줄바꿈 방지 */
         white-space: nowrap;

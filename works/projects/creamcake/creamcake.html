@@ -190,19 +190,30 @@ slides.addEventListener('touchmove', e => {
     const x = e.touches[0].clientX;
     const walk = startX - x;
 
-    if (walk > 50) {
-        currentIndex = Math.min(currentIndex + 1, maxIndex);
+    // 좌우 슬라이드 조건
+    if (walk > 30 && currentIndex < maxIndex) { // 오른쪽 스와이프
+        e.preventDefault(); // 페이지 스크롤 막기
+        currentIndex++;
+        slides.style.transform = `translateX(-${currentIndex * 100}%)`;
         isDragging = false;
-    } else if (walk < -50) {
-        currentIndex = Math.max(currentIndex - 1, 0);
+    } else if (walk < -30 && currentIndex > 0) { // 왼쪽 스와이프
+        e.preventDefault(); // 페이지 스크롤 막기
+        currentIndex--;
+        slides.style.transform = `translateX(-${currentIndex * 100}%)`;
         isDragging = false;
     }
 
-    slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+    // 첫/마지막 슬라이드 체크
+    if (currentIndex === 0 || currentIndex === maxIndex) {
+        document.body.style.overflowY = 'auto'; // 세로 스크롤 허용
+    } else {
+        document.body.style.overflowY = 'hidden'; // 슬라이드 중에는 세로 스크롤 막기
+    }
 });
 
-slides.addEventListener('touchend', () => { isDragging = false; });
+slides.addEventListener('touchend', () => { 
+    isDragging = false; 
+});
 </script>
-
 </body>
 </html>
