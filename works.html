@@ -8,12 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* ======================== */
-/*        기본 스타일       */
-/* ======================== */
 body {
     background-color: black;
-    font-family: 'Inter', sans-serif;;
+    font-family: 'Inter', sans-serif;
     font-size: 16px;
     color: rgb(180,180,180);
     margin: 0;
@@ -21,13 +18,12 @@ body {
     overflow: hidden;
     cursor: none;
     user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;        /* 🔹 기본 볼드감 */
     letter-spacing: -0.01em;
 }
 
+/* 스크롤 숨기기 */
 
-::-webkit-scrollbar { display: none; }
+::-webkit-scrollbar { width: 0; height: 0; }
 
 .navbar {
     position: fixed;
@@ -66,10 +62,6 @@ body {
     cursor: url('works/UI/Star.png'), auto;
 }
 
-
-/* ======================== */
-/*        빔 라이트         */
-/* ======================== */
 .beam {
     position: fixed;
     top: 0;
@@ -85,49 +77,17 @@ body {
     animation: flickerPC 0.8s infinite;
 }
 
-/* 모바일 빔 라이트 */
-@media (max-width: 768px) {
-    .beam {
-        width: 60px;
-        height: 60px;
-        filter: blur(50px) brightness(1);
-    }
-}
-
-/* PC 플리커링 */
 @keyframes flickerPC {
-    0%   { filter: blur(90px) brightness(0.85); }
-    10%  { filter: blur(90px) brightness(0.9); }
-    20%  { filter: blur(90px) brightness(0.95); }
-    30%  { filter: blur(90px) brightness(1); }
-    40%  { filter: blur(90px) brightness(0.92); }
-    50%  { filter: blur(90px) brightness(0.87); }
-    60%  { filter: blur(90px) brightness(0.9); }
-    70%  { filter: blur(90px) brightness(0.95); }
-    80%  { filter: blur(90px) brightness(1); }
-    90%  { filter: blur(90px) brightness(0.9); }
-    100% { filter: blur(90px) brightness(0.85); }
+    0%, 100% { filter: blur(90px) brightness(0.85); }
+    10%, 60% { filter: blur(90px) brightness(0.9); }
+    20%, 70% { filter: blur(90px) brightness(0.95); }
+    30%, 80% { filter: blur(90px) brightness(1); }
+    40%, 50%, 90% { filter: blur(90px) brightness(0.92); }
 }
 
-/* 모바일 플리커링 */
 @media (max-width: 768px) {
-    @keyframes flickerMobile {
-        0%   { filter: blur(50px) brightness(0.8); }
-        10%  { filter: blur(50px) brightness(0.85); }
-        20%  { filter: blur(50px) brightness(0.9); }
-        30%  { filter: blur(50px) brightness(0.95); }
-        40%  { filter: blur(50px) brightness(1); }
-        50%  { filter: blur(50px) brightness(0.92); }
-        60%  { filter: blur(50px) brightness(0.9); }
-        70%  { filter: blur(50px) brightness(0.95); }
-        80%  { filter: blur(50px) brightness(1); }
-        90%  { filter: blur(50px) brightness(0.9); }
-        100% { filter: blur(50px) brightness(0.85); }
-    }
-
-    .beam {
-        animation: flickerMobile 0.8s infinite;
-    }
+    body { cursor: default; overflow-y: auto; }
+    .beam { width: 180px; height: 180px; filter: blur(60px) brightness(0.9); }
 }
 
 /* ======================== */
@@ -146,53 +106,86 @@ body {
     aspect-ratio: 4 / 5;
 }
 
+/* 흑백 이미지 */
 .work-card img.img-gray {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
     display: block;
     filter: grayscale(100%) brightness(0.85);
 }
 
+/* 컬러 이미지 + 마스크 */
 .work-card img.img-color {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
     display: block;
     mask-image: radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%);
     -webkit-mask-image: radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%);
-    transition: mask-size 0.15s ease;
+    transition: mask-size 0.15s ease, opacity 0.25s ease;
     pointer-events: none;
 }
 
+
 /* ======================== */
-/*        모바일 처리       */
+/*       텍스트 스타일      */
 /* ======================== */
-@media (max-width: 768px) {
-    body {
-        cursor: default;
-        overflow-x: hidden; /* 가로 스크롤 막기 */
-        overflow-y: auto;   /* 세로 스크롤 허용 */
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .works-wrapper { padding: 90px 15px 40px; }
-
-    .works-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-        gap: 24px;
-    }
-
-    .beam {
-        width: 180px;
-        height: 180px;
-        filter: blur(60px) brightness(0.9);
-    }
+.work-text {
+    position: absolute;
+    bottom: 50px;               /* 이미지 오른쪽 아래 */
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;           /* 네비게이션처럼 얇게 */
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.247);
+    opacity: 0;                 /* 처음엔 안보임 */
+    pointer-events: auto;       /* 커서 감지 가능 */
+    text-decoration: none;      /* 밑줄 제거 */
+    transition: opacity 0.25s ease, color 0.25s ease, text-shadow 0.25s ease;
+    cursor: url('works/UI/Star.png'), auto;
+    z-index: 9999;  
 }
+
+/* 이미지 호버 시 글씨 등장 (글로우 없음) */
+.work-card:hover .work-text {
+    opacity: 1;
+    text-shadow: none;
+}
+
+/* 글씨에 가까이 가면 네비게이션과 동일한 글로우 */
+.work-text:hover {
+    color: white;
+    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
+    cursor: url('works/UI/Star.png'), auto; /* 클릭 가능한 커서 */
+}
+
+/* 클릭 가능한 링크 영역 확장 (보이지 않지만 커서 감지 가능) */
+.work-card a {
+    position: relative;
+    display: inline-block;
+}
+.work-text::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: -60px;
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+    pointer-events: auto;       /* 커서 감지 가능 */
+    cursor: url('works/UI/Star.png'), auto;
+}
+
+/* 모바일 처리 */
+@media (max-width: 768px) {
+    .works-wrapper { padding: 90px 15px 40px; }
+    .works-grid { grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); gap: 24px; }
+    .work-text { font-size: 16px; bottom: 8px; right: 8px; }
+}
+
 </style>
 </head>
 
@@ -207,20 +200,23 @@ body {
 <div class="works-wrapper">
     <div class="works-grid">
 
-        <a href="  " class="work-card">
+        <div class="work-card">
             <img class="img-gray" src="works/assets/Creamcake1.jpg" alt="Creamcake">
             <img class="img-color" src="works/assets/Creamcake1.jpg" alt="Creamcake">
-        </a>
+            <a href="Creamcake.html" class="work-text">Creamcake 3hd 2025: Vertigo</a>
+        </div>
 
-        <a href="  " class="work-card">
+        <div class="work-card">
             <img class="img-gray" src="works/assets/ASID1.jpg" alt="ASID">
             <img class="img-color" src="works/assets/ASID1.jpg" alt="ASID">
-        </a>
+            <a href="ASID.html" class="work-text">ASID: Drowned God</a>
+        </div>
 
-        <a href="  " class="work-card">
+        <div class="work-card">
             <img class="img-gray" src="works/assets/Club8.jpg" alt="Club8">
             <img class="img-color" src="works/assets/Club8.jpg" alt="Club8">
-        </a>
+            <a href="Club8.html" class="work-text">[8]: MASSIVE GAIN & Kontext</a>
+        </div>
 
     </div>
 </div>
@@ -243,10 +239,7 @@ function updateBeam(x, y) {
         const localX = x - rect.left;
         const localY = y - rect.top;
 
-        if (
-            localX >= 0 && localX <= rect.width &&
-            localY >= 0 && localY <= rect.height
-        ) {
+        if (localX >= 0 && localX <= rect.width && localY >= 0 && localY <= rect.height) {
             colorImg.style.maskImage = `radial-gradient(circle ${radius}px at ${localX}px ${localY}px, black 0%, transparent 60%)`;
             colorImg.style.webkitMaskImage = colorImg.style.maskImage;
         } else {
@@ -256,10 +249,7 @@ function updateBeam(x, y) {
     });
 }
 
-// 마우스
 document.addEventListener("mousemove", e => updateBeam(e.clientX, e.clientY));
-
-// 터치
 document.addEventListener("touchmove", e => {
     const t = e.touches[0];
     if (!t) return;
