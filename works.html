@@ -8,60 +8,64 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* ======================== */
+/*        기본 스타일       */
+/* ======================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     background-color: black;
     font-family: 'Inter', sans-serif;
     font-size: 16px;
     color: rgb(180,180,180);
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+    overflow-x: hidden;
     cursor: none;
     user-select: none;
     letter-spacing: -0.01em;
 }
 
-/* 스크롤 숨기기 */
-
 ::-webkit-scrollbar { width: 0; height: 0; }
 
+/* ======================== */
+/*       네비게이션         */
+/* ======================== */
 .navbar {
     position: fixed;
     top: 20px;
     right: 20px;
     z-index: 10000;
 }
-
 .navbar a {
-    color: gray; 
+    color: gray;
     text-decoration: none;
     font-size: 19px;
-    font-family: 'Inter', sans-serif;
     font-weight: 500;
     cursor: none;
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
-
-/* 빔 가까이 접근 or 호버 시 글로우 */
-/* 빔 가까이 접근 or 호버 시 글로우 */
-.navbar a.beam-hover,
-.navbar a:hover {
+.navbar a:hover,
+.navbar a.beam-hover {
     color: white !important;
     text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
 }
-
-/* 커서 반응 영역 확장 (보이지 않지만 커서 감지 가능) */
 .navbar a::before {
     content: '';
     position: absolute;
-    top: -30px;       /* 위쪽 여유 */
-    left: -50px;      /* 왼쪽 여유 */
-    width: calc(100% + 60px);  /* 오른쪽 포함 */
-    height: calc(100% + 40px); /* 아래쪽 포함 */
-    pointer-events: auto;      /* 커서 감지 가능 */
+    top: -30px;
+    left: -50px;
+    width: calc(100% + 60px);
+    height: calc(100% + 40px);
+    pointer-events: auto;
     cursor: url('works/UI/Star.png'), auto;
 }
 
+/* ======================== */
+/*        빔 라이트         */
+/* ======================== */
 .beam {
     position: fixed;
     top: 0;
@@ -70,7 +74,7 @@ body {
     height: 360px;
     pointer-events: none;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.233);
+    background-color: rgba(255,255,255,0.2);
     filter: blur(100px) brightness(1);
     transform: translate(-50%, -50%);
     z-index: 9998;
@@ -78,16 +82,20 @@ body {
 }
 
 @keyframes flickerPC {
-    0%, 100% { filter: blur(90px) brightness(0.85); }
-    10%, 60% { filter: blur(90px) brightness(0.9); }
-    20%, 70% { filter: blur(90px) brightness(0.95); }
-    30%, 80% { filter: blur(90px) brightness(1); }
-    40%, 50%, 90% { filter: blur(90px) brightness(0.92); }
+    0%,100%{filter:blur(90px) brightness(0.85);}
+    10%,60%{filter:blur(90px) brightness(0.9);}
+    20%,70%{filter:blur(90px) brightness(0.95);}
+    30%,80%{filter:blur(90px) brightness(1);}
+    40%,50%,90%{filter:blur(90px) brightness(0.92);}
 }
 
-@media (max-width: 768px) {
-    body { cursor: default; overflow-y: auto; }
-    .beam { width: 180px; height: 180px; filter: blur(60px) brightness(0.9); }
+/* 모바일 빔 */
+@media(max-width:768px){
+    .beam{
+        width: 180px;
+        height: 180px;
+        filter: blur(60px) brightness(0.9);
+    }
 }
 
 /* ======================== */
@@ -99,121 +107,68 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
     gap: 40px;
 }
-
 .work-card {
     position: relative;
     overflow: hidden;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 4/5;
 }
-
-/* 흑백 이미지 */
 .work-card img.img-gray {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
     filter: grayscale(100%) brightness(0.85);
 }
-
-/* 컬러 이미지 + 마스크 */
 .work-card img.img-color {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
     mask-image: radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%);
     -webkit-mask-image: radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%);
     transition: mask-size 0.15s ease, opacity 0.25s ease;
     pointer-events: none;
 }
 
-
 /* ======================== */
-/*       텍스트 스타일      */
+/*      텍스트 스타일       */
 /* ======================== */
 .work-text {
     position: absolute;
-    bottom: 50px;               /* 이미지 오른쪽 아래 */
+    bottom: 50px;
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Inter', sans-serif;
-    font-weight: 200;           /* 네비게이션처럼 얇게 */
+    font-weight: 200;
     font-size: 18px;
-    color: rgba(255, 255, 255, 0.247);
-    opacity: 0;                 /* 처음엔 안보임 */
-    pointer-events: auto;       /* 커서 감지 가능 */
-    text-decoration: none;      /* 밑줄 제거 */
+    color: rgba(255,255,255,0.25);
+    opacity: 0;
+    pointer-events: auto;
+    text-decoration: none;
     transition: opacity 0.25s ease, color 0.25s ease, text-shadow 0.25s ease;
     cursor: url('works/UI/Star.png'), auto;
-    z-index: 9999;  
+    z-index: 9999;
 }
-
-/* 이미지 호버 시 글씨 등장 (글로우 없음) */
-.work-card:hover .work-text {
-    opacity: 1;
-    text-shadow: none;
-}
-
-/* 글씨에 가까이 가면 네비게이션과 동일한 글로우 */
-.work-text:hover {
-    color: white !important;
-    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white !important;
-    cursor: url('works/UI/Star.png'), auto; /* 클릭 가능한 커서 */
-}
-
-/* 클릭 가능한 링크 영역 확장 (보이지 않지만 커서 감지 가능) */
-.work-card a {
-    position: relative;
-    display: inline-block;
-}
-.work-text::before {
-    content: '';
-    position: absolute;
-    top: -60px;
-    left: -60px;
-    width: calc(100% + 60px);
-    height: calc(100% + 60px);
-    pointer-events: auto;       /* 커서 감지 가능 */
-    cursor: url('works/UI/Star.png'), auto;
+.work-card:hover .work-text { opacity:1; text-shadow:none; }
+.work-text:hover{
+    color:white !important;
+    text-shadow:0 0 10px white,0 0 20px white,0 0 40px white !important;
 }
 
 /* 모바일 처리 */
-@media (max-width: 768px) {
-
-    .works-wrapper { padding: 90px 15px 40px; }
-    .works-grid { 
-        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); 
-        gap: 24px; 
+@media(max-width:768px){
+    .works-wrapper { padding:90px 15px 40px; }
+    .works-grid { grid-template-columns: repeat(auto-fill,minmax(100%,1fr)); gap:24px; }
+    .work-card { overflow: visible; }
+    .work-text{
+        font-size:12.5px;
+        bottom:24px;
+        opacity:1;
     }
-
-    /* ✅ 텍스트 잘림 방지 */
-    .work-card {
-        overflow: visible;
-    }
-
-    /* ✅ 모바일은 hover 없으니까 항상 보이게 */
-    .work-text {
-        font-size: 12.5px;
-        bottom: 24px;
-        left: 50%;
-        transform: translateX(-50%);
-        opacity: 1;
-        pointer-events: auto;
-    }
-
-    /* ✅ 클릭 막는 가상영역 제거 */
-    .work-text::before {
-        display: none;
-    }
-
+    .work-text::before { display:none; }
 }
-
-
 </style>
 </head>
-
 <body>
 
 <nav class="navbar">
@@ -224,7 +179,6 @@ body {
 
 <div class="works-wrapper">
     <div class="works-grid">
-
         <div class="work-card">
             <img class="img-gray" src="works/assets/Creamcake1.jpg" alt="Creamcake">
             <img class="img-color" src="works/assets/Creamcake1.jpg" alt="Creamcake">
@@ -242,7 +196,6 @@ body {
             <img class="img-color" src="works/assets/Club8.jpg" alt="Club8">
             <a href="works/projects/club8/club8.html" class="work-text">[8]: MASSIVE GAIN & Kontext</a>
         </div>
-
     </div>
 </div>
 
@@ -250,21 +203,21 @@ body {
 const beam = document.querySelector(".beam");
 const cards = document.querySelectorAll(".work-card");
 
-// 빔 범위
 const DESKTOP_RADIUS = 450;
 const MOBILE_RADIUS = 220;
 
 function updateBeam(x, y) {
-    beam.style.transform = `translate(${x - beam.offsetWidth/2}px, ${y - beam.offsetHeight/2}px)`;
     const radius = window.innerWidth <= 768 ? MOBILE_RADIUS : DESKTOP_RADIUS;
 
-    cards.forEach(card => {
+    beam.style.transform = `translate(${x - beam.offsetWidth/2}px, ${y - beam.offsetHeight/2}px)`;
+
+    cards.forEach(card=>{
         const rect = card.getBoundingClientRect();
         const colorImg = card.querySelector(".img-color");
         const localX = x - rect.left;
         const localY = y - rect.top;
 
-        if (localX >= 0 && localX <= rect.width && localY >= 0 && localY <= rect.height) {
+        if(localX>=0 && localX<=rect.width && localY>=0 && localY<=rect.height){
             colorImg.style.maskImage = `radial-gradient(circle ${radius}px at ${localX}px ${localY}px, black 0%, transparent 60%)`;
             colorImg.style.webkitMaskImage = colorImg.style.maskImage;
         } else {
@@ -274,12 +227,15 @@ function updateBeam(x, y) {
     });
 }
 
+// PC 마우스
 document.addEventListener("mousemove", e => updateBeam(e.clientX, e.clientY));
-document.addEventListener("touchmove", e => {
+
+// 모바일 터치
+document.addEventListener("touchmove", e=>{
     const t = e.touches[0];
-    if (!t) return;
+    if(!t) return;
     updateBeam(t.clientX, t.clientY);
-}, { passive: true });
+}, {passive:true});
 </script>
 
 </body>

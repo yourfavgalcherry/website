@@ -177,6 +177,9 @@ window.addEventListener('wheel', e => {
 // ----------------------
 // 모바일 터치 슬라이드
 // ----------------------
+// ----------------------
+// 모바일 터치 슬라이드
+// ----------------------
 let isDragging = false;
 let startX = 0;
 
@@ -187,33 +190,42 @@ slides.addEventListener('touchstart', e => {
 
 slides.addEventListener('touchmove', e => {
     if (!isDragging) return;
+
     const x = e.touches[0].clientX;
     const walk = startX - x;
 
-    // 좌우 슬라이드 조건
+    // 좌우 스와이프 조건 (30px 이상)
     if (walk > 30 && currentIndex < maxIndex) { // 오른쪽 스와이프
-        e.preventDefault(); // 페이지 스크롤 막기
+        e.preventDefault(); // 세로 스크롤 막기
         currentIndex++;
         slides.style.transform = `translateX(-${currentIndex * 100}%)`;
         isDragging = false;
     } else if (walk < -30 && currentIndex > 0) { // 왼쪽 스와이프
-        e.preventDefault(); // 페이지 스크롤 막기
+        e.preventDefault(); // 세로 스크롤 막기
         currentIndex--;
         slides.style.transform = `translateX(-${currentIndex * 100}%)`;
         isDragging = false;
     }
 
-    // 첫/마지막 슬라이드 체크
+    // 슬라이드 중/끝 체크
     if (currentIndex === 0 || currentIndex === maxIndex) {
-        document.body.style.overflowY = 'auto'; // 세로 스크롤 허용
+        document.body.style.overflowY = 'auto'; // 첫/마지막: 세로 스크롤 허용
     } else {
-        document.body.style.overflowY = 'hidden'; // 슬라이드 중에는 세로 스크롤 막기
+        document.body.style.overflowY = 'hidden'; // 중간 슬라이드: 세로 스크롤 막기
     }
 });
 
-slides.addEventListener('touchend', () => { 
-    isDragging = false; 
+slides.addEventListener('touchend', () => {
+    isDragging = false;
+
+    // 스와이프 종료 후에도 현재 슬라이드 위치 체크
+    if (currentIndex === 0 || currentIndex === maxIndex) {
+        document.body.style.overflowY = 'auto';
+    } else {
+        document.body.style.overflowY = 'hidden';
+    }
 });
+
 </script>
 </body>
 </html>
