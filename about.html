@@ -6,7 +6,9 @@
 <title>About</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
 
 
 <style>
@@ -15,12 +17,13 @@
 /* ======================== */
 body {
     background-color: black;
-    font-family: 'Inter', sans-serif;;
+    font-family: "Manrope", sans-serif;;
     font-size: 16px;
     color: rgb(180,180,180);
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow-x: hidden;   /* ← 변경 */
+    overflow-y: auto;  
     cursor: none;
     user-select: none;
     -webkit-user-select: none;
@@ -160,7 +163,7 @@ body, html {
     margin: 150px auto 10px auto;
     font-size: 1.1rem;
     line-height: 1.4;
-    font-family: 'Inter', sans-serif;
+    font-family: "Manrope", sans-serif;
     font-weight: 500;
     white-space: pre-wrap;
 }
@@ -190,47 +193,128 @@ body, html {
 }
 
 /* ======================== */
-/*        기타 UI           */
+/*     Any inquiries 폼     */
 /* ======================== */
-.under-construction {
-    text-align: center;
-    font-size: 1rem;
-    color: gray;
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-    margin-top: 180px;
-    margin-bottom: 80px;
-}
-.footer {
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    background: rgba(0, 0, 0, 0);
-    padding: 10px 0;
-    font-size: 0.9rem;
-    color: rgba(218, 218, 218, 0.733);
+.inquiry {
+    max-width: 800px;
+    font-family: "Manrope", sans-serif;
+    margin: 80px auto 120px;
+    font-size: 0.95rem;
 }
 
-.footer a::before {
-    content: '';
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    width: calc(100% + 20px);
-    height: calc(100% + 20px);
-    pointer-events: auto;
-    cursor: url('works/UI/Star.png'), auto;
+.inquiry h3 {
+    font-size: 1rem;
+    font-family: "Manrope", sans-serif;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: white;
 }
+
+.inquiry form {
+    display: flex;
+    font-family: "Manrope", sans-serif;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.inquiry input,
+.inquiry textarea {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: white;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.inquiry button {
+    align-self: flex-start;
+    background: none;
+    border: 1px solid rgba(255,255,255,0.4);
+    color: white;
+    padding: 8px 18px;
+    font-family: "Manrope", sans-serif;
+    font-size: 0.85rem;
+}
+
+/* ======================== */
+/*        슬라이드 푸터     */
+/* ======================== */
+.footer-marquee {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 8px 0;
+  background: transparent;   /* ❌ 배경 제거 */
+  border: none;              /* ❌ 라인 제거 */
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.marquee-text {
+  overflow: clip;
+}
+
+.marquee-text-track {
+  display: flex;
+  align-items: center;
+  gap: 3.2rem;               /* 문장 사이 기본 간격 */
+  width: max-content;
+  will-change: transform;
+  animation: marquee-move-text var(--speed, 40s) linear infinite;
+}
+
+/* 텍스트만 */
+.marquee-text-track span {
+  font-family: "Manrope", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(218,218,218,0.75);
+  white-space: nowrap;
+
+  /* ❌ pill 스타일 전부 제거 */
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* ✴︎ separator 전용 */
+.marquee-text-track .separator {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  transform: translateY(-0.02em);
+}
+
+@keyframes marquee-move-text {
+  to { transform: translateX(-50%); }
+}
+
+/* fade out mask */
+.fadeout-horizontal {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 4rem,
+    black calc(100% - 4rem),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 4rem,
+    black calc(100% - 4rem),
+    transparent
+  );
+}
+
 
 /* ======================== */
 /*        모바일 처리       */
 /* ======================== */
 @media (max-width: 768px) {
     body {
-        overflow-y: hidden;
+        overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         cursor: default;
     }
@@ -247,7 +331,7 @@ body, html {
 
     .intro-text {
         padding: 14px;
-        font-family: 'Inter', sans-serif;
+        font-family: "Manrope", sans-serif;
         font-weight: 400;
         font-size: 0.80rem;
         line-height: 1.4;
@@ -261,26 +345,53 @@ body, html {
         filter: blur(60px) brightness(0.9);
     }
 
-        .under-construction {
-        position: fixed;
-        bottom: 36px;              /* footer 위 */
-        left: 0;
-        width: 100%;
-        margin: 0;
-        font-size: 0.7rem;
-        font-family: 'Inter', sans-serif;
-        font-weight: 500;
-        color: rgb(130,130,130);
-        pointer-events: none;
+ .inquiry {
+        margin: 60px 14px 100px;
     }
 
-    .footer {
-        font-size: 0.75rem;
-        padding: 8px 0;
+    .inquiry h3 {
+        font-size: 0.85rem;
     }
 
+    .inquiry input,
+    .inquiry textarea {
+        font-size: 0.8rem;
+    }
+  .footer-marquee {
+    padding: 6px 0;
+  }
 
-}
+  .marquee-text-track {
+    gap: 2rem;
+    animation-duration: 30s;
+  }
+
+  .marquee-text-track span {
+    font-size: 0.7rem;
+  }
+
+  .separator {
+    font-size: 0.65rem;
+  }
+
+  .fadeout-horizontal {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 2rem,
+      black calc(100% - 2rem),
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 2rem,
+      black calc(100% - 2rem),
+      transparent
+    );
+  }
+} 
+
 </style>
 </head>
 
@@ -330,14 +441,52 @@ on projects with Ableton, Creamcake, ASID, LUNA,
 and Club[8].</p>
 </div>
 
-<div class="under-construction">© 2026 Chaery Yoon. All rights reserved.</div>
+<section class="inquiry">
+<h3>Any inquiries:</h3>
+<form action="https://formsubmit.co/chaeryyoon.de@gmail.com" method="POST">
+    <input type="email" name="email" placeholder="Your email" required>
+    <textarea name="message" rows="3" placeholder="Message"></textarea>
+    <button type="submit">Send</button>
+</form>
+</section>
 
-<footer class="footer">
-    Any inquiries:
-    <a href="mailto:chaeryyoon.de@gmail.com" style="color: gray; text-decoration: underline;">
-        chaeryyoon.de@gmail.com
-    </a>
+<footer class="footer-marquee fadeout-horizontal">
+  <div class="marquee-text" aria-label="copyright marquee">
+    <div class="marquee-text-track">
+      <!-- set A -->
+      <span>© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator">✴︎</span>
+      <span>© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator">✴︎</span>
+      <span>© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator">✴︎</span>
+
+      <!-- set B (duplicate) -->
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+
+      <!-- set C (extra for large screens) -->
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+     <span class="separator" aria-hidden="true">✴︎</span>
+
+
+    </div>
+  </div>
 </footer>
+
+
+
+
+
+
 
 <script>
 document.addEventListener("selectstart", e => e.preventDefault());

@@ -36,11 +36,11 @@ body {
     align-items: center;
     justify-content: center;
 
-    font-family: "Arial Narrow", "Helvetica Neue Condensed", Helvetica, Arial, sans-serif;
+    font-family: 'Helvetica Neue', 'Helvetica', sans-serif;
     font-weight: 700;
 
     font-size: 28vw;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.001em;
 
     color: #ffffff;
     opacity: 0.05;

@@ -126,6 +126,7 @@ a{
 /* text */
 .work-text{
     position:absolute;
+    font-family: 'Inter', sans-serif;
     bottom:50px;
     left:50%;
     transform:translateX(-50%);
@@ -156,6 +157,79 @@ a{
     cursor: url('works/UI/Star.png'), auto;
     z-index: 9999;
 }
+
+
+/* ======================== */
+/*        슬라이드 푸터     */
+/* ======================== */
+.footer-marquee {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 8px 0;
+  background: transparent;   /* ❌ 배경 제거 */
+  border: none;              /* ❌ 라인 제거 */
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.marquee-text {
+  overflow: clip;
+}
+
+.marquee-text-track {
+  display: flex;
+  align-items: center;
+  gap: 5rem;               /* 문장 사이 기본 간격 */
+  width: max-content;
+  will-change: transform;
+  animation: marquee-move-text var(--speed, 40s) linear infinite;
+}
+
+/* 텍스트만 */
+.marquee-text-track span {
+  font-family: "Manrope", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(218,218,218,0.75);
+  white-space: nowrap;
+
+  /* ❌ pill 스타일 전부 제거 */
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* ✴︎ separator 전용 */
+.marquee-text-track .separator {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  transform: translateY(-0.02em);
+}
+
+@keyframes marquee-move-text {
+  to { transform: translateX(-50%); }
+}
+
+/* fade out mask */
+.fadeout-horizontal {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 4rem,
+    black calc(100% - 4rem),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 4rem,
+    black calc(100% - 4rem),
+    transparent
+  );
+}
+
 
 /* ================= MOBILE ================= */
 @media(max-width:768px){
@@ -193,6 +267,41 @@ a{
         grid-template-columns:1fr;
         gap:24px;
     }
+
+  .footer-marquee {
+    padding: 6px 0;
+  }
+
+  .marquee-text-track {
+    gap: 3rem;
+    animation-duration: 30s;
+  }
+
+  .marquee-text-track span {
+    font-size: 0.7rem;
+  }
+
+  .separator {
+    font-size: 0.65rem;
+  }
+
+  .fadeout-horizontal {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 2rem,
+      black calc(100% - 2rem),
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 2rem,
+      black calc(100% - 2rem),
+      transparent
+    );
+  }
+
 }
 
 </style>
@@ -260,6 +369,39 @@ TOO SOON TO SAY: Luminal
 </div>
 </div>
 
+<footer class="footer-marquee fadeout-horizontal">
+  <div class="marquee-text" aria-label="copyright marquee">
+    <div class="marquee-text-track">
+      <!-- set A -->
+      <span>© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator">✴︎</span>
+      <span>© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator">✴︎</span>
+      <span>© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator">✴︎</span>
+
+      <!-- set B (duplicate) -->
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+
+      <!-- set C (extra for large screens) -->
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+     <span class="separator" aria-hidden="true">✴︎</span>
+
+
+    </div>
+  </div>
+</footer>
+
+
 <script>
 /* ===== PC beam interaction only ===== */
 if(window.innerWidth > 768){
@@ -310,7 +452,7 @@ if(window.innerWidth <= 768){
 
             if(lx>=0 && lx<=rect.width && ly>=0 && ly<=rect.height){
 
-                const mask = `radial-gradient(circle 420px at ${lx}px ${ly}px, black 0%, transparent 60%)`;
+                const mask = `radial-gradient(circle 420px at ${lx}px ${ly}px, black 0%, transparent 100%)`;
 
                 img.style.maskImage = mask;
                 img.style.webkitMaskImage = mask;
