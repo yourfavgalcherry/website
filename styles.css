@@ -59,7 +59,7 @@ body {
     .bg-click {
         font-size: 29vh;           /* 세로 기준 꽉차도록 */
         line-height: 1;             /* 세로 간격 최소화 */
-        transform: scaleY(4.5) scaleX(0.55); /* 세로 줄이고, 가로 살짝 확대 */
+        transform: scaleY(4.5) scaleX(0.5); /* 세로 줄이고, 가로 살짝 확대 */
         letter-spacing: -0.03em;   /* 알파벳 간격 최소화 */
         white-space: nowrap;        /* 한 줄 유지 */
         overflow: visible;

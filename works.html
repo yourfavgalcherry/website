@@ -160,39 +160,41 @@ a{
 /* ================= MOBILE ================= */
 @media(max-width:768px){
 
-    /* 빔 제거 */
+    /* beam 모바일에서도 사용 */
     .beam{
-        display:none;
+        display:block;
     }
 
-    /* 모바일: 글씨 기본 숨김 */
+    /* 텍스트 — 기본 회색 */
     .work-text{
-        opacity:1;              /* 항상 보이게 */
-        color: rgba(255,255,255,0.2); /* 아주 연하게 */
-        font-size:14px;          /* 약간 작게 */
+        opacity:1;
+        color: rgba(255,255,255,0.25);
+        font-size:14px;
         bottom:24px;
-        width:calc(100% - 16px); 
+        width:calc(100% - 16px);
         text-align:center;
-        transition: color .35s; /* 클릭 시 색상 전환 */
-        pointer-events: auto;   /* 링크 클릭 가능 */
+        transition: color .2s, text-shadow .2s;
+        pointer-events:auto;
     }
 
-    /* 이미지 기본 컬러 숨김 */
+    /* 모바일도 mask 방식 사용 */
     .img-color{
-        opacity:0;
-        mask:none;
-        -webkit-mask:none;
-        transition:.35s;
+        opacity:1;
+        mask-image: radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%);
+        -webkit-mask-image: radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%);
+        transition:.25s;
     }
-    /* grid */
+
     .works-wrapper{
         padding:90px 15px 40px;
     }
+
     .works-grid{
         grid-template-columns:1fr;
         gap:24px;
     }
 }
+
 </style>
 </head>
 
@@ -288,26 +290,59 @@ if(window.innerWidth > 768){
 }
 
 /* ===== MOBILE click to reveal color + text ===== */
+/* ===== MOBILE beam touch interaction ===== */
 if(window.innerWidth <= 768){
-    const cards = document.querySelectorAll(".work-card");
-    cards.forEach(card=>{
-        const colorImg = card.querySelector(".img-color");
-        const text = card.querySelector(".work-text");
 
-        card.addEventListener("click",()=>{
-            const isActive = colorImg.style.opacity=="1";
-            if(!isActive){
-                colorImg.style.opacity="1";           // 컬러 이미지 나타남
-                text.style.color="white";             // 글씨 화이트
-                text.style.textShadow = "0 0 10px white, 0 0 20px white, 0 0 40px white"; // 글로우
-            }else{
-                colorImg.style.opacity="0";           // 다시 흑백
-                text.style.color="rgba(255,255,255,0.2)"; // 글씨 연하게
-                text.style.textShadow = "none";       // 글로우 제거
+    const beam = document.querySelector(".beam");
+    const cards = document.querySelectorAll(".work-card");
+
+    function updateBeam(x,y){
+
+        beam.style.transform = `translate(${x-180}px,${y-180}px)`;
+
+        cards.forEach(card=>{
+            const rect = card.getBoundingClientRect();
+            const img = card.querySelector(".img-color");
+            const text = card.querySelector(".work-text");
+
+            const lx = x - rect.left;
+            const ly = y - rect.top;
+
+            if(lx>=0 && lx<=rect.width && ly>=0 && ly<=rect.height){
+
+                const mask = `radial-gradient(circle 420px at ${lx}px ${ly}px, black 0%, transparent 60%)`;
+
+                img.style.maskImage = mask;
+                img.style.webkitMaskImage = mask;
+
+                /* 🔥 텍스트 glow */
+                text.style.color = "white";
+                text.style.textShadow =
+                    "0 0 10px white, 0 0 20px white, 0 0 40px white";
+
+            } else {
+
+                img.style.maskImage =
+                  `radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%)`;
+                img.style.webkitMaskImage = img.style.maskImage;
+
+                text.style.color = "rgba(255,255,255,0.25)";
+                text.style.textShadow = "none";
             }
         });
+    }
+
+    document.addEventListener("touchstart", e=>{
+        const t = e.touches[0];
+        updateBeam(t.clientX, t.clientY);
+    });
+
+    document.addEventListener("touchmove", e=>{
+        const t = e.touches[0];
+        updateBeam(t.clientX, t.clientY);
     });
 }
+
 
 
 </script>
