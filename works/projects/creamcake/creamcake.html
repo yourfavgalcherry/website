@@ -35,61 +35,59 @@
     <p>
         GrandMA3 lighting programming, and live laser and lighting operation throughout the 3hd 2025: Vertigo festival in Berlin. 
         Worked with performing artists including <i>TOURS</i>, <i>Mug (Ludwig Wandinger & Yves B Golden)</i>, <i>Star & Stan</i>, and <i>Kinlaw</i> developing site-specific lighting compositions and immersive stage environments aligned with 
-        <a href="https://creamcake.de" target="_blank" class="inline-link"><i>Creamcake<i></a>’s curatorial vision.
+        <a href="https://creamcake.de" target="_blank" class="inline-link"><i>Creamcake<i></a>’s curatorial vision with spatial previsualization and simulation developed using Capture Lighting and Blender.
     </p>
 </section>
 
 <script>
-// ---------------------- PC 휠 슬라이드 ----------------------
-const slides = document.querySelectorAll('.slides');
+// ---------------------- PC 휠 슬라이드 (변경 없음) ----------------------
+const slides = document.querySelector('.slides');
+const slideImages = document.querySelectorAll('.slides img');
+let currentIndex = 0;
+const maxIndex = slideImages.length - 1;
 
-slides.forEach(slider => {
-    const slideImages = slider.querySelectorAll('img');
-    let currentIndex = 0;
-    const maxIndex = slideImages.length - 1;
+window.addEventListener('wheel', e => {
+    if (window.innerWidth <= 768) return;
 
-    if(window.innerWidth > 768){
-        window.addEventListener('wheel', e => {
-            if (!slider.contains(e.target)) return;
+    const delta = e.deltaY;
 
-            const delta = e.deltaY;
+    if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
+        e.preventDefault();
+        currentIndex = delta > 0 
+            ? Math.min(currentIndex + 1, maxIndex)
+            : Math.max(currentIndex - 1, 0);
+        slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
 
-            if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
-                e.preventDefault();
-                currentIndex = delta > 0 
-                    ? Math.min(currentIndex + 1, maxIndex)
-                    : Math.max(currentIndex - 1, 0);
-                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
-            }
-
-            if ((currentIndex === maxIndex && delta > 0) || (currentIndex === 0 && delta < 0)) {
-                document.body.style.overflowY = 'auto';
-            } else {
-                document.body.style.overflowY = 'hidden';
-            }
-        });
+    if (currentIndex === maxIndex && delta > 0) {
+        document.body.style.overflowY = 'auto';
+    } else if (currentIndex === 0 && delta < 0) {
+        document.body.style.overflowY = 'auto';
+    } else {
+        document.body.style.overflowY = 'hidden';
     }
 });
 
 // ---------------------- 모바일 슬라이드 + 세로스크롤 제어 ----------------------
-if(window.innerWidth <= 768){
-    slides.forEach(slider => {
-        function updateVerticalScrollLock() {
-            const atStart = slider.scrollLeft <= 2;
-            const atEnd = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 2;
+if (window.innerWidth <= 768) {
+    const slider = document.querySelector('.slider');
 
-            if (atStart || atEnd) {
-                document.body.style.overflowY = 'auto';
-            } else {
-                document.body.style.overflowY = 'hidden';
-            }
+    function updateVerticalScrollLock() {
+        const atStart = slider.scrollLeft <= 2;
+        const atEnd = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 2;
+
+        if (atStart || atEnd) {
+            document.body.style.overflowY = 'auto';   // 텍스트로 내려가기 허용
+        } else {
+            document.body.style.overflowY = 'hidden'; // 슬라이드 중에는 막기
         }
+    }
 
-        slider.addEventListener('scroll', updateVerticalScrollLock);
-        updateVerticalScrollLock();
-    });
+    slider.addEventListener('scroll', updateVerticalScrollLock);
+    updateVerticalScrollLock();
 }
-</script>
 
+
+</script>
 </body>
 </html>
