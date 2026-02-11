@@ -68,6 +68,31 @@ a{
     cursor: url('works/UI/Star.png'), auto;
 }
 
+/* ======================== */
+/*   모바일 네비게이션 축소 */
+/* ======================== */
+@media (max-width: 768px) {
+    .navbar {
+        top: 14px;        /* 살짝 위로 */
+        right: 14px;      /* 가장자리 여백 줄이기 */
+    }
+
+    .navbar a {
+        font-size: 14px;  /* 19px → 14px */
+        font-weight: 500;
+        letter-spacing: -0.01em;
+    }
+
+    /* 터치 영역도 같이 줄여줌 (before 영역) */
+    .navbar a::before {
+        top: -18px;
+        left: -28px;
+        width: calc(100% + 36px);
+        height: calc(100% + 30px);
+    }
+}
+
+
 /* ================= BEAM (PC) ================= */
 .beam{
     position:fixed;
