@@ -1,11 +1,18 @@
 body {
     margin: 0;
     background: black;
-    font-family: 'Inter', sans-serif;
+    font-family: "Manrope", sans-serif;
     color: rgb(200,200,200);
     overflow-x: hidden;
     overflow-y: hidden; /* 초기 상태 */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
 }
+
+
 
 ::-webkit-scrollbar { display: none; }
 
@@ -126,6 +133,7 @@ body {
     max-width: 820px;
     margin: 40px auto 120px;
     padding: 0 20px;
+    font-family: "Manrope", sans-serif;
     font-size: 1.05rem;
     line-height: 1.6;
 }
@@ -133,6 +141,7 @@ body {
     font-size: 1.5rem;
     font-weight: 600;
     color: white;
+    font-family: "Manrope", sans-serif;
     margin-bottom: 8px;
 }
 .project-meta {
