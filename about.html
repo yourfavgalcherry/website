@@ -10,7 +10,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
 
-
 <style>
 /* ======================== */
 /*        기본 스타일       */
@@ -22,15 +21,14 @@ body {
     color: rgb(180,180,180);
     margin: 0;
     padding: 0;
-    overflow-x: hidden;   /* ← 변경 */
-    overflow-y: auto;  
+    overflow-x: hidden;
+    overflow-y: auto;
     cursor: none;
     user-select: none;
     -webkit-user-select: none;
-    -ms-user-select: none;        /* 🔹 기본 볼드감 */
+    -ms-user-select: none;
     letter-spacing: -0.01em;
 }
-
 
 a,
 button,
@@ -38,7 +36,6 @@ input,
 textarea,
 select {
     cursor: url('works/UI/Star.png'), auto !important;
-    
 }
 
 body, html {
@@ -50,8 +47,6 @@ body, html {
     pointer-events: none;
 }
 
-
-
 ::-webkit-scrollbar { width: 0; height: 0; }
 
 .navbar {
@@ -62,7 +57,7 @@ body, html {
 }
 
 .navbar a {
-    color: gray; 
+    color: gray;
     text-decoration: none;
     font-size: 19px;
     font-family: 'Inter', sans-serif;
@@ -71,26 +66,22 @@ body, html {
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
-/* 빔 가까이 접근 or 호버 시 글로우 */
-/* 빔 가까이 접근 or 호버 시 글로우 */
 .navbar a.beam-hover,
 .navbar a:hover {
     color: white !important;
     text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
 }
 
-/* 커서 반응 영역 확장 (보이지 않지만 커서 감지 가능) */
 .navbar a::before {
     content: '';
     position: absolute;
-    top: -30px;       /* 위쪽 여유 */
-    left: -50px;      /* 왼쪽 여유 */
-    width: calc(100% + 60px);  /* 오른쪽 포함 */
-    height: calc(100% + 40px); /* 아래쪽 포함 */
-    pointer-events: auto;      /* 커서 감지 가능 */
+    top: -30px;
+    left: -50px;
+    width: calc(100% + 60px);
+    height: calc(100% + 40px);
+    pointer-events: auto;
     cursor: url('works/UI/Star.png'), auto;
 }
-
 
 /* ======================== */
 /*        빔 라이트         */
@@ -110,7 +101,6 @@ body, html {
     animation: flickerPC 0.25s infinite;
 }
 
-/* 모바일 빔 라이트 */
 @media (max-width: 768px) {
     .beam {
         width: 60px;
@@ -119,7 +109,6 @@ body, html {
     }
 }
 
-/* PC 플리커링 */
 @keyframes flickerPC {
     0%   { filter: blur(90px) brightness(0.85); }
     10%  { filter: blur(90px) brightness(0.9); }
@@ -134,7 +123,6 @@ body, html {
     100% { filter: blur(90px) brightness(0.85); }
 }
 
-/* 모바일 플리커링 */
 @media (max-width: 768px) {
     @keyframes flickerMobile {
         0%   { filter: blur(50px) brightness(0.8); }
@@ -149,10 +137,7 @@ body, html {
         90%  { filter: blur(50px) brightness(0.9); }
         100% { filter: blur(50px) brightness(0.85); }
     }
-
-    .beam {
-        animation: flickerMobile 0.25s infinite;
-    }
+    .beam { animation: flickerMobile 0.25s infinite; }
 }
 
 /* ======================== */
@@ -168,16 +153,10 @@ body, html {
     white-space: pre-wrap;
 }
 
-.intro-text p {
-    margin-bottom: 1.4em;
-}
+.intro-text p { margin-bottom: 1.4em; }
 
-/* 🔹 기본 상태: 모바일 텍스트 숨김 */
-#mobile-text {
-    display: none;
-}
+#mobile-text { display: none; }
 
-/* 알파벳 단위 */
 .char {
     display: inline-block;
     transition: color 0.25s ease, text-shadow 0.25s ease;
@@ -198,7 +177,7 @@ body, html {
 .inquiry {
     max-width: 800px;
     font-family: "Manrope", sans-serif;
-    margin: 80px auto 120px;
+    margin: 80px auto 220px;
     font-size: 0.95rem;
 }
 
@@ -207,6 +186,7 @@ body, html {
     font-family: "Manrope", sans-serif;
     font-weight: 500;
     margin-bottom: 16px;
+    margin-top: 80px;
     color: white;
 }
 
@@ -237,6 +217,31 @@ body, html {
     font-size: 0.85rem;
 }
 
+.ig-link {
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    text-decoration: underline;
+    color: rgba(180,180,180,0.8);
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+.ig-link:hover {
+    color: white;
+    text-shadow: 0 0 8px rgba(255,255,255,0.6);
+}
+
+.location {
+  margin-top: 30px;
+  margin-bottom: 8px;
+  font-size: 0.90rem;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.05em;
+}
+.contact-email {
+  margin-top: 3px;
+  font-size: 0.90rem;
+  color: rgba(255,255,255,0.6);
+}
+
 /* ======================== */
 /*        슬라이드 푸터     */
 /* ======================== */
@@ -246,40 +251,34 @@ body, html {
   bottom: 0;
   width: 100%;
   padding: 8px 0;
-  background: transparent;   /* ❌ 배경 제거 */
-  border: none;              /* ❌ 라인 제거 */
+  background: transparent;
+  border: none;
   z-index: 9999;
   pointer-events: none;
 }
 
-.marquee-text {
-  overflow: clip;
-}
+.marquee-text { overflow: clip; }
 
 .marquee-text-track {
   display: flex;
   align-items: center;
-  gap: 3.2rem;               /* 문장 사이 기본 간격 */
+  gap: 3.2rem;
   width: max-content;
   will-change: transform;
   animation: marquee-move-text var(--speed, 40s) linear infinite;
 }
 
-/* 텍스트만 */
 .marquee-text-track span {
   font-family: "Manrope", sans-serif;
   font-size: 0.85rem;
   font-weight: 500;
   color: rgba(218,218,218,0.75);
   white-space: nowrap;
-
-  /* ❌ pill 스타일 전부 제거 */
   background: none;
   border: none;
   padding: 0;
 }
 
-/* ✴︎ separator 전용 */
 .marquee-text-track .separator {
   font-size: 0.75rem;
   opacity: 0.6;
@@ -290,7 +289,6 @@ body, html {
   to { transform: translateX(-50%); }
 }
 
-/* fade out mask */
 .fadeout-horizontal {
   -webkit-mask-image: linear-gradient(
     to right,
@@ -308,7 +306,6 @@ body, html {
   );
 }
 
-
 /* ======================== */
 /*        모바일 처리       */
 /* ======================== */
@@ -319,15 +316,12 @@ body, html {
         cursor: default;
     }
 
-    /* 🔹 모바일에서는 데스크톱 텍스트 숨기고 */
-    #desktop-text {
-        display: none;
-    }
+    /* ✅ 모바일 네비 더 작게 */
+    .navbar { top: 14px; right: 14px; }
+    .navbar a { font-size: 15px; font-weight: 500; }
 
-    /* 🔹 모바일 텍스트 표시 */
-    #mobile-text {
-        display: block;
-    }
+    #desktop-text { display: none; }
+    #mobile-text { display: block; }
 
     .intro-text {
         padding: 14px;
@@ -336,8 +330,9 @@ body, html {
         font-size: 0.80rem;
         line-height: 1.4;
         margin-top: 60px;
+        margin-bottom: 20px;
         white-space: pre-wrap;
-        }
+    }
 
     .beam {
         width: 100px;
@@ -345,53 +340,36 @@ body, html {
         filter: blur(60px) brightness(0.9);
     }
 
- .inquiry {
-        margin: 60px 14px 100px;
+    .inquiry { margin: 60px 14px 100px; }
+    .inquiry h3 { font-size: 0.85rem; }
+    .inquiry input, .inquiry textarea { font-size: 0.8rem; }
+
+    .footer-marquee { padding: 6px 0; }
+    .marquee-text-track { gap: 2rem; animation-duration: 30s; }
+    .marquee-text-track span { font-size: 0.7rem; }
+    .separator { font-size: 0.65rem; }
+
+    .fadeout-horizontal {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent,
+        black 2rem,
+        black calc(100% - 2rem),
+        transparent
+      );
+      mask-image: linear-gradient(
+        to right,
+        transparent,
+        black 2rem,
+        black calc(100% - 2rem),
+        transparent
+      );
     }
 
-    .inquiry h3 {
-        font-size: 0.85rem;
-    }
-
-    .inquiry input,
-    .inquiry textarea {
-        font-size: 0.8rem;
-    }
-  .footer-marquee {
-    padding: 6px 0;
-  }
-
-  .marquee-text-track {
-    gap: 2rem;
-    animation-duration: 30s;
-  }
-
-  .marquee-text-track span {
-    font-size: 0.7rem;
-  }
-
-  .separator {
-    font-size: 0.65rem;
-  }
-
-  .fadeout-horizontal {
-    -webkit-mask-image: linear-gradient(
-      to right,
-      transparent,
-      black 2rem,
-      black calc(100% - 2rem),
-      transparent
-    );
-    mask-image: linear-gradient(
-      to right,
-      transparent,
-      black 2rem,
-      black calc(100% - 2rem),
-      transparent
-    );
-  }
-} 
-
+    .ig-link { font-size: 0.7rem; }
+    .location { font-size: 0.70rem; }
+    .contact-email { font-size: 0.70rem; }
+}
 </style>
 </head>
 
@@ -421,39 +399,62 @@ ASID, LUNA, and Club[8].</p>
 <!-- 모바일 텍스트 -->
 <div class="intro-text" id="mobile-text">
 <p>Chaery Yoon is a Seoul-born, Berlin-based Light Designer
-and Creative Technologist. She focuses on interactive, 
+and Creative Technologist. She focuses on interactive,
 light-based visuals and real-time audiovisual environments.
-Coming from a sculptural background, she creates 
+Coming from a sculptural background, she creates
 immersive and responsive spaces that explore human-
-centered phenomena and speculative narratives.</p><p>Her visual language combines atmospheric abstractions 
-with real-time control, responding to sound, performance, 
-and audience movement. Light is both the material and 
-the metaphor, while intensity, rhythm, and texture act as 
-sculptural elements in both physical and digital spaces. 
-She works with TouchDesigner, Unreal Engine, sensors, 
-and lighting systems (GrandMA2/3, Capture).</p><p>In 2024, her VR work 'Luminal' premiered at the 
+centered phenomena and speculative narratives.</p><p>Her visual language combines atmospheric abstractions
+with real-time control, responding to sound, performance,
+and audience movement. Light is both the material and
+the metaphor, while intensity, rhythm, and texture act as
+sculptural elements in both physical and digital spaces.
+She works with TouchDesigner, Unreal Engine, sensors,
+and lighting systems (GrandMA2/3, Capture).</p><p>In 2024, her VR work 'Luminal' premiered at the
 Manifest:IO at Haus der Visionäre in Berlin. A narrative
-version was later presented in TOO SOON TO SAY, 
+version was later presented in TOO SOON TO SAY,
 curated by Nebyula for Various Others at Bayerischer Hof
 in Munich. She has also created a light-based campaign
 for RE:PUBLICA/Tincon and worked as a lighting designer
-on projects with Ableton, Creamcake, ASID, LUNA, 
+on projects with Ableton, Creamcake, ASID, LUNA,
 and Club[8].</p>
 </div>
 
 <section class="inquiry">
-<h3>Any inquiries:</h3>
-<form action="https://formsubmit.co/chaeryyoon.de@gmail.com" method="POST">
-    <input type="email" name="email" placeholder="Your email" required>
-    <textarea name="message" rows="3" placeholder="Message"></textarea>
+  <div class="location">Berlin | Germany</div>
+  <div class="social">
+    <a href="https://www.instagram.com/yourfavgalcherry/" target="_blank" class="ig-link">
+      @yourfavgalcherry
+    </a>
+  </div>
+  <div class="contact-email">chaeryyoon.de@gmail.com</div>
+
+  <h3>Any inquiries:</h3>
+
+  <!-- ✅ 다이렉트: 메일 앱 열어서 사용자가 직접 발송 -->
+  <form id="inquiryForm">
+    <input
+      type="email"
+      id="senderEmail"
+      name="email"
+      placeholder="Your email"
+      required
+    >
+
+    <textarea
+      id="messageBody"
+      name="message"
+      rows="3"
+      placeholder="Message"
+      required
+    ></textarea>
+
     <button type="submit">Send</button>
-</form>
+  </form>
 </section>
 
 <footer class="footer-marquee fadeout-horizontal">
   <div class="marquee-text" aria-label="copyright marquee">
     <div class="marquee-text-track">
-      <!-- set A -->
       <span>© 2026 Chaery Yoon. All rights reserved.</span>
       <span class="separator">✴︎</span>
       <span>© 2026 Chaery Yoon. All rights reserved.</span>
@@ -461,7 +462,6 @@ and Club[8].</p>
       <span>© 2026 Chaery Yoon. All rights reserved.</span>
       <span class="separator">✴︎</span>
 
-      <!-- set B (duplicate) -->
       <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
       <span class="separator" aria-hidden="true">✴︎</span>
       <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
@@ -469,24 +469,15 @@ and Club[8].</p>
       <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
       <span class="separator" aria-hidden="true">✴︎</span>
 
-      <!-- set C (extra for large screens) -->
       <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
       <span class="separator" aria-hidden="true">✴︎</span>
       <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
       <span class="separator" aria-hidden="true">✴︎</span>
       <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
-     <span class="separator" aria-hidden="true">✴︎</span>
-
-
+      <span class="separator" aria-hidden="true">✴︎</span>
     </div>
   </div>
 </footer>
-
-
-
-
-
-
 
 <script>
 document.addEventListener("selectstart", e => e.preventDefault());
@@ -532,9 +523,25 @@ document.addEventListener("touchmove", e => {
     updateBeam(t.clientX, t.clientY);
 }, { passive: true });
 
+/* ✅ 다이렉트 메일 전송(mailto) */
+const inquiryForm = document.getElementById("inquiryForm");
+if (inquiryForm) {
+  inquiryForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const sender = document.getElementById("senderEmail").value.trim();
+    const msg = document.getElementById("messageBody").value.trim();
+
+    const subject = encodeURIComponent("New inquiry from website");
+    const body = encodeURIComponent(
+      `From: ${sender}\n\nMessage:\n${msg}\n\n— Sent via chaery-yoon.de`
+    );
+
+    // mailto: 사용자의 메일 앱을 열어 직접 발송 → 내 메일함에 '진짜 메일'로 들어옴
+    window.location.href = `mailto:chaeryyoon.de@gmail.com?subject=${subject}&body=${body}`;
+  });
+}
 </script>
 
 </body>
 </html>
-
-
