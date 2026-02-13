@@ -68,7 +68,7 @@ body {
 
   .bg-click-inner {
     font-size: 150vh;
-    transform: scaleY(2.5);
+    transform: scaleY(1.8);
     letter-spacing: -0.16em;
   }
 

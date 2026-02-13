@@ -84,29 +84,38 @@ function onDeviceMotion(e) {
     lastShakeTime = now;
   }
 }
+let motionPermissionGranted = false;
+let motionPermissionRequested = false;
 
-function enableShake() {
-  if (typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function") {
-    DeviceMotionEvent.requestPermission()
-      .then(state => {
-        if (state === "granted") {
-          window.addEventListener("devicemotion", onDeviceMotion, { passive: true });
-        }
-      })
-      .catch(() => {});
+async function requestMotionPermission() {
+  if (motionPermissionRequested) return;
+  motionPermissionRequested = true;
+
+  // iOS
+  if (typeof DeviceMotionEvent !== "undefined" &&
+      typeof DeviceMotionEvent.requestPermission === "function") {
+    try {
+      const state = await DeviceMotionEvent.requestPermission();
+      if (state === "granted") {
+        motionPermissionGranted = true;
+        window.addEventListener("devicemotion", onDeviceMotion, { passive: true });
+      }
+    } catch (e) {
+      // denied or error
+    }
   } else {
+    // Android etc
+    motionPermissionGranted = true;
     window.addEventListener("devicemotion", onDeviceMotion, { passive: true });
   }
 }
 
-// iOS는 사용자 제스처에서만 권한 요청 가능
+// ✅ 핵심: 첫 "진짜" 탭에서 권한 요청 (preventDefault 없이)
 if (isMobile) {
-  window.addEventListener("touchstart", () => enableShake(), { once: true, passive: true });
+  window.addEventListener("pointerdown", () => {
+    requestMotionPermission();
+  }, { once: true });
 }
-
-
-
-
 
 
 // ============================
