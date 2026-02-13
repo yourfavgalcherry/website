@@ -97,6 +97,13 @@ if(window.innerWidth <= 768){
         updateVerticalScrollLock();
     });
 }
+
+if (window.location.pathname === "/about.html") {
+  window.history.replaceState({}, "", "/about");
+}
+
+
+
 </script>
 
 </body>

@@ -93,6 +93,11 @@ if (window.innerWidth <= 768) {
     slider.addEventListener('scroll', updateVerticalScrollLock);
     updateVerticalScrollLock();
 }
+if (window.location.pathname === "/works/projects/creamcake/creamcake.html") {
+  window.history.replaceState({}, "", "/works/creamcake");
+}
+
+
 
 
 </script>

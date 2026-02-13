@@ -94,6 +94,11 @@ if(window.innerWidth <= 768){
         updateVerticalScrollLock();
     });
 }
+
+if (window.location.pathname === "/works/projects/ASID/ASID.html") {
+  window.history.replaceState({}, "", "/works/asid");
+}
+
 </script>
 
 </body>

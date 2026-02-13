@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
 
 <style>
-*{
+{
     margin:0;
     padding:0;
     box-sizing:border-box;
@@ -546,6 +546,10 @@ if(window.innerWidth <= 768){
         const t = e.touches[0];
         updateBeam(t.clientX, t.clientY);
     });
+}
+
+if (window.location.pathname === "/works.html") {
+  window.history.replaceState({}, "", "/works");
 }
 
 
