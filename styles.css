@@ -67,8 +67,8 @@ body {
 @media (max-width: 768px) {
 
   .bg-click-inner {
-    font-size: 110vh;
-    transform: scaleY(1.4);
+    font-size: 150vh;
+    transform: scaleY(2.5);
     letter-spacing: -0.16em;
   }
 
