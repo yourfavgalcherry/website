@@ -107,6 +107,11 @@ if(window.innerWidth <= 768){
         updateVerticalScrollLock();
     });
 }
+
+if (window.location.pathname === "/works/projects/TINCON/TINCON.html") {
+  window.history.replaceState({}, "", "/");
+}
+
 </script>
 
 </body>

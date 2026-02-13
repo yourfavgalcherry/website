@@ -105,6 +105,11 @@ if(window.innerWidth <= 768){
         updateVerticalScrollLock();
     });
 }
+
+if (window.location.pathname === "/works/projects/Thesis/Thesis.html") {
+  window.history.replaceState({}, "", "/");
+}
+
 </script>
 
 </body>

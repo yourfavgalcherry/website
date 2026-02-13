@@ -584,6 +584,11 @@ if (inquiryForm) {
     window.location.href = `mailto:chaeryyoon.de@gmail.com?subject=${subject}&body=${body}`;
   });
 }
+
+if (window.location.pathname === "/about.html") {
+  window.history.replaceState({}, "", "/");
+}
+
 </script>
 
 </body>

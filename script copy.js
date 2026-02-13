@@ -23,6 +23,25 @@ if (customCursor) {
 }
 
 // ============================
+// ✅ 배경 텍스트(데스크탑/모바일) 자동 변경
+// ============================
+(function setBgClickCopy() {
+  const desktopEl = document.querySelector(".bg-desktop");
+  const mobileEl = document.querySelector(".bg-mobile");
+
+  if (desktopEl || mobileEl) {
+    if (desktopEl) desktopEl.style.display = isMobile ? "none" : "block";
+    if (mobileEl) mobileEl.style.display = isMobile ? "block" : "none";
+    return;
+  }
+
+  const bg = document.querySelector(".bg-click");
+  if (!bg) return;
+
+  bg.textContent = isMobile ? "Touch and Shake!" : "Click and Scroll!";
+})();
+
+// ============================
 // ✅ 스트로브 컬러
 // - 기본: White (시작은 화이트)
 // - PC: 스크롤하면 Neon Green ↔ Cyan 토글
@@ -104,11 +123,6 @@ if (isMobile) {
   window.addEventListener("touchstart", () => enableShake(), { once: true, passive: true });
 }
 
-
-
-
-
-
 // ============================
 // PC 마우스 제어
 // ============================
@@ -129,7 +143,6 @@ if (!isMobile) {
 
   document.addEventListener("mouseup", () => (isMouseDown = false));
 }
-
 
 // ============================
 // 모바일 터치 제어
@@ -183,8 +196,6 @@ document.addEventListener("touchend", () => {
   beam.style.display = "none";
   clearTimeout(longPressTimeout);
 }, { passive: false });
-
-
 
 // ============================
 // 전체 화면 스트로브
@@ -243,61 +254,47 @@ function screenStrobe() {
   setTimeout(() => strobe.remove(), 150);
 }
 
-
-
 // ============================
 // About 버튼 반응 & 클릭
 // ============================
 const aboutBtn = document.querySelector(".navbar a");
-
 if (aboutBtn) {
-    aboutBtn.addEventListener("click", () => {
-        window.location.href = "about.html"; // 실제 About 페이지 연결
-    });
+  aboutBtn.addEventListener("click", () => {
+    window.location.href = "about.html";
+  });
 }
 
 function animateBeam(timestamp) {
-    // PC: 항상 마우스 따라감
-    if (!isMobile) {
-        const x = mouseX - beam.offsetWidth / 2;
-        const y = mouseY - beam.offsetHeight / 2;
-        beam.style.transform = `translate(${x}px, ${y}px)`;
+  if (!isMobile) {
+    const x = mouseX - beam.offsetWidth / 2;
+    const y = mouseY - beam.offsetHeight / 2;
+    beam.style.transform = `translate(${x}px, ${y}px)`;
 
-        const flicker = 0.8 + Math.random() * 0.2;
-        beam.style.filter = `blur(60px) brightness(${flicker})`;
-    }
+    const flicker = 0.8 + Math.random() * 0.2;
+    beam.style.filter = `blur(60px) brightness(${flicker})`;
+  }
 
-    // 모바일: 터치 중일 때만 움직임
-    if (isMobile && isDragging) {
-        const x = mouseX - beam.offsetWidth / 2;
-        const y = mouseY - beam.offsetHeight / 2;
-        beam.style.transform = `translate(${x}px, ${y}px)`;
+  if (isMobile && isDragging) {
+    const x = mouseX - beam.offsetWidth / 2;
+    const y = mouseY - beam.offsetHeight / 2;
+    beam.style.transform = `translate(${x}px, ${y}px)`;
 
-        const flicker = 0.8 + Math.random() * 0.2;
-        beam.style.filter = `blur(40px) brightness(${flicker})`;
-    }
+    const flicker = 0.8 + Math.random() * 0.2;
+    beam.style.filter = `blur(40px) brightness(${flicker})`;
+  }
 
-    // About 버튼 glow 처리 (PC/모바일 공통)
-    if (aboutBtn) {
-        const rect = aboutBtn.getBoundingClientRect();
-        const btnX = rect.left + rect.width / 2;
-        const btnY = rect.top + rect.height / 2;
-        const distance = Math.hypot(mouseX - btnX, mouseY - btnY);
+  if (aboutBtn) {
+    const rect = aboutBtn.getBoundingClientRect();
+    const btnX = rect.left + rect.width / 2;
+    const btnY = rect.top + rect.height / 2;
+    const distance = Math.hypot(mouseX - btnX, mouseY - btnY);
 
-        if (distance < 150) {
-            aboutBtn.classList.add("beam-hover");
-        } else {
-            aboutBtn.classList.remove("beam-hover");
-        }
-    }
+    if (distance < 150) aboutBtn.classList.add("beam-hover");
+    else aboutBtn.classList.remove("beam-hover");
+  }
 
-    handleStrobe(timestamp);
-    requestAnimationFrame(animateBeam);
+  handleStrobe(timestamp);
+  requestAnimationFrame(animateBeam);
 }
 
-
-
-
 requestAnimationFrame(animateBeam);
-
-
