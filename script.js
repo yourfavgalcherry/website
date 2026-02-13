@@ -59,11 +59,12 @@ if (!isMobile) {
     toggleStrobeColor();
   }, { passive: true });
 }
-
-// 모바일: 흔들기 감지 (iOS 권한 포함)
+// ============================
+// ✅ 모바일: 흔들기 감지 (권한 포함)
+// ============================
 let lastShakeTime = 0;
 let lastMagnitude = 0;
-const SHAKE_THRESHOLD = 16;
+const SHAKE_THRESHOLD = 14;   // ✅ 좀 더 민감하게 (16 → 14)
 const SHAKE_COOLDOWN = 450;
 
 function onDeviceMotion(e) {
@@ -84,6 +85,7 @@ function onDeviceMotion(e) {
     lastShakeTime = now;
   }
 }
+
 let motionPermissionGranted = false;
 let motionPermissionRequested = false;
 
@@ -310,3 +312,28 @@ function animateBeam(timestamp) {
 requestAnimationFrame(animateBeam);
 
 
+function createMotionButton() {
+  const btn = document.createElement("button");
+  btn.textContent = "Enable Motion";
+  btn.style.position = "fixed";
+  btn.style.left = "50%";
+  btn.style.top = "50%";
+  btn.style.transform = "translate(-50%, -50%)";
+  btn.style.zIndex = "20000";
+  btn.style.padding = "10px 14px";
+  btn.style.fontSize = "14px";
+  btn.style.background = "rgba(255,255,255,0.08)";
+  btn.style.color = "white";
+  btn.style.border = "1px solid rgba(255,255,255,0.25)";
+  btn.style.backdropFilter = "blur(10px)";
+
+  btn.addEventListener("click", async () => {
+    await requestMotionPermission(); // 너 코드에 있는 함수 그대로 사용
+    if (motionPermissionGranted) btn.remove();
+  });
+
+  document.body.appendChild(btn);
+}
+
+// 모바일이면 버튼 띄우기
+if (isMobile) createMotionButton();
