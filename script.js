@@ -254,6 +254,16 @@ function handleStrobe(timestamp) {
 function screenStrobe() {
   const { r, g, b } = getStrobeRGB();
 
+
+  // ✅ 여기 추가: strobe가 실제로 터질 때마다 SFX도 같이
+  // 에너지는 “눌린 시간” 기반으로 넣으면 속도감 맞음 (아래 예시)
+  const heldTime = Date.now() - pressStartTime;
+  const energy = Math.min(1, heldTime / 2000); // 0~1
+  playStrobeSfx(energy);
+
+
+
+
   const strobe = document.createElement("div");
   strobe.style.position = "fixed";
   strobe.style.top = "0";
@@ -337,3 +347,90 @@ function animateBeam(timestamp) {
 }
 
 requestAnimationFrame(animateBeam);
+
+
+// ============================
+// ✅ AUDIO: first-gesture unlock + ambient loop + strobe SFX sync
+// ============================
+const ambientEl = document.getElementById("ambient");
+const sfxEl = document.getElementById("sfx");
+
+let audioUnlocked = false;
+let audioCtx = null;
+let sfxBuffer = null;
+let ambientSource = null;
+let ambientGain = null;
+let sfxGain = null;
+
+// (선택) 속도에 따라 SFX pitch 약간 변형하고 싶을 때
+function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+async function unlockAudioOnce() {
+  if (audioUnlocked) return;
+  audioUnlocked = true;
+
+  // WebAudio가 동기/정밀 타이밍에 훨씬 유리
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  // iOS/모바일에서는 resume 필요할 때가 많음
+  if (audioCtx.state === "suspended") {
+    try { await audioCtx.resume(); } catch(e) {}
+  }
+
+  // 앰비언트: HTMLAudio를 WebAudio로 라우팅 (볼륨/필터 제어 쉬움)
+  ambientGain = audioCtx.createGain();
+  ambientGain.gain.value = 0.35; // 기본 앰비언트 볼륨 (원하는 값으로)
+  ambientGain.connect(audioCtx.destination);
+
+  // HTMLAudio를 node로 연결
+  if (ambientEl) {
+    const ambientNode = audioCtx.createMediaElementSource(ambientEl);
+    ambientNode.connect(ambientGain);
+
+    // 재생 시도
+    try {
+      await ambientEl.play();
+    } catch(e) {
+      // 그래도 안 되면(브라우저 정책) 유저가 볼 수 있게 UX 처리 필요
+      console.log("ambient autoplay blocked:", e);
+    }
+  }
+
+  // SFX: 버퍼로 로딩 (매 스트로브마다 정확히 재생)
+  sfxGain = audioCtx.createGain();
+  sfxGain.gain.value = 0.9; // 효과음 볼륨
+  sfxGain.connect(audioCtx.destination);
+
+  if (sfxEl?.src) {
+    const res = await fetch(sfxEl.src);
+    const arr = await res.arrayBuffer();
+    sfxBuffer = await audioCtx.decodeAudioData(arr);
+  }
+}
+
+// ✅ “첫 인터랙션”에서만 오디오 언락
+// (너 페이지 컨셉상 Click/Touch가 이미 있으니 자연스럽게 맞음)
+window.addEventListener("pointerdown", unlockAudioOnce, { once: true });
+
+// 스트로브 SFX 재생
+function playStrobeSfx(energy = 0.5) {
+  if (!audioCtx || !sfxBuffer || audioCtx.state !== "running") return;
+
+  const src = audioCtx.createBufferSource();
+  src.buffer = sfxBuffer;
+
+  // energy(0~1) 기반으로 살짝 피치 변형하면 “속도 맞는 느낌”이 남
+  const playbackRate = 0.95 + clamp(energy, 0, 1) * 0.25; // 0.95~1.20
+  src.playbackRate.value = playbackRate;
+
+  // 클릭/팝 방지: 아주 짧게 어택/릴리즈
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(1.0, audioCtx.currentTime + 0.005);
+  g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.12);
+
+  src.connect(g);
+  g.connect(sfxGain);
+
+  src.start();
+}
