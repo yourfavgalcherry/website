@@ -13,9 +13,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
   
-<audio id="ambient" src="/works/assets/dragon-studio-glitch-effect-1-397982.mp3" loop playsinline></audio>
-<audio id="sfx" src="/audio/strobe.wav" preload="auto" playsinline></audio>
-
 
 </head>
 
@@ -44,9 +41,11 @@
     <!-- 인터랙션 레이어 -->
     <div class="container"></div>
 
-    <script src="script.js"></script>
+  <!-- ✅ Audio (앰비언트 + 스트로브 SFX) -->
+  <audio id="ambient" src="/works/assets/dragon-studio-glitch-effect-1-397982.mp3" loop playsinline preload="auto"></audio>
+  <audio id="sfx" src="/audio/strobe.wav" playsinline preload="auto"></audio>
 
-    
+  <script src="script.js"></script>
 
 <script>
 
