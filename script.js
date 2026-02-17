@@ -23,102 +23,51 @@ if (customCursor) {
 }
 
 // ============================
-// ✅ 스트로브 컬러
+// ✅ 스트로브 컬러 (요청 반영)
 // - 기본: White (시작은 화이트)
-// - PC: 스크롤하면 Neon Green ↔ Cyan 토글
-// - Mobile: 흔들면 Neon Green ↔ Cyan 토글
-// - ✅ 추가: 다시 "클릭(=mousedown)" 하면 즉시 White로 리셋 (다음 스트로브부터 화이트)
+// - PC: 스크롤하면 Aurora pastel 팔레트 순환
+// - Mobile: 터치 움직임 "커지면" 팔레트 / "작아지면" 화이트 복귀
+// - ✅ 클릭/터치 시작 시: 화이트 리셋
 // ============================
-let strobeMode = "white"; // "white" | "toggle"
-let toggleIndex = 0;
+let strobeMode = "white"; // "white" | "palette"
+let paletteIndex = 1;     // 0은 white, 1부터 팔레트
 
-// Neon Green / Cyan
-const TOGGLE_COLORS = [
-  { r: 57, g: 255, b: 20 },  // Neon Green
-  { r: 0,  g: 255, b: 255 }  // Cyan
+// Aurora pastel palette (중간에 살짝 네온끼 파스텔 핑크/그린 포함)
+// Aurora pastel palette (핑크 제거 + 네온그린 살짝 + 남색 포함)
+const PALETTE = [
+  { r: 255, g: 255, b: 255 }, // Open White (기본)
+  { r: 20,  g: 110, b: 255 }, // Deep Electric Blue
+  { r: 0,   g: 200, b: 170 }, // Teal Mint
+  { r: 10,  g: 60,  b: 200 }  // Darker Blue (더 묵직)
 ];
 
-function toggleStrobeColor() {
-  // 스크롤/쉐이크가 "처음" 발생하면 화이트에서 토글 모드로 전환
-  if (strobeMode === "white") strobeMode = "toggle";
-  toggleIndex = (toggleIndex + 1) % TOGGLE_COLORS.length;
+
+function nextPaletteColor() {
+  if (strobeMode === "white") strobeMode = "palette";
+  paletteIndex += 1;
+  if (paletteIndex >= PALETTE.length) paletteIndex = 1; // 1~끝 순환
 }
 
 function resetStrobeToWhite() {
   strobeMode = "white";
+  paletteIndex = 1;
 }
 
 function getStrobeRGB() {
-  if (strobeMode === "white") return { r: 255, g: 255, b: 255 };
-  return TOGGLE_COLORS[toggleIndex];
+  if (strobeMode === "white") return PALETTE[0];
+  return PALETTE[paletteIndex];
 }
 
-// 데스크탑: 스크롤하면 컬러 토글
+// 데스크탑: 스크롤하면 컬러 순환
 if (!isMobile) {
-  window.addEventListener("wheel", () => {
-    toggleStrobeColor();
-  }, { passive: true });
+  window.addEventListener(
+    "wheel",
+    () => {
+      nextPaletteColor();
+    },
+    { passive: true }
+  );
 }
-// ============================
-// ✅ 모바일: 흔들기 감지 (권한 포함)
-// ============================
-let lastShakeTime = 0;
-let lastMagnitude = 0;
-const SHAKE_THRESHOLD = 14;   // ✅ 좀 더 민감하게 (16 → 14)
-const SHAKE_COOLDOWN = 450;
-
-function onDeviceMotion(e) {
-  const acc = e.accelerationIncludingGravity;
-  if (!acc) return;
-
-  const x = acc.x || 0;
-  const y = acc.y || 0;
-  const z = acc.z || 0;
-
-  const magnitude = Math.sqrt(x * x + y * y + z * z);
-  const delta = Math.abs(magnitude - lastMagnitude);
-  lastMagnitude = magnitude;
-
-  const now = Date.now();
-  if (delta > SHAKE_THRESHOLD && now - lastShakeTime > SHAKE_COOLDOWN) {
-    toggleStrobeColor();
-    lastShakeTime = now;
-  }
-}
-
-let motionPermissionGranted = false;
-let motionPermissionRequested = false;
-
-async function requestMotionPermission() {
-  if (motionPermissionRequested) return;
-  motionPermissionRequested = true;
-
-  // iOS
-  if (typeof DeviceMotionEvent !== "undefined" &&
-      typeof DeviceMotionEvent.requestPermission === "function") {
-    try {
-      const state = await DeviceMotionEvent.requestPermission();
-      if (state === "granted") {
-        motionPermissionGranted = true;
-        window.addEventListener("devicemotion", onDeviceMotion, { passive: true });
-      }
-    } catch (e) {
-      // denied or error
-    }
-  } else {
-    // Android etc
-    motionPermissionGranted = true;
-    window.addEventListener("devicemotion", onDeviceMotion, { passive: true });
-  }
-}
-
-// ✅ 핵심: 첫 "진짜" 탭에서 권한 요청 (preventDefault 없이)
-if (isMobile) {
-  window.addEventListener("pointerdown", () => {
-    requestMotionPermission();
-  }, { once: true });
-}
-
 
 // ============================
 // PC 마우스 제어
@@ -141,7 +90,6 @@ if (!isMobile) {
   document.addEventListener("mouseup", () => (isMouseDown = false));
 }
 
-
 // ============================
 // 모바일 터치 제어
 // ============================
@@ -154,48 +102,135 @@ const STROBE_DELAY_AFTER_DRAG = 400;
 const MIN_STROBE_INTERVAL = 80;
 const MAX_STROBE_INTERVAL = 400;
 
-document.addEventListener("touchstart", e => {
-  if (e.target.closest(".navbar a")) return;
+// ✅ 모바일 움직임 강도 기반 컬러 전환
+let lastTouchX = null;
+let lastTouchY = null;
+let lastMoveTime = 0;
 
-  e.preventDefault();
-  pressStartTime = Date.now();
-  isDragging = false;
-  isStrobing = false;
+// "커짐" 임계 (px/ms). 값이 작을수록 민감해짐.
+const MOBILE_INTENSITY_ON = 0.9;
+// "작아짐" 임계 (px/ms). ON보다 낮게 두면 히스테리시스 생겨서 깜빡임 줄어듦.
+const MOBILE_INTENSITY_OFF = 0.35;
 
-  beam.style.display = "block";
+// 작아진 상태가 이 시간(ms) 유지되면 화이트로 복귀
+const MOBILE_CALM_HOLD_MS = 140;
+let calmSince = null;
 
-  longPressTimeout = setTimeout(() => {
-    if (isDragging) {
-      setTimeout(() => {
+function mobileUpdateColorByIntensity(intensity) {
+  // intensity가 충분히 크면 -> 팔레트 (컬러는 순환)
+  if (intensity >= MOBILE_INTENSITY_ON) {
+    calmSince = null;
+    // 팔레트 모드 진입 + 다음 컬러로 넘김
+    nextPaletteColor();
+    return;
+  }
+
+  // intensity가 충분히 작으면 -> 일정 시간 유지 후 화이트 복귀
+  if (intensity <= MOBILE_INTENSITY_OFF) {
+    const now = Date.now();
+    if (calmSince === null) calmSince = now;
+
+    if (now - calmSince >= MOBILE_CALM_HOLD_MS) {
+      // ✅ “작아지면 화이트” 복귀
+      resetStrobeToWhite();
+    }
+    return;
+  }
+
+  // 중간 구간: 상태 유지 (깜빡임 방지)
+  calmSince = null;
+}
+
+// 터치 시작
+document.addEventListener(
+  "touchstart",
+  e => {
+    if (e.target.closest(".navbar a")) return;
+
+    // ✅ 다시 터치했을 때도 화이트여야 함
+    resetStrobeToWhite();
+
+    e.preventDefault();
+    pressStartTime = Date.now();
+    isDragging = false;
+    isStrobing = false;
+
+    // 이동 강도 측정 리셋
+    lastTouchX = null;
+    lastTouchY = null;
+    lastMoveTime = 0;
+    calmSince = null;
+
+    beam.style.display = "block";
+
+    longPressTimeout = setTimeout(() => {
+      if (isDragging) {
+        setTimeout(() => {
+          isStrobing = true;
+          lastStrobeTime = 0;
+        }, STROBE_DELAY_AFTER_DRAG);
+      } else {
         isStrobing = true;
         lastStrobeTime = 0;
-      }, STROBE_DELAY_AFTER_DRAG);
-    } else {
-      isStrobing = true;
-      lastStrobeTime = 0;
+      }
+    }, LONG_PRESS_DELAY);
+  },
+  { passive: false }
+);
+
+// 터치 이동
+document.addEventListener(
+  "touchmove",
+  e => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    if (!touch) return;
+
+    mouseX = touch.clientX;
+    mouseY = touch.clientY;
+    isDragging = true;
+
+    const now = performance.now();
+
+    if (lastTouchX !== null && lastTouchY !== null && lastMoveTime) {
+      const dx = mouseX - lastTouchX;
+      const dy = mouseY - lastTouchY;
+      const dist = Math.hypot(dx, dy);
+
+      const dt = Math.max(now - lastMoveTime, 1); // ms
+      const intensity = dist / dt; // px/ms
+
+      // ✅ 커지면 팔레트 / 작아지면 화이트
+      mobileUpdateColorByIntensity(intensity);
     }
-  }, LONG_PRESS_DELAY);
-}, { passive: false });
 
-document.addEventListener("touchmove", e => {
-  e.preventDefault();
-  const touch = e.touches[0];
-  if (!touch) return;
+    lastTouchX = mouseX;
+    lastTouchY = mouseY;
+    lastMoveTime = now;
+  },
+  { passive: false }
+);
 
-  mouseX = touch.clientX;
-  mouseY = touch.clientY;
-  isDragging = true;
-}, { passive: false });
+// 터치 종료
+document.addEventListener(
+  "touchend",
+  () => {
+    isDragging = false;
+    isStrobing = false;
 
-document.addEventListener("touchend", () => {
-  isDragging = false;
-  isStrobing = false;
+    beam.style.display = "none";
+    clearTimeout(longPressTimeout);
 
-  beam.style.display = "none";
-  clearTimeout(longPressTimeout);
-}, { passive: false });
+    // ✅ 터치 끝나면 화이트로 복귀 (원하면 유지로 바꿀 수도 있음)
+    resetStrobeToWhite();
 
-
+    lastTouchX = null;
+    lastTouchY = null;
+    lastMoveTime = 0;
+    calmSince = null;
+  },
+  { passive: false }
+);
 
 // ============================
 // 전체 화면 스트로브
@@ -254,60 +289,51 @@ function screenStrobe() {
   setTimeout(() => strobe.remove(), 150);
 }
 
-
-
 // ============================
 // About 버튼 반응 & 클릭
 // ============================
 const aboutBtn = document.querySelector(".navbar a");
 
 if (aboutBtn) {
-    aboutBtn.addEventListener("click", () => {
-        window.location.href = "about.html"; // 실제 About 페이지 연결
-    });
+  aboutBtn.addEventListener("click", () => {
+    window.location.href = "about.html";
+  });
 }
 
 function animateBeam(timestamp) {
-    // PC: 항상 마우스 따라감
-    if (!isMobile) {
-        const x = mouseX - beam.offsetWidth / 2;
-        const y = mouseY - beam.offsetHeight / 2;
-        beam.style.transform = `translate(${x}px, ${y}px)`;
+  // PC: 항상 마우스 따라감
+  if (!isMobile) {
+    const x = mouseX - beam.offsetWidth / 2;
+    const y = mouseY - beam.offsetHeight / 2;
+    beam.style.transform = `translate(${x}px, ${y}px)`;
 
-        const flicker = 0.8 + Math.random() * 0.2;
-        beam.style.filter = `blur(60px) brightness(${flicker})`;
-    }
+    const flicker = 0.8 + Math.random() * 0.2;
+    beam.style.filter = `blur(60px) brightness(${flicker})`;
+  }
 
-    // 모바일: 터치 중일 때만 움직임
-    if (isMobile && isDragging) {
-        const x = mouseX - beam.offsetWidth / 2;
-        const y = mouseY - beam.offsetHeight / 2;
-        beam.style.transform = `translate(${x}px, ${y}px)`;
+  // 모바일: 터치 중일 때만 움직임
+  if (isMobile && isDragging) {
+    const x = mouseX - beam.offsetWidth / 2;
+    const y = mouseY - beam.offsetHeight / 2;
+    beam.style.transform = `translate(${x}px, ${y}px)`;
 
-        const flicker = 0.8 + Math.random() * 0.2;
-        beam.style.filter = `blur(40px) brightness(${flicker})`;
-    }
+    const flicker = 0.8 + Math.random() * 0.2;
+    beam.style.filter = `blur(40px) brightness(${flicker})`;
+  }
 
-    // About 버튼 glow 처리 (PC/모바일 공통)
-    if (aboutBtn) {
-        const rect = aboutBtn.getBoundingClientRect();
-        const btnX = rect.left + rect.width / 2;
-        const btnY = rect.top + rect.height / 2;
-        const distance = Math.hypot(mouseX - btnX, mouseY - btnY);
+  // About 버튼 glow 처리 (PC/모바일 공통)
+  if (aboutBtn) {
+    const rect = aboutBtn.getBoundingClientRect();
+    const btnX = rect.left + rect.width / 2;
+    const btnY = rect.top + rect.height / 2;
+    const distance = Math.hypot(mouseX - btnX, mouseY - btnY);
 
-        if (distance < 150) {
-            aboutBtn.classList.add("beam-hover");
-        } else {
-            aboutBtn.classList.remove("beam-hover");
-        }
-    }
+    if (distance < 150) aboutBtn.classList.add("beam-hover");
+    else aboutBtn.classList.remove("beam-hover");
+  }
 
-    handleStrobe(timestamp);
-    requestAnimationFrame(animateBeam);
+  handleStrobe(timestamp);
+  requestAnimationFrame(animateBeam);
 }
 
-
-
-
 requestAnimationFrame(animateBeam);
-
