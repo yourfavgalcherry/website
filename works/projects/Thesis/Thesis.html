@@ -36,45 +36,17 @@
 </section>
 
 <section class="text-wrapper">
-    <div class="project-title">Light Installation | The Semiotics of Light: Thesis Project</div>
+    <div class="project-title">Light Installation | The Altar</div>
     <div class="project-meta">
         Berlin, 2025 | 
         <a href="https://chaeryoon.notion.site/The-Semiotics-of-Light-through-generative-real-time-visuals-30414e8f55968010a84de229ad25e257" target="_blank" class="inline-link">Documantation Link</a>
     </div>
     <p>
-The Altar is a scenographic lighting installation that interrogates the intersections of perception, sanctity, immersion, and identity within the fabric of contemporary digital culture. The work originates from a fundamental inquiry:<p></p>
+The Altar is a scenographic lighting installation that explores the intersection of perception, sanctity, immersion and identity within contemporary digital culture. Drawing on the theoretical concept of light as an interface that organises emotional systems rather than mere information, the piece poses a fundamental question:<p></p>
 
-It begins with a simple question:<br>What do we immerse ourselves in, and what do we believe in today?<p> </p>
-The work is composed of a series of translucent vertical surfaces installed at eye level and arranged across the floor plane. A single beam of light enters the space and interacts with these surfaces, scattering softly across their surfaces. The light is further transformed through its reflection on the floor, generating an additional layer of shifting visual phenomena that expands the spatial perception of the installation.<p> </p>
-When combined with atmospheric haze, the environment becomes an immersive field of light and sensation. Within this space, the viewer experiences a subtle dissolution of boundaries between body, space, and image.<p> </p>
-Rather than following a linear narrative, the light operates as a rhythm and an emotional interface, guiding a process of perceptual absorption. The installation unfolds as a continuous loop without a fixed beginning or end, where perception is constantly reconstructed through reflections, refractions, and movement.<p> </p>
-</section>
-
-<script>
-    document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-});
-// ---------------------- PC 휠 슬라이드 ----------------------
-const slides = document.querySelectorAll('.slides');
-
-slides.forEach(slider => {
-    const slideImages = slider.querySelectorAll('img');
-    let currentIndex = 0;
-    const maxIndex = slideImages.length - 1;
-
-    if(window.innerWidth > 768){
-        window.addEventListener('wheel', e => {
-            if (!slider.contains(e.target)) return;
-
-            const delta = e.deltaY;
-
-            if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
-                e.preventDefault();
-                currentIndex = delta > 0 
-                    ? Math.min(currentIndex + 1, maxIndex)
-                    : Math.max(currentIndex - 1, 0);
-                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
-            }
+'In what do we immerse ourselves today, and in what do we place our faith?<p> </p>
+The installation comprises flexiglass panels arranged in a circle on the floor. A high-precision overhead laser source strikes the top edge of each panel with surgical accuracy, initiating a complex optical transformation. The light undergoes a dual metamorphosis: it creates a soft internal dispersion within the matte grain of the panels while simultaneously refracting and reflecting off the floor. This generates a secondary, shifting topography of light that distorts the viewer’s perception of space.<p> </p>
+When synthesised with atmospheric haze, the environment transforms into an immersive field of light and sensation. The light functions as a rhythmic and emotional interface, mediating a process of deep perceptual absorption and linear narrative. The installation unfolds as a continuous temporal loop, devoid of a fixed origin or endpoint, in which perception is perpetually reconstructed through the constant interplay of reflection, refraction, and kinetic presence.Rather than following a linear narrative, the light operates as a rhythm and an emotional interface, guiding a process of perceptual absorption. The installation unfolds as a continuous loop without a fixed beginning or end, where perception is constantly reconstruc 
 
             if ((currentIndex === maxIndex && delta > 0) || (currentIndex === 0 && delta < 0)) {
                 document.body.style.overflowY = 'auto';
@@ -105,7 +77,7 @@ if(window.innerWidth <= 768){
 }
 
 if (window.location.pathname === "/works/projects/Thesis/Thesis.html") {
-  window.history.replaceState({}, "", "/works/The Semiotics of Light");
+  window.history.replaceState({}, "", "/works/Altar");
 }
 
 </script>

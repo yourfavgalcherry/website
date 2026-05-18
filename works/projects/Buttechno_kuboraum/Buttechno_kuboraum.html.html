@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ableton x MUTEK Push3</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../pages.css">
+
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a href="/works.html">Works</a>
+</nav>
+
+<!-- ================= LUNA x UNGUARDED SLIDES ================= -->
+<section class="slider">
+    <div class="slides">
+        <img src="1.png" >
+        <img src="2.png" >
+        <img src="3.png" >
+        <img src="4.png" >
+    </div>
+</section>
+
+<section class="text-wrapper">
+    <div class="project-title">Light Design | Buttechno Live</div>
+    <div class="project-meta">
+        Berlin, 2026
+    </div>
+    </div>
+<p>
+Lighting Design, Programming & Operation for         <a href="https://www.instagram.com/buttechn/"_blank" class="inline-link">Buttechno</a>,</i>  live at         <a href="https://www.instagram.com/p/DXt2ry9gbQD/?img_index=1" target="_blank" class="inline-link">Hamburger Bahnhof</a>,</i> , Berlin
+as part of 'We Travel To Know Our Own Geography', an evening program of live performances presented and curated by <a href="https://www.instagram.com/kuboraum/" class="inline-link">Kuboraum</a>,</i> Editions during Berlin Gallery Weekend.
+
+</section>
+
+<script>
+// ---------------------- PC 휠 슬라이드 ----------------------
+const slides = document.querySelectorAll('.slides');
+
+slides.forEach(slider => {
+    const slideImages = slider.querySelectorAll('img');
+    let currentIndex = 0;
+    const maxIndex = slideImages.length - 1;
+
+    if(window.innerWidth > 768){
+        window.addEventListener('wheel', e => {
+            if (!slider.contains(e.target)) return;
+
+            const delta = e.deltaY;
+
+            if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
+                e.preventDefault();
+                currentIndex = delta > 0 
+                    ? Math.min(currentIndex + 1, maxIndex)
+                    : Math.max(currentIndex - 1, 0);
+                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }
+
+            if ((currentIndex === maxIndex && delta > 0) || (currentIndex === 0 && delta < 0)) {
+                document.body.style.overflowY = 'auto';
+            } else {
+                document.body.style.overflowY = 'hidden';
+            }
+        });
+    }
+});
+
+// ---------------------- 모바일 슬라이드 + 세로스크롤 제어 ----------------------
+if(window.innerWidth <= 768){
+    slides.forEach(slider => {
+        function updateVerticalScrollLock() {
+            const atStart = slider.scrollLeft <= 2;
+            const atEnd = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 2;
+
+            if (atStart || atEnd) {
+                document.body.style.overflowY = 'auto';
+            } else {
+                document.body.style.overflowY = 'hidden';
+            }
+        }
+
+        slider.addEventListener('scroll', updateVerticalScrollLock);
+        updateVerticalScrollLock();
+    });
+}
+
+if (window.location.pathname === "/works/projects/Ableton/Ableton.html") {
+  window.history.replaceState({}, "", "/works/ableton");
+}
+
+
+
+</script>
+
+</body>
+</html>
