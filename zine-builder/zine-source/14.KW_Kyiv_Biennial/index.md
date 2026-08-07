@@ -10,7 +10,7 @@ images:
   - 3.jpg
   - 4.jpg
   - 5.jpg
-order: 13
+order: 14
 slug: KW_Kyiv_Biennial
 publish: true
 ---

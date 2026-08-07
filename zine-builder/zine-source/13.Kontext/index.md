@@ -3,11 +3,11 @@ title: KONTEXT_GS present
 category: Light Design
 projectTitle: "KONTEXT & GS present: Berlin Fashion Week Special"
 meta: Berlin, 2025
-cover: cover.jpg
+cover: 1.gif
 images:
   - 1.gif
-order: 12
-slug: KONTEXT_GS present:BerlinFashionWeekSpecial
+order: 13
+slug: Kontext
 publish: true
 ---
 Designed and operated lighting on GrandMA3 for [KONTEXT](https://www.instagram.com/kontext91/) & GS's Berlin Fashion Week Special at Haus der Visionäre, Berlin — featuring performances by Yung Gud (Rooster), Kamixlo, Iced Lattina, and Valeria Litvakov, alongside a moving-image programme opening with works by Mark Leckey and curated by Yan Yassin.
