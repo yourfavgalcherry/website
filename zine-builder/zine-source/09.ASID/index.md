@@ -1,22 +1,16 @@
 ---
 title: "ASID: Drowned God"
-category: "Light Design"
+category: Light Design
 projectTitle: "Light Design | ASID: Drowned God, Berlin"
-meta: "October, 2025"
+meta: October, 2025
 cover: cover.jpg
 images:
-  - src: 1.png
-    alt: "ASID Drowned God 01"
-  - src: 2.gif
-    alt: "ASID Drowned God 02"
-  - src: 3.gif
-    alt: "ASID Drowned God 03"
-  - src: 4.gif
-    alt: "ASID Drowned God 04"
-  - src: 5.gif
-    alt: "ASID Drowned God 05"
-  - src: 6.gif
-    alt: "ASID Drowned God 06"
+  - 1.png
+  - 2.gif
+  - 3.gif
+  - 4.gif
+  - 5.gif
+  - 6.gif
 order: 9
 slug: ASID
 publish: true

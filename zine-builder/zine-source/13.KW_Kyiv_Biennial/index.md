@@ -1,6 +1,6 @@
 ---
 title: Kyiv Biennial | KW
-category: "Light Design"
+category: Light Design
 projectTitle: Light Design | Kyiv Biennial | KW
 meta: Berlin, 2025
 cover: cover.jpg
@@ -10,7 +10,7 @@ images:
   - 3.jpg
   - 4.jpg
   - 5.jpg
-order: 12
+order: 13
 slug: KW_Kyiv_Biennial
 publish: true
 ---

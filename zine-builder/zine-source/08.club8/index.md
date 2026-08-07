@@ -16,4 +16,4 @@ slug: club8
 publish: true
 ---
 
-GrandMA2 lighting programming, design, and live operation for a multi-stage event at [Club8](https://www.instagram.com/club8.systems/), Berlin. Delivered real-time lighting control across Tanzhalle and Ambienthalle in collaboration with the Norwegian collective *Massive Gain* and the Berlin-based label *Kontext*, alongside a curated interactive exhibition.
+GrandMA2 lighting programming, design, and live operation for a multi-stage event at [Club8](https://www.instagram.com/club8.systems/), Berlin. Delivered real-time lighting control across Tanzhalle in collaboration with Berlin-based label *Kontext*, alongside a curated interactive exhibition.
