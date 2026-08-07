@@ -3,9 +3,13 @@ title: KONTEXT_GS present
 category: Light Design
 projectTitle: "KONTEXT & GS present: Berlin Fashion Week Special"
 meta: Berlin, 2025
-cover: 1.gif
+cover: cover.jpg
 images:
   - 1.gif
+  - 2.gif
+  - 3.jpg
+  - 4.gif
+  - 5.gif
 order: 13
 slug: Kontext
 publish: true

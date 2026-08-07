@@ -8,7 +8,8 @@ images:
   - 1.jpg
   - 2.jpg
   - 3.jpg
-  - 4.jpg
+  - 4.gif
+  - 5.jpg
 order: 12
 slug: OneYearofEndlessClubbing
 publish: true
