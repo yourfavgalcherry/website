@@ -22,6 +22,31 @@
             }
           }
         ]
+      },
+      {
+        "id": "7e355843be05d4ec",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a295d92aff3b870d",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "KW_Kyiv Biennial/index.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          }
+        ]
       }
     ],
     "direction": "vertical"
@@ -99,7 +124,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "example-first-post.md",
+                "file": "KW_Kyiv Biennial/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -174,8 +199,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -189,7 +213,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "37a4c9cd1cbe09d1",
+  "active": "a295d92aff3b870d",
   "lastOpenFiles": [
     "KW_Kyiv Biennial/5.jpg",
     "KW_Kyiv Biennial/cover.jpg",
