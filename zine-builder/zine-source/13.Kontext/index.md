@@ -1,5 +1,5 @@
 ---
-title: KONTEXT_GS present
+title: KONTEXT & GS present
 category: Light Design
 projectTitle: "KONTEXT & GS present: Berlin Fashion Week Special"
 meta: Berlin, 2025
