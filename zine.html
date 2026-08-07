@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zine — Chaery Yoon</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="zine.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="index.html">Home</a>
+</nav>
+
+<div class="zine-wrapper">
+  <h1 class="zine-title">Zine</h1>
+  <div class="zine-list">
+      <a class="zine-entry" href="zine/example-first-post.html">
+        <span class="zine-entry-date">Aug 7, 2026</span>
+        <span class="zine-entry-title">First Entry</span>
+        <span class="zine-entry-excerpt">The first note published from Obsidian straight to the site.</span>
+      </a>
+  </div>
+</div>
+
+<footer class="footer-marquee fadeout-horizontal">
+  <div class="marquee-text" aria-label="copyright marquee">
+    <div class="marquee-text-track">
+      <span>© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator">✴︎</span>
+      <span>© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator">✴︎</span>
+      <span>© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator">✴︎</span>
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var beam = document.createElement("div");
+  beam.className = "beam";
+  document.body.appendChild(beam);
+  var isMobile = /Mobi|Android/i.test(navigator.userAgent);
+  if (isMobile) { beam.style.display = "none"; return; }
+  document.addEventListener("mousemove", function (e) {
+    beam.style.transform = "translate(" + e.clientX + "px, " + e.clientY + "px)";
+  });
+})();
+</script>
+
+</body>
+</html>
