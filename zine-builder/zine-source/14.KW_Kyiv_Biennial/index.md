@@ -16,6 +16,4 @@ slug: KW_Kyiv_Biennial
 publish: true
 ---
 At [KW Institute for Contemporary Art](https://www.kw-berlin.de/en/projects/kyiv-biennial-a-bird-that-cannot-land-live-program), Berlin, designed and programmed live lighting for the concert week of Kyiv Biennial's "A Bird That Cannot Land," crafting artist-specific lighting for performances by Abdullah Miniawy, Heinali, Andriana-Yaroslava Saienko, Ihor Tsymbrovsky, Katarina Gryvul, Nazanin Noori, Nour Sokhon, and Wafaa Saied. 
-Live Curator: Lorena Juan  
-Live Assistant Curator: Nikolas Brummer  
-Live Program Assistant: Saba Bagheri
+Live Curator: Lorena Juan · Live Assistant Curator: Nikolas Brummer · Live Program Assistant: Saba Bagheri
