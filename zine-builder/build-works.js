@@ -70,6 +70,15 @@ function renderBody(md) {
   return styleLinks(marked.parse(String(md)));
 }
 
+// Obsidian's Properties panel can store a "category" as either plain text
+// or a list (if the property type gets set to "List"). Either way we just
+// want the first/only value as a plain string for the "category | title"
+// heading.
+function categoryToString(category) {
+  const value = Array.isArray(category) ? category[0] : category;
+  return String(value).trim();
+}
+
 function normalizeImages(images) {
   if (!Array.isArray(images)) return [];
   return images.map((img) => {
@@ -159,17 +168,20 @@ function loadWorks() {
       projectTitle: data.projectTitle
         ? String(data.projectTitle).trim()
         : data.category
-        ? `${String(data.category).trim()} | ${String(data.title).trim()}`
+        ? `${categoryToString(data.category)} | ${String(data.title).trim()}`
         : String(data.title).trim(),
       meta: data.meta ? String(data.meta).trim() : "",
       cover,
       images,
-      order: typeof data.order === "number" ? data.order : orderFromFolderName(folderName) ?? 9999,
+      // Higher order = newer = shown first, so new work naturally floats to
+      // the top just by using the next-highest number. Missing order sorts
+      // to the very end rather than jumping to the front.
+      order: typeof data.order === "number" ? data.order : orderFromFolderName(folderName) ?? -Infinity,
       bodyMarkdown: parsed.content,
     });
   }
 
-  works.sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
+  works.sort((a, b) => b.order - a.order || a.title.localeCompare(b.title));
 
   const seenSlugs = new Map();
   for (const w of works) {

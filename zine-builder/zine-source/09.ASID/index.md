@@ -17,7 +17,7 @@ images:
     alt: "ASID Drowned God 05"
   - src: 6.gif
     alt: "ASID Drowned God 06"
-order: 4
+order: 9
 slug: ASID
 publish: true
 ---

@@ -11,7 +11,7 @@ images:
   - 4.gif
   - 5.jpeg
   - 6.gif
-order: 10
+order: 3
 slug: TINCON
 publish: true
 ---

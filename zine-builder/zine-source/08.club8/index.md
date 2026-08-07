@@ -11,7 +11,7 @@ images:
   - 4.gif
   - 5.gif
   - 6.jpg
-order: 5
+order: 8
 slug: club8
 publish: true
 ---
