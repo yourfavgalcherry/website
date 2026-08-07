@@ -12,7 +12,7 @@ images:
   - 6.jpg
   - 7.jpg
   - 8.jpg
-order: 2
+slug: creamcake
 publish: true
 ---
 

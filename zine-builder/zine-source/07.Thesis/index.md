@@ -11,7 +11,7 @@ images:
   - 5.jpg
   - 6.png
   - 7.gif
-order: 6
+slug: Thesis
 publish: true
 ---
 

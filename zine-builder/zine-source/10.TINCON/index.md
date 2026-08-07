@@ -10,7 +10,7 @@ images:
   - 4.gif
   - 5.jpeg
   - 6.gif
-order: 9
+slug: TINCON
 publish: true
 ---
 

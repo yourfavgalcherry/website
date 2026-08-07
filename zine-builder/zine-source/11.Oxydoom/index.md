@@ -8,7 +8,7 @@ images:
   - 2.jpg
   - 3.png
   - 4.gif
-order: 10
+slug: Oxydoom
 publish: true
 ---
 

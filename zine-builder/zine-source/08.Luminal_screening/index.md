@@ -11,7 +11,7 @@ images:
   - 5.jpg
   - 6.jpg
   - 7.jpg
-order: 7
+slug: Luminal_screening
 publish: true
 ---
 

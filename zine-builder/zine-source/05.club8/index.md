@@ -1,22 +1,16 @@
 ---
 title: "[8]: MASSIVE GAIN & Kontext"
 projectTitle: "Light Design | [8]: MASSIVE GAIN & Kontext"
-meta: "Berlin, 2025 | [Event Link](https://ra.co/events/2304473)"
+meta: Berlin, 2025 | [Event Link](https://ra.co/events/2304473)
 cover: cover.jpg
 images:
-  - src: 1.gif
-    alt: "Massive Gain & Kontext 01"
-  - src: 2.gif
-    alt: "Massive Gain & Kontext 02"
-  - src: 3.jpeg
-    alt: "Massive Gain & Kontext 03"
-  - src: 4.gif
-    alt: "Massive Gain & Kontext 04"
-  - src: 5.gif
-    alt: "Massive Gain & Kontext 05"
-  - src: 6.jpg
-    alt: "Massive Gain & Kontext 06"
-order: 4
+  - 1.gif
+  - 2.gif
+  - 3.jpeg
+  - 4.gif
+  - 5.gif
+  - 6.jpg
+slug: club8
 publish: true
 ---
 

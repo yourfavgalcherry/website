@@ -26,13 +26,28 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
+// Folders can be named "01.MyProject" so their position in the Obsidian
+// sidebar controls grid order without needing an "order" field in
+// frontmatter. This pulls that leading number out.
+const ORDER_PREFIX_RE = /^(\d+)\.\s*/;
+
+function orderFromFolderName(name) {
+  const m = name.match(ORDER_PREFIX_RE);
+  return m ? parseInt(m[1], 10) : null;
+}
+
+function stripOrderPrefix(name) {
+  return name.replace(ORDER_PREFIX_RE, "");
+}
+
 // Folder names are free text in Obsidian (spaces, punctuation, Korean, etc.)
 // but slugs end up in a URL path, so default slugs are sanitized to be
 // URL-safe (spaces -> underscore, drop characters that break URLs/paths)
-// while keeping non-ASCII letters (Korean, etc.) intact. An explicit "slug"
-// in frontmatter always wins over this.
+// while keeping non-ASCII letters (Korean, etc.) intact. A leading "NN."
+// ordering prefix is dropped first since it's about position, not identity.
+// An explicit "slug" in frontmatter always wins over this default.
 function slugifyFolderName(name) {
-  const cleaned = name
+  const cleaned = stripOrderPrefix(name)
     .trim()
     .replace(/\s+/g, "_")
     .replace(/[\/\\:*?"<>|#%&{}$!'@+`=]/g, "");
@@ -145,7 +160,7 @@ function loadWorks() {
       meta: data.meta ? String(data.meta).trim() : "",
       cover,
       images,
-      order: typeof data.order === "number" ? data.order : 9999,
+      order: typeof data.order === "number" ? data.order : orderFromFolderName(folderName) ?? 9999,
       bodyMarkdown: parsed.content,
     });
   }

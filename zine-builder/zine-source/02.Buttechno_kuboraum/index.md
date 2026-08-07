@@ -8,7 +8,7 @@ images:
   - 2.png
   - 3.png
   - 4.png
-order: 1
+slug: Buttechno_kuboraum
 publish: true
 ---
 

@@ -11,7 +11,7 @@ images:
   - 5.png
   - 6.jpg
   - 7.png
-order: 8
+slug: Luminal_vr
 publish: true
 ---
 

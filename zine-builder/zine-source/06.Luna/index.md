@@ -14,7 +14,7 @@ images:
     alt: "Luna x Unguarded 04"
   - src: 5.gif
     alt: "Luna x Unguarded 05"
-order: 5
+slug: Luna
 publish: true
 ---
 
