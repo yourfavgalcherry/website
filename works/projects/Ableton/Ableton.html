@@ -20,7 +20,6 @@
     <a href="/works.html">Works</a>
 </nav>
 
-<!-- ================= LUNA x UNGUARDED SLIDES ================= -->
 <section class="slider">
     <div class="slides">
         <img src="1.jpg" >
@@ -28,26 +27,20 @@
         <img src="3.jpg" >
         <img src="4.jpg" >
         <img src="5.png" >
-
-
     </div>
 </section>
 
 <section class="text-wrapper">
     <div class="project-title">Light Design | Ableton x MUTEK</div>
-    <div class="project-meta">
-        Berlin, 2025
-    </div>
-    </div>
-<p>
-Lighting design for Ableton x MUTEK Push3 event at Studio Hydro-Québec. 
-Work with in-house tech director to develop full rendered scenes using Capture Visualization 
-and different light fixtures. Modeled and created custom 3D objects for the stage setup using Blender.
-
+    <div class="project-meta">Berlin, 2025</div>
+<p>Lighting design for Ableton x MUTEK Push3 event at Studio Hydro-Québec. Work with in-house tech director to develop full rendered scenes using Capture Visualization and different light fixtures. Modeled and created custom 3D objects for the stage setup using Blender.</p>
 
 </section>
 
 <script>
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+});
 // ---------------------- PC 휠 슬라이드 ----------------------
 const slides = document.querySelectorAll('.slides');
 
@@ -64,7 +57,7 @@ slides.forEach(slider => {
 
             if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
                 e.preventDefault();
-                currentIndex = delta > 0 
+                currentIndex = delta > 0
                     ? Math.min(currentIndex + 1, maxIndex)
                     : Math.max(currentIndex - 1, 0);
                 slider.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -101,8 +94,6 @@ if(window.innerWidth <= 768){
 if (window.location.pathname === "/works/projects/Ableton/Ableton.html") {
   window.history.replaceState({}, "", "/works/ableton");
 }
-
-
 
 </script>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Light Installation</title>
+<title>Light Installation, TINCON/re:publica</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,6 @@
     <a href="/works.html">Works</a>
 </nav>
 
-<!-- ================= LUNA x UNGUARDED SLIDES ================= -->
 <section class="slider">
     <div class="slides">
         <img src="1.jpg" >
@@ -34,28 +33,14 @@
 
 <section class="text-wrapper">
     <div class="project-title">Light Installation | TINCON/re:publica</div>
-    <div class="project-meta">
-        Berlin, 2025
-    </div>
-    </div>
-<p>
-Funded by the EU in collaboration with <i>DE/MO Foundation</i> and <i>Public Art Lab Berlin</i>.
-</p>
-
-<p>
-An immersive audiovisual installation exploring light pollution and its disorienting effects on nocturnal pollinators.
-Presented at 
-<a href="https://tincon.org/" target="_blank" class="inline-link">TINCON</a> /
-<a href="https://re-publica.com/en" target="_blank" class="inline-link">re:publica</a> 
-in Berlin, combining ecological research with spatial storytelling through ILDA laser, DMX lighting control, and projection mapping programmed in TouchDesigner.
-</p>
-
-
+    <div class="project-meta">Berlin, 2025</div>
+<p>Funded by the EU in collaboration with <em>DE/MO Foundation</em> and <em>Public Art Lab Berlin</em>.</p>
+<p>An immersive audiovisual installation exploring light pollution and its disorienting effects on nocturnal pollinators. Presented at <a target="_blank" class="inline-link" href="https://tincon.org/">TINCON</a> / <a target="_blank" class="inline-link" href="https://re-publica.com/en">re:publica</a> in Berlin, combining ecological research with spatial storytelling through ILDA laser, DMX lighting control, and projection mapping programmed in TouchDesigner.</p>
 
 </section>
 
 <script>
-    document.addEventListener('contextmenu', function(e) {
+document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
 });
 // ---------------------- PC 휠 슬라이드 ----------------------
@@ -74,7 +59,7 @@ slides.forEach(slider => {
 
             if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
                 e.preventDefault();
-                currentIndex = delta > 0 
+                currentIndex = delta > 0
                     ? Math.min(currentIndex + 1, maxIndex)
                     : Math.max(currentIndex - 1, 0);
                 slider.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -109,7 +94,7 @@ if(window.innerWidth <= 768){
 }
 
 if (window.location.pathname === "/works/projects/TINCON/TINCON.html") {
-  window.history.replaceState({}, "", "/works/Tincon");
+  window.history.replaceState({}, "", "/works/tincon");
 }
 
 </script>

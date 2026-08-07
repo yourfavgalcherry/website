@@ -1,0 +1,47 @@
+name: Build Works
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "zine-builder/zine-source/**"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-works
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install zine-builder dependencies
+        working-directory: zine-builder
+        run: npm ci
+
+      - name: Build works pages
+        working-directory: zine-builder
+        run: npm run build
+
+      - name: Commit and push generated pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add works.html works/projects works/assets
+          if git diff --cached --quiet; then
+            echo "No changes to works output, nothing to commit."
+            exit 0
+          fi
+          git commit -m "chore: rebuild works from zine-source [skip ci]"
+          git push

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Oxydoom: Shattered Equilibrium</title>
+<title>Light Object, Oxydoom</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,33 +20,24 @@
     <a href="/works.html">Works</a>
 </nav>
 
-<!-- ================= LUNA x UNGUARDED SLIDES ================= -->
 <section class="slider">
     <div class="slides">
         <img src="1.jpg" >
         <img src="2.jpg" >
         <img src="3.png" >
         <img src="4.gif" >
-
     </div>
 </section>
 
 <section class="text-wrapper">
     <div class="project-title">Light Object Design | Oxydoom: Shattered Equilibrium</div>
-    <div class="project-meta">
-        Seoul, 2023
-    </div>
-    </div>
-
-<p>
-The light objects developed for Oxydoom: Shattered Equilibrium, sculptural artifacts within the project’s expanded mythological world. 
-The original narrative is into a symbolic exploration of collapse, transformation, and belief. The light object appears as a powerful religious motif that marks a turning point in the original arc.
-</p>
+    <div class="project-meta">Seoul, 2023</div>
+<p>The light objects developed for Oxydoom: Shattered Equilibrium, sculptural artifacts within the project&#39;s expanded mythological world. The original narrative is into a symbolic exploration of collapse, transformation, and belief. The light object appears as a powerful religious motif that marks a turning point in the original arc.</p>
 
 </section>
 
 <script>
-    document.addEventListener('contextmenu', function(e) {
+document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
 });
 // ---------------------- PC 휠 슬라이드 ----------------------
@@ -65,7 +56,7 @@ slides.forEach(slider => {
 
             if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
                 e.preventDefault();
-                currentIndex = delta > 0 
+                currentIndex = delta > 0
                     ? Math.min(currentIndex + 1, maxIndex)
                     : Math.max(currentIndex - 1, 0);
                 slider.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -100,9 +91,8 @@ if(window.innerWidth <= 768){
 }
 
 if (window.location.pathname === "/works/projects/Oxydoom/Oxydoom.html") {
-  window.history.replaceState({}, "", "/works/Oxydoom");
+  window.history.replaceState({}, "", "/works/oxydoom");
 }
-
 
 </script>
 

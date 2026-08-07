@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Too Soon Too Stay, Luminal</title>
+<title>TOO SOON TO SAY: Luminal</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,6 @@
     <a href="/works.html">Works</a>
 </nav>
 
-<!-- ================= LUNA x UNGUARDED SLIDES ================= -->
 <section class="slider">
     <div class="slides">
         <img src="1.jpg" >
@@ -30,25 +29,21 @@
         <img src="5.jpg" >
         <img src="6.jpg" >
         <img src="7.jpg" >
-
     </div>
 </section>
 
 <section class="text-wrapper">
     <div class="project-title">Exhibition | Too Soon Too Stay, Luminal</div>
-    <div class="project-meta">
-        Munich, 2025
-    </div>
-    <p>
-    The first-person vr project <i>Luminal</i> appears to be a re-edited version of a video installation, showcasing a single-channel video format. This work will be shown in collaboration with the Nebula Gallery at the Cinema Hall of the Bayerischer Hof, a renowned venue in Munich, Germany.
-    </p>
+    <div class="project-meta">Munich, 2025</div>
+<p>The first-person vr project <em>Luminal</em> appears to be a re-edited version of a video installation, showcasing a single-channel video format. This work will be shown in collaboration with the Nebula Gallery at the Cinema Hall of the Bayerischer Hof, a renowned venue in Munich, Germany.</p>
+
 </section>
 
 <script>
-// ---------------------- PC 휠 슬라이드 ----------------------
 document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
 });
+// ---------------------- PC 휠 슬라이드 ----------------------
 const slides = document.querySelectorAll('.slides');
 
 slides.forEach(slider => {
@@ -64,7 +59,7 @@ slides.forEach(slider => {
 
             if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
                 e.preventDefault();
-                currentIndex = delta > 0 
+                currentIndex = delta > 0
                     ? Math.min(currentIndex + 1, maxIndex)
                     : Math.max(currentIndex - 1, 0);
                 slider.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -99,12 +94,8 @@ if(window.innerWidth <= 768){
 }
 
 if (window.location.pathname === "/works/projects/Luminal_screening/Luminal_screening.html") {
-  window.history.replaceState({}, "", "/works/TooSoonTooStay");
+  window.history.replaceState({}, "", "/works/luminal_screening");
 }
-
-
-
-
 
 </script>
 

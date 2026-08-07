@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>[8]: MASSIVE GAIN & Kontext</title>
+<title>[8]: MASSIVE GAIN &amp; Kontext</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,36 +22,26 @@
 
 <section class="slider">
     <div class="slides">
-        <img src="1.gif" alt="Massive Gain & Kontext 01">
-        <img src="2.gif" alt="Massive Gain & Kontext 02">
-        <img src="3.jpeg" alt="Massive Gain & Kontext 03">
-        <img src="4.gif" alt="Massive Gain & Kontext 04">
-        <img src="5.gif" alt="Massive Gain & Kontext 05">
-        <img src="6.jpg" alt="Massive Gain & Kontext 06">
+        <img src="1.gif" alt="Massive Gain &amp; Kontext 01">
+        <img src="2.gif" alt="Massive Gain &amp; Kontext 02">
+        <img src="3.jpeg" alt="Massive Gain &amp; Kontext 03">
+        <img src="4.gif" alt="Massive Gain &amp; Kontext 04">
+        <img src="5.gif" alt="Massive Gain &amp; Kontext 05">
+        <img src="6.jpg" alt="Massive Gain &amp; Kontext 06">
     </div>
 </section>
 
 <section class="text-wrapper">
-    <div class="project-title">Light Design | [8]: MASSIVE GAIN & Kontext</div>
-    <div class="project-meta">
-        Berlin, 2025 | 
-        <a href="https://ra.co/events/2304473" target="_blank" class="inline-link">Event Link</a>
-    </div>
-    <p>
-        GrandMA2 lighting programming, design, and live operation for a multi-stage event at 
-        <a href="https://www.instagram.com/club8.systems/" target="_blank" class="inline-link">Club8</a>, Berlin. Delivered real-time lighting control across Tanzhalle and Ambienthalle in collaboration with the Norwegian collective <i>Massive Gain</i> and the Berlin-based label <i>Kontext</i>, alongside a curated interactive exhibition.
-    </p>
+    <div class="project-title">Light Design | [8]: MASSIVE GAIN &amp; Kontext</div>
+    <div class="project-meta">Berlin, 2025 | <a target="_blank" class="inline-link" href="https://ra.co/events/2304473">Event Link</a></div>
+<p>GrandMA2 lighting programming, design, and live operation for a multi-stage event at <a target="_blank" class="inline-link" href="https://www.instagram.com/club8.systems/">Club8</a>, Berlin. Delivered real-time lighting control across Tanzhalle and Ambienthalle in collaboration with the Norwegian collective <em>Massive Gain</em> and the Berlin-based label <em>Kontext</em>, alongside a curated interactive exhibition.</p>
+
 </section>
 
 <script>
-
 document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
 });
-
-
-
-
 // ---------------------- PC 휠 슬라이드 ----------------------
 const slides = document.querySelectorAll('.slides');
 
@@ -68,7 +58,7 @@ slides.forEach(slider => {
 
             if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
                 e.preventDefault();
-                currentIndex = delta > 0 
+                currentIndex = delta > 0
                     ? Math.min(currentIndex + 1, maxIndex)
                     : Math.max(currentIndex - 1, 0);
                 slider.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -105,8 +95,6 @@ if(window.innerWidth <= 768){
 if (window.location.pathname === "/works/projects/club8/club8.html") {
   window.history.replaceState({}, "", "/works/club8");
 }
-
-
 
 </script>
 

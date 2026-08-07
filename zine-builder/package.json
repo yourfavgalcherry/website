@@ -2,10 +2,10 @@
   "name": "zine-builder",
   "private": true,
   "version": "1.0.0",
-  "description": "Builds /zine.html and /zine/*.html from markdown notes in zine-source/",
-  "main": "build-zine.js",
+  "description": "Builds works.html's project grid and works/projects/*/*.html from markdown notes in zine-source/",
+  "main": "build-works.js",
   "scripts": {
-    "build": "node build-zine.js"
+    "build": "node build-works.js"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",

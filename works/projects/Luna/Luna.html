@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luna x Unguarded | Berlin, 2025</title>
+<title>unguarded x LUNA</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,6 @@
     <a href="/works.html">Works</a>
 </nav>
 
-<!-- ================= LUNA x UNGUARDED SLIDES ================= -->
 <section class="slider">
     <div class="slides">
         <img src="1.jpg" alt="Luna x Unguarded 01">
@@ -28,25 +27,18 @@
         <img src="3.jpg" alt="Luna x Unguarded 03">
         <img src="4.gif" alt="Luna x Unguarded 04">
         <img src="5.gif" alt="Luna x Unguarded 05">
-
     </div>
 </section>
 
 <section class="text-wrapper">
     <div class="project-title">Light Design | Luna x Unguarded</div>
-    <div class="project-meta">
-        Berlin, 2025 | 
-        <a href="https://ra.co/events/2161590?sharedId=&subId1=&subId3=2wu9AsOSFXcfrKDvZMpMaF&partnerId=residentadvisor" target="_blank" class="inline-link">Event Link</a>
-    </div>
-    <p>
-        Designed and implemented a custom DMX x Laser light system using TouchDesigner for this Berlin-based club night hosted by avant-label <i>Unguarded</i> and collective <i>LUNA</i>. Integrated laser and strobe lighting through LED pixel mapping. Lighting simulations and stage visuals were developed and pre-rendered using Capture Visualization. Executed the final real-time setup and live-reactive control, creating a euphoric, 
-        high-intensity audiovisual experience that complemented performances by 
-        <i>Xenia Reaper</i>, <i>Amore Marco</i>, <i>Yui</i>, <i>Seychelles</i>, <i>Alex Wang</i>, <i>Cybermission</i>, and <i>TRYCE</i>.
-    </p>
+    <div class="project-meta">Berlin, 2025 | <a target="_blank" class="inline-link" href="https://ra.co/events/2161590?sharedId=&subId1=&subId3=2wu9AsOSFXcfrKDvZMpMaF&partnerId=residentadvisor">Event Link</a></div>
+<p>Designed and implemented a custom DMX x Laser light system using TouchDesigner for this Berlin-based club night hosted by avant-label <em>Unguarded</em> and collective <em>LUNA</em>. Integrated laser and strobe lighting through LED pixel mapping. Lighting simulations and stage visuals were developed and pre-rendered using Capture Visualization. Executed the final real-time setup and live-reactive control, creating a euphoric, high-intensity audiovisual experience that complemented performances by <em>Xenia Reaper</em>, <em>Amore Marco</em>, <em>Yui</em>, <em>Seychelles</em>, <em>Alex Wang</em>, <em>Cybermission</em>, and <em>TRYCE</em>.</p>
+
 </section>
 
 <script>
-    document.addEventListener('contextmenu', function(e) {
+document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
 });
 // ---------------------- PC 휠 슬라이드 ----------------------
@@ -65,7 +57,7 @@ slides.forEach(slider => {
 
             if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
                 e.preventDefault();
-                currentIndex = delta > 0 
+                currentIndex = delta > 0
                     ? Math.min(currentIndex + 1, maxIndex)
                     : Math.max(currentIndex - 1, 0);
                 slider.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -98,11 +90,10 @@ if(window.innerWidth <= 768){
         updateVerticalScrollLock();
     });
 }
+
 if (window.location.pathname === "/works/projects/Luna/Luna.html") {
-  window.history.replaceState({}, "", "/works/Luna");
+  window.history.replaceState({}, "", "/works/luna");
 }
-
-
 
 </script>
 

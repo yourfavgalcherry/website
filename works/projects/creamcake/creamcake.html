@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="../pages.css">
 
 </head>
+
 <body>
 
 <nav class="navbar">
@@ -21,85 +22,83 @@
 
 <section class="slider">
     <div class="slides">
-        <img src="1.jpg">
-        <img src="2.jpg">
-        <img src="3.jpg">
-        <img src="4.jpg">
-        <img src="5.jpg">
-        <img src="6.jpg">
-        <img src="7.jpg">
-        <img src="8.jpg">
+        <img src="1.jpg" >
+        <img src="2.jpg" >
+        <img src="3.jpg" >
+        <img src="4.jpg" >
+        <img src="5.jpg" >
+        <img src="6.jpg" >
+        <img src="7.jpg" >
+        <img src="8.jpg" >
     </div>
 </section>
 
 <section class="text-wrapper">
     <div class="project-title">Light Design | Creamcake 3hd 2025: Vertigo</div>
     <div class="project-meta">Berlin, 2025</div>
-<p>
-Working with light designer <i>Shaly López</i>, developed spatial previsualization and simulation using Capture Lighting and Blender, alongside live lighting operation with GrandMA3 and live laser programming in TouchDesigner throughout 3hd 2025: Vertigo Festival for <a href="https://creamcake.de" target="_blank" class="inline-link"><i>Creamcake<i></a> in Berlin.  
-
-Worked with performing artists including <i>TOURS</i>, <i>Mug (Ludwig Wandinger & Yves B Golden)</i>, <i>Joshua Woolford w/ Sippin’ T & Lie Ning</i>, <i>Star & Stan</i>, and <i>Kinlaw</i>, developing site-specific lighting compositions and immersive stage environments tailored to each artist’s performance and sonic identity.
-</p>
+<p>Working with light designer <em>Shaly López</em>, developed spatial previsualization and simulation using Capture Lighting and Blender, alongside live lighting operation with GrandMA3 and live laser programming in TouchDesigner throughout 3hd 2025: Vertigo Festival for <a target="_blank" class="inline-link" href="https://creamcake.de"><em>Creamcake</em></a> in Berlin. Worked with performing artists including <em>TOURS</em>, <em>Mug (Ludwig Wandinger &amp; Yves B Golden)</em>, <em>Joshua Woolford w/ Sippin’ T &amp; Lie Ning</em>, <em>Star &amp; Stan</em>, and <em>Kinlaw</em>, developing site-specific lighting compositions and immersive stage environments tailored to each artist’s performance and sonic identity.</p>
 
 </section>
 
 <script>
-    document.addEventListener('contextmenu', function(e) {
+document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
 });
-// ---------------------- PC 휠 슬라이드 (변경 없음) ----------------------
-const slides = document.querySelector('.slides');
-const slideImages = document.querySelectorAll('.slides img');
-let currentIndex = 0;
-const maxIndex = slideImages.length - 1;
+// ---------------------- PC 휠 슬라이드 ----------------------
+const slides = document.querySelectorAll('.slides');
 
-window.addEventListener('wheel', e => {
-    if (window.innerWidth <= 768) return;
+slides.forEach(slider => {
+    const slideImages = slider.querySelectorAll('img');
+    let currentIndex = 0;
+    const maxIndex = slideImages.length - 1;
 
-    const delta = e.deltaY;
+    if(window.innerWidth > 768){
+        window.addEventListener('wheel', e => {
+            if (!slider.contains(e.target)) return;
 
-    if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
-        e.preventDefault();
-        currentIndex = delta > 0 
-            ? Math.min(currentIndex + 1, maxIndex)
-            : Math.max(currentIndex - 1, 0);
-        slides.style.transform = `translateX(-${currentIndex * 100}%)`;
-    }
+            const delta = e.deltaY;
 
-    if (currentIndex === maxIndex && delta > 0) {
-        document.body.style.overflowY = 'auto';
-    } else if (currentIndex === 0 && delta < 0) {
-        document.body.style.overflowY = 'auto';
-    } else {
-        document.body.style.overflowY = 'hidden';
+            if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
+                e.preventDefault();
+                currentIndex = delta > 0
+                    ? Math.min(currentIndex + 1, maxIndex)
+                    : Math.max(currentIndex - 1, 0);
+                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }
+
+            if ((currentIndex === maxIndex && delta > 0) || (currentIndex === 0 && delta < 0)) {
+                document.body.style.overflowY = 'auto';
+            } else {
+                document.body.style.overflowY = 'hidden';
+            }
+        });
     }
 });
 
 // ---------------------- 모바일 슬라이드 + 세로스크롤 제어 ----------------------
-if (window.innerWidth <= 768) {
-    const slider = document.querySelector('.slider');
+if(window.innerWidth <= 768){
+    slides.forEach(slider => {
+        function updateVerticalScrollLock() {
+            const atStart = slider.scrollLeft <= 2;
+            const atEnd = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 2;
 
-    function updateVerticalScrollLock() {
-        const atStart = slider.scrollLeft <= 2;
-        const atEnd = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 2;
-
-        if (atStart || atEnd) {
-            document.body.style.overflowY = 'auto';   // 텍스트로 내려가기 허용
-        } else {
-            document.body.style.overflowY = 'hidden'; // 슬라이드 중에는 막기
+            if (atStart || atEnd) {
+                document.body.style.overflowY = 'auto';
+            } else {
+                document.body.style.overflowY = 'hidden';
+            }
         }
-    }
 
-    slider.addEventListener('scroll', updateVerticalScrollLock);
-    updateVerticalScrollLock();
+        slider.addEventListener('scroll', updateVerticalScrollLock);
+        updateVerticalScrollLock();
+    });
 }
+
 if (window.location.pathname === "/works/projects/creamcake/creamcake.html") {
   window.history.replaceState({}, "", "/works/creamcake");
 }
 
-
-
-
 </script>
+
 </body>
 </html>

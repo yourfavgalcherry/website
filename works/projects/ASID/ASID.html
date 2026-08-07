@@ -34,15 +34,12 @@
 <section class="text-wrapper">
     <div class="project-title">Light Design | ASID: Drowned God, Berlin</div>
     <div class="project-meta">October, 2025</div>
-    <p>
-        Lighting programming, design, and live operation using GrandMA2 during the Drowned God event at <i>Musikbrauerei</i>, Berlin, organized by <i>Fetchish, EWASTE, 
-        <a href="https://www.instagram.com/aphoticsignals/" target="_blank" class="inline-link">ASID</a>,</i> 
-        and <i>Tear City.</i> Executed real-time lighting control across multiple live performances, integrating scenographic and audiovisual elements within the industrial architecture of the venue.
-    </p>
+<p>Lighting programming, design, and live operation using GrandMA2 during the Drowned God event at <em>Musikbrauerei</em>, Berlin, organized by <em>Fetchish</em>, <em>EWASTE</em>, <a target="_blank" class="inline-link" href="https://www.instagram.com/aphoticsignals/">ASID</a>, and <em>Tear City</em>. Executed real-time lighting control across multiple live performances, integrating scenographic and audiovisual elements within the industrial architecture of the venue.</p>
+
 </section>
 
 <script>
-    document.addEventListener('contextmenu', function(e) {
+document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
 });
 // ---------------------- PC 휠 슬라이드 ----------------------
@@ -61,7 +58,7 @@ slides.forEach(slider => {
 
             if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
                 e.preventDefault();
-                currentIndex = delta > 0 
+                currentIndex = delta > 0
                     ? Math.min(currentIndex + 1, maxIndex)
                     : Math.max(currentIndex - 1, 0);
                 slider.style.transform = `translateX(-${currentIndex * 100}%)`;

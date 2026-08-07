@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luminal vr | Berlin, 2025</title>
+<title>Luminal, first-person VR simulation</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,6 @@
     <a href="/works.html">Works</a>
 </nav>
 
-<!-- ================= LUNA x UNGUARDED SLIDES ================= -->
 <section class="slider">
     <div class="slides">
         <img src="1.png" >
@@ -30,39 +29,21 @@
         <img src="5.png" >
         <img src="6.jpg" >
         <img src="7.png" >
-
     </div>
 </section>
 
 <section class="text-wrapper">
     <div class="project-title">Artwork | Luminal, vr</div>
-    <div class="project-meta">
-        Berlin, 2025 | 
-        <a href="https://chaeryoon.notion.site/LUMINAL-An-Immersive-First-Person-VR-Simulation-30414e8f5596801dab40c765a8869ec9?pvs=73" target="_blank" class="inline-link">Documantation Link</a>
-    </div>
-    </div>
-    <p>
-<i>Luminal</i> is an immersive first-person VR simulation that invites the viewer into the deep ocean through the perspective of a fictional bioluminescent creature. 
-Beginning at the surface of a collapsed world, the journey descends into a lightless abyss, guided by an unknown glow.
-</p>
-
-<p>
-In this submerged environment, light functions as a speculative language rather than a visual effect—glowing entities communicate through pulses, signals, and flickers, encoding fragmented identity, emotion, and memory. 
-Bioluminescence becomes a medium for connection in isolation, transforming darkness into a space of resonance and survival.
-</p>
-
-<p>
-Through themes of solitude, digital estrangement, and post-collapse existence, <i>Luminal</i> explores how light can transcend aesthetics to operate as communication, presence, and shared affect within virtual worlds.
-</p>
-
-<p>
-Presented at <a href="https://www.manifestio.art/" target="_blank" class="inline-link">MANIFEST:IO</a> (Haus der Visionäre, Berlin, 2025).
-</p>
+    <div class="project-meta">Berlin, 2025 | <a target="_blank" class="inline-link" href="https://chaeryoon.notion.site/LUMINAL-An-Immersive-First-Person-VR-Simulation-30414e8f5596801dab40c765a8869ec9?pvs=73">Documentation Link</a></div>
+<p><em>Luminal</em> is an immersive first-person VR simulation that invites the viewer into the deep ocean through the perspective of a fictional bioluminescent creature. Beginning at the surface of a collapsed world, the journey descends into a lightless abyss, guided by an unknown glow.</p>
+<p>In this submerged environment, light functions as a speculative language rather than a visual effect—glowing entities communicate through pulses, signals, and flickers, encoding fragmented identity, emotion, and memory. Bioluminescence becomes a medium for connection in isolation, transforming darkness into a space of resonance and survival.</p>
+<p>Through themes of solitude, digital estrangement, and post-collapse existence, <em>Luminal</em> explores how light can transcend aesthetics to operate as communication, presence, and shared affect within virtual worlds.</p>
+<p>Presented at <a target="_blank" class="inline-link" href="https://www.manifestio.art/">MANIFEST:IO</a> (Haus der Visionäre, Berlin, 2025).</p>
 
 </section>
 
 <script>
-    document.addEventListener('contextmenu', function(e) {
+document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
 });
 // ---------------------- PC 휠 슬라이드 ----------------------
@@ -81,7 +62,7 @@ slides.forEach(slider => {
 
             if ((delta > 0 && currentIndex < maxIndex) || (delta < 0 && currentIndex > 0)) {
                 e.preventDefault();
-                currentIndex = delta > 0 
+                currentIndex = delta > 0
                     ? Math.min(currentIndex + 1, maxIndex)
                     : Math.max(currentIndex - 1, 0);
                 slider.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -114,8 +95,9 @@ if(window.innerWidth <= 768){
         updateVerticalScrollLock();
     });
 }
+
 if (window.location.pathname === "/works/projects/Luminal_vr/Luminal_vr.html") {
-  window.history.replaceState({}, "", "/works/Luminal");
+  window.history.replaceState({}, "", "/works/luminal_vr");
 }
 
 </script>
