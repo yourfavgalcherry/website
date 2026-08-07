@@ -9,10 +9,9 @@ images:
   - 2.jpg
   - 3.jpg
   - 4.gif
-  - 5.jpg
 order: 12
 slug: OneYearofEndlessClubbing
 publish: true
 ---
 
-GrandMA2 lighting programming, design, and live operation for a multi-stage event at [Club8](https://www.instagram.com/club8.systems/), Berlin. Delivered real-time lighting control.
+GrandMA2 lighting programming, design, and live operation for a multi-stage event at [Club8](https://www.instagram.com/club8ing/), Berlin. Delivered real-time lighting control.

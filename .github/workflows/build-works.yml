@@ -38,7 +38,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add works.html works/projects works/assets
+          git add works.html works/projects works/assets zine-builder/.works-assets-manifest.json
           if git diff --cached --quiet; then
             echo "No changes to works output, nothing to commit."
             exit 0
