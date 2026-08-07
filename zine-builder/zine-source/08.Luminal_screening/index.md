@@ -1,5 +1,6 @@
 ---
 title: "TOO SOON TO SAY: Luminal"
+category: "Exhibition"
 projectTitle: "Exhibition | Too Soon Too Stay, Luminal"
 meta: "Munich, 2025"
 cover: cover.jpg
@@ -11,6 +12,7 @@ images:
   - 5.jpg
   - 6.jpg
   - 7.jpg
+order: 8
 slug: Luminal_screening
 publish: true
 ---

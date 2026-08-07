@@ -1,5 +1,6 @@
 ---
 title: "ASID: Drowned God"
+category: "Light Design"
 projectTitle: "Light Design | ASID: Drowned God, Berlin"
 meta: "October, 2025"
 cover: cover.jpg
@@ -16,6 +17,7 @@ images:
     alt: "ASID Drowned God 05"
   - src: 6.gif
     alt: "ASID Drowned God 06"
+order: 4
 slug: ASID
 publish: true
 ---

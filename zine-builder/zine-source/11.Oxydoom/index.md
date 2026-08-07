@@ -1,5 +1,6 @@
 ---
 title: "Light Object, Oxydoom"
+category: "Light Object Design"
 projectTitle: "Light Object Design | Oxydoom: Shattered Equilibrium"
 meta: "Seoul, 2023"
 cover: cover.jpg
@@ -8,6 +9,7 @@ images:
   - 2.jpg
   - 3.png
   - 4.gif
+order: 11
 slug: Oxydoom
 publish: true
 ---

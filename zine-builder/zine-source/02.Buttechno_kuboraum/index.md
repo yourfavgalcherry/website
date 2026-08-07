@@ -1,5 +1,6 @@
 ---
 title: "Buttechno Live"
+category: "Light Design"
 projectTitle: "Light Design | Buttechno Live"
 meta: "Berlin, 2026"
 cover: cover.png
@@ -8,6 +9,7 @@ images:
   - 2.png
   - 3.png
   - 4.png
+order: 2
 slug: Buttechno_kuboraum
 publish: true
 ---

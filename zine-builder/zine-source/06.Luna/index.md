@@ -1,5 +1,6 @@
 ---
 title: "unguarded x LUNA"
+category: "Light Design"
 projectTitle: "Light Design | Luna x Unguarded"
 meta: "Berlin, 2025 | [Event Link](https://ra.co/events/2161590?sharedId=&subId1=&subId3=2wu9AsOSFXcfrKDvZMpMaF&partnerId=residentadvisor)"
 cover: cover.jpg
@@ -14,6 +15,7 @@ images:
     alt: "Luna x Unguarded 04"
   - src: 5.gif
     alt: "Luna x Unguarded 05"
+order: 6
 slug: Luna
 publish: true
 ---

@@ -1,5 +1,6 @@
 ---
 title: "Luminal, first-person VR simulation"
+category: "Artwork"
 projectTitle: "Artwork | Luminal, vr"
 meta: "Berlin, 2025 | [Documentation Link](https://chaeryoon.notion.site/LUMINAL-An-Immersive-First-Person-VR-Simulation-30414e8f5596801dab40c765a8869ec9?pvs=73)"
 cover: cover.jpeg
@@ -11,6 +12,7 @@ images:
   - 5.png
   - 6.jpg
   - 7.png
+order: 9
 slug: Luminal_vr
 publish: true
 ---

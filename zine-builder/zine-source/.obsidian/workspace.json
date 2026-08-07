@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02.Buttechno_kuboraum/index.md",
+                "file": "01.KW_Kyiv_Biennial/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "02.Buttechno_kuboraum/index.md",
+                "file": "01.KW_Kyiv_Biennial/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -190,6 +190,12 @@
   },
   "active": "37a4c9cd1cbe09d1",
   "lastOpenFiles": [
+    "11.Oxydoom/index.md.tmp.4372.332c93f25b19",
+    "07.Thesis/index.md.tmp.4372.ea59d20009f2",
+    "07.Thesis/index.md.tmp.4372.ce35c1f1abdb",
+    "04.ASID/index.md.tmp.4372.2135f69226d7",
+    "03.creamcake/index.md.tmp.4372.e8a9e1a966b2",
+    "02.Buttechno_kuboraum/index.md",
     "01.KW_Kyiv_Biennial/index.md",
     "12.Ableton/index.md",
     "12.Ableton/cover.jpg",
@@ -214,15 +220,10 @@
     "07.Thesis/index.md",
     "07.Thesis",
     "06.Luna/index.md",
-    "06.Luna",
     "creamcake/index.md",
     "05.club8/index.md",
-    "05.club8",
     "04.ASID/index.md",
-    "04.ASID",
     "03.creamcake/index.md",
-    "03.creamcake",
-    "02.Buttechno_kuboraum/index.md",
     "club8/index.md",
     "KW_Kyiv Biennial/index.md",
     "KW Institute for Contemporary Art.md",
@@ -235,7 +236,6 @@
     "Luminal_screening/index.md",
     "Ableton/index.md",
     "ASID/index.md",
-    "example-first-post.md",
     "Untitled.canvas"
   ]
 }

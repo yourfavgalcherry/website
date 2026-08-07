@@ -1,5 +1,6 @@
 ---
 title: "Light Installation, TINCON/re:publica"
+category: "Light Installation"
 projectTitle: "Light Installation | TINCON/re:publica"
 meta: "Berlin, 2025"
 cover: cover.jpg
@@ -10,6 +11,7 @@ images:
   - 4.gif
   - 5.jpeg
   - 6.gif
+order: 10
 slug: TINCON
 publish: true
 ---

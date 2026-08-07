@@ -1,5 +1,6 @@
 ---
 title: "Creamcake 3hd 2025: Vertigo"
+category: "Light Design"
 projectTitle: "Light Design | Creamcake 3hd 2025: Vertigo"
 meta: "Berlin, 2025"
 cover: cover.jpg
@@ -12,6 +13,7 @@ images:
   - 6.jpg
   - 7.jpg
   - 8.jpg
+order: 3
 slug: creamcake
 publish: true
 ---

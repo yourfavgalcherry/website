@@ -1,5 +1,6 @@
 ---
 title: "The Semiotics of Light"
+category: "Light Installation"
 projectTitle: "Light Installation | The Altar"
 meta: "Berlin, 2025 | [Documentation Link](https://chaeryoon.notion.site/The-Semiotics-of-Light-through-generative-real-time-visuals-30414e8f55968010a84de229ad25e257)"
 cover: cover.png
@@ -11,6 +12,7 @@ images:
   - 5.jpg
   - 6.png
   - 7.gif
+order: 7
 slug: Thesis
 publish: true
 ---

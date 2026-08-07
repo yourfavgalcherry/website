@@ -156,7 +156,11 @@ function loadWorks() {
       folderPath,
       slug,
       title: String(data.title).trim(),
-      projectTitle: data.projectTitle ? String(data.projectTitle).trim() : String(data.title).trim(),
+      projectTitle: data.projectTitle
+        ? String(data.projectTitle).trim()
+        : data.category
+        ? `${String(data.category).trim()} | ${String(data.title).trim()}`
+        : String(data.title).trim(),
       meta: data.meta ? String(data.meta).trim() : "",
       cover,
       images,

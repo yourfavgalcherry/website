@@ -1,5 +1,6 @@
 ---
 title: "Ableton x MUTEK Push3"
+category: "Light Design"
 projectTitle: "Light Design | Ableton x MUTEK"
 meta: "Berlin, 2025"
 cover: cover.jpg
@@ -9,6 +10,7 @@ images:
   - 3.jpg
   - 4.jpg
   - 5.png
+order: 12
 slug: Ableton
 publish: true
 ---
