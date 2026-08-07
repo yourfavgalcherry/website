@@ -32,8 +32,6 @@ if (customCursor) {
 let strobeMode = "white"; // "white" | "palette"
 let paletteIndex = 1;     // 0은 white, 1부터 팔레트
 
-// Aurora pastel palette (중간에 살짝 네온끼 파스텔 핑크/그린 포함)
-// Aurora pastel palette (핑크 제거 + 네온그린 살짝 + 남색 포함)
 const PALETTE = [
   { r: 255, g: 255, b: 255 }, // Open White (기본)
   { r: 20,  g: 110, b: 255 }, // Deep Electric Blue
@@ -41,11 +39,10 @@ const PALETTE = [
   { r: 10,  g: 60,  b: 200 }  // Darker Blue (더 묵직)
 ];
 
-
 function nextPaletteColor() {
   if (strobeMode === "white") strobeMode = "palette";
   paletteIndex += 1;
-  if (paletteIndex >= PALETTE.length) paletteIndex = 1; // 1~끝 순환
+  if (paletteIndex >= PALETTE.length) paletteIndex = 1;
 }
 
 function resetStrobeToWhite() {
@@ -56,6 +53,65 @@ function resetStrobeToWhite() {
 function getStrobeRGB() {
   if (strobeMode === "white") return PALETTE[0];
   return PALETTE[paletteIndex];
+}
+
+// ✅ 실제 제논 플래시처럼: 피크 순간엔 흰색에 가깝고, 감쇠하며 원래 색이 드러남
+function mixWithWhite(c, amount) {
+  // amount: 0 = 원래 색, 1 = 완전 흰색
+  return {
+    r: Math.round(c.r + (255 - c.r) * amount),
+    g: Math.round(c.g + (255 - c.g) * amount),
+    b: Math.round(c.b + (255 - c.b) * amount)
+  };
+}
+
+// ============================
+// 전체 화면 스트로브 (Atomic 3000 스타일 flash)
+// ============================
+function screenStrobe() {
+  const base = getStrobeRGB();
+
+  const heldTime = Date.now() - pressStartTime;
+  const energy = Math.min(1, heldTime / 2000);
+  playStrobeSfx(energy);
+
+  // 매 플래시마다 미세한 편차 → 기계적으로 안 보이게
+  const peakOpacity = 0.9 + Math.random() * 0.1;      // 0.9~1.0
+  const flashDuration = 80 + Math.random() * 50;       // 80~130ms, atomic 특유의 짧고 강한 펄스
+
+  const hot = mixWithWhite(base, 0.9);  // 피크 = 거의 흰색
+  const mid = mixWithWhite(base, 0.25); // 감쇠 중간 = 원래 색이 조금씩 드러남
+
+  const strobe = document.createElement("div");
+  strobe.style.position = "fixed";
+  strobe.style.inset = "0";
+  strobe.style.pointerEvents = "none";
+  strobe.style.zIndex = "9999";
+  strobe.style.mixBlendMode = "screen"; // 배경 위에 "가산"으로 얹혀서 실제 조명처럼 자연스럽게 섞임
+  strobe.style.background = `radial-gradient(circle at 50% 45%,
+      rgba(255,255,255,1) 0%,
+      rgba(${hot.r},${hot.g},${hot.b},0.95) 22%,
+      rgba(${mid.r},${mid.g},${mid.b},0.55) 55%,
+      rgba(${base.r},${base.g},${base.b},0) 100%)`;
+  strobe.style.opacity = "0";
+
+  document.body.appendChild(strobe);
+
+  const anim = strobe.animate(
+    [
+      { opacity: 0,                 offset: 0 },
+      { opacity: peakOpacity,       offset: 0.05 },  // 거의 즉발 attack
+      { opacity: peakOpacity * 0.65, offset: 0.22 }, // hot core 아주 짧게 유지
+      { opacity: 0,                 offset: 1 }
+    ],
+    {
+      duration: flashDuration,
+      easing: "cubic-bezier(0.11, 0.85, 0.2, 1)", // 급상승 → 지수적 감쇠
+      fill: "forwards"
+    }
+  );
+
+  anim.onfinish = () => strobe.remove();
 }
 
 // 데스크탑: 스크롤하면 컬러 순환

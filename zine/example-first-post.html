@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Entry — Chaery Yoon</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../zine.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="../zine.html">Zine</a>
+</nav>
+
+<article class="zine-post">
+  <div class="zine-post-date">Aug 7, 2026</div>
+  <h1 class="zine-post-title">First Entry</h1>
+  <div class="zine-post-body">
+<p>This is a test entry written in <strong>Obsidian</strong> and pushed straight to the site.</p>
+<p>It supports normal markdown:</p>
+<ul>
+<li>lists</li>
+<li><a href="https://chaery-yoon.de">links</a></li>
+<li><em>emphasis</em></li>
+</ul>
+<blockquote>
+<p>and blockquotes too.</p>
+</blockquote>
+<p>Delete this file once you&#39;ve confirmed the pipeline works, or leave it as your first real zine entry.</p>
+
+  </div>
+</article>
+
+<footer class="footer-marquee fadeout-horizontal">
+  <div class="marquee-text" aria-label="copyright marquee">
+    <div class="marquee-text-track">
+      <span>© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator">✴︎</span>
+      <span>© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator">✴︎</span>
+      <span>© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator">✴︎</span>
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+      <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
+      <span class="separator" aria-hidden="true">✴︎</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var beam = document.createElement("div");
+  beam.className = "beam";
+  document.body.appendChild(beam);
+  var isMobile = /Mobi|Android/i.test(navigator.userAgent);
+  if (isMobile) { beam.style.display = "none"; return; }
+  document.addEventListener("mousemove", function (e) {
+    beam.style.transform = "translate(" + e.clientX + "px, " + e.clientY + "px)";
+  });
+})();
+</script>
+
+</body>
+</html>

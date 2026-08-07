@@ -1,0 +1,318 @@
+/* ========================================================= */
+/*  zine.css — styles for /zine.html and /zine/{slug}.html   */
+/*  Loaded together with styles.css (shared navbar, beam,    */
+/*  scrollbar, cursor rules). This file adds the reading-    */
+/*  friendly overrides + zine-specific layout.                */
+/* ========================================================= */
+
+/* Zine pages are read, not "played" — restore normal scroll
+   and a visible cursor instead of the homepage's hidden-cursor
+   beam-follow interaction. */
+body {
+    overflow-y: auto;
+    overflow-x: hidden;
+    cursor: default;
+}
+
+body, html {
+    cursor: default !important;
+}
+
+a, button {
+    cursor: pointer !important;
+}
+
+/* ======================== */
+/*   soft ambient beam       */
+/* ======================== */
+.beam {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 260px;
+    pointer-events: none;
+    border-radius: 50%;
+    background-color: white;
+    filter: blur(110px);
+    opacity: 0.5;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    will-change: transform;
+}
+
+@media (max-width: 768px) {
+    .beam { display: none; }
+}
+
+/* ======================== */
+/*        zine index         */
+/* ======================== */
+.zine-wrapper {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 150px 24px 160px;
+}
+
+.zine-title {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 600;
+    font-size: 2.4rem;
+    color: white;
+    letter-spacing: -0.02em;
+    margin-bottom: 60px;
+}
+
+.zine-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.zine-entry {
+    display: block;
+    padding: 26px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.zine-list .zine-entry:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.zine-entry-date {
+    display: block;
+    font-family: "Manrope", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.zine-entry-title {
+    display: block;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 500;
+    font-size: 1.3rem;
+    color: rgb(210, 210, 210);
+    letter-spacing: -0.01em;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.zine-entry:hover .zine-entry-title {
+    color: white;
+    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
+}
+
+.zine-entry-excerpt {
+    display: block;
+    font-family: "Manrope", sans-serif;
+    font-weight: 400;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: rgba(180, 180, 180, 0.75);
+    margin-top: 10px;
+}
+
+.zine-empty {
+    font-family: "Manrope", sans-serif;
+    color: rgba(180, 180, 180, 0.6);
+    font-size: 0.95rem;
+}
+
+/* ======================== */
+/*        zine post          */
+/* ======================== */
+.zine-post {
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 150px 24px 160px;
+}
+
+.zine-post-date {
+    font-family: "Manrope", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 14px;
+}
+
+.zine-post-title {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 600;
+    font-size: 2.1rem;
+    line-height: 1.2;
+    color: white;
+    letter-spacing: -0.02em;
+    margin-bottom: 48px;
+}
+
+.zine-post-body {
+    font-family: "Manrope", sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    font-weight: 400;
+    color: rgb(190, 190, 190);
+}
+
+.zine-post-body p { margin: 0 0 1.4em; }
+
+.zine-post-body h1,
+.zine-post-body h2,
+.zine-post-body h3 {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 600;
+    color: white;
+    letter-spacing: -0.01em;
+    margin: 1.6em 0 0.7em;
+}
+
+.zine-post-body h1 { font-size: 1.5rem; }
+.zine-post-body h2 { font-size: 1.3rem; }
+.zine-post-body h3 { font-size: 1.1rem; }
+
+.zine-post-body a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.zine-post-body a:hover {
+    color: white;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+.zine-post-body img {
+    max-width: 100%;
+    display: block;
+    margin: 1.8em 0;
+    filter: brightness(0.95);
+}
+
+.zine-post-body blockquote {
+    margin: 1.4em 0;
+    padding-left: 18px;
+    border-left: 2px solid rgba(255, 255, 255, 0.25);
+    color: rgba(180, 180, 180, 0.85);
+    font-style: italic;
+}
+
+.zine-post-body code {
+    font-family: "Menlo", "Consolas", monospace;
+    font-size: 0.88em;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 0.15em 0.4em;
+}
+
+.zine-post-body pre {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 16px 18px;
+    overflow-x: auto;
+    margin: 1.4em 0;
+}
+
+.zine-post-body pre code {
+    background: none;
+    padding: 0;
+}
+
+.zine-post-body ul,
+.zine-post-body ol {
+    margin: 0 0 1.4em;
+    padding-left: 1.4em;
+}
+
+.zine-post-body li { margin-bottom: 0.5em; }
+
+.zine-post-body hr {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    margin: 2.4em 0;
+}
+
+/* ======================== */
+/*        mobile             */
+/* ======================== */
+@media (max-width: 768px) {
+    .zine-wrapper { padding: 100px 18px 120px; }
+    .zine-title { font-size: 1.8rem; margin-bottom: 40px; }
+    .zine-entry-title { font-size: 1.1rem; }
+    .zine-entry-excerpt { font-size: 0.85rem; }
+
+    .zine-post { padding: 100px 18px 120px; }
+    .zine-post-title { font-size: 1.5rem; margin-bottom: 32px; }
+    .zine-post-body { font-size: 0.95rem; }
+}
+
+/* ======================== */
+/*   footer marquee (shared  */
+/*   pattern from about/works)*/
+/* ======================== */
+.footer-marquee {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 8px 0;
+    background: transparent;
+    border: none;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.marquee-text { overflow: clip; }
+
+.marquee-text-track {
+    display: flex;
+    align-items: center;
+    gap: 3.2rem;
+    width: max-content;
+    will-change: transform;
+    animation: marquee-move-text var(--speed, 40s) linear infinite;
+}
+
+.marquee-text-track span {
+    font-family: "Manrope", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(218, 218, 218, 0.75);
+    white-space: nowrap;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.marquee-text-track .separator {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    transform: translateY(-0.02em);
+}
+
+@keyframes marquee-move-text {
+    to { transform: translateX(-50%); }
+}
+
+.fadeout-horizontal {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 4rem, black calc(100% - 4rem), transparent);
+    mask-image: linear-gradient(to right, transparent, black 4rem, black calc(100% - 4rem), transparent);
+}
+
+@media (max-width: 768px) {
+    .footer-marquee { padding: 6px 0; }
+    .marquee-text-track { gap: 2rem; animation-duration: 30s; }
+    .marquee-text-track span { font-size: 0.7rem; }
+    .fadeout-horizontal {
+        -webkit-mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent);
+        mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent);
+    }
+}
