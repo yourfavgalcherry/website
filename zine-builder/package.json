@@ -2,7 +2,7 @@
   "name": "zine-builder",
   "private": true,
   "version": "1.0.0",
-  "description": "Builds works.html's project grid and works/projects/*/*.html from markdown notes in zine-source/",
+  "description": "Builds work.html's project grid and works/projects/*/*.html from markdown notes in zine-source/",
   "main": "build-works.js",
   "scripts": {
     "build": "node build-works.js"
