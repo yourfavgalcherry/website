@@ -222,10 +222,9 @@ function renderProjectPage(work) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${escapeHtml(work.title)}</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap">
 
 <link rel="stylesheet" href="../pages.css">
 
@@ -233,6 +232,7 @@ function renderProjectPage(work) {
 
 <body>
 
+<a class="home-logo" href="/" aria-label="Home"><img src="/img/monogram.png" alt="" width="36" height="36"></a>
 <nav class="navbar">
     <a href="/works.html">Works</a>
 </nav>

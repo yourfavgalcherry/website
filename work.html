@@ -3,15 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Works</title>
+<title>Work</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap">
 
 <style>
 
+:root{
+  --black:#000;
+  --white:#fff;
+  --text:#e4e4e4;
+  --grey:#8d8d8d;
+  --dim:#5e5e5e;
+  --sans:"Helvetica Neue",Helvetica,"Nimbus Sans","Nimbus Sans L",FreeSans,Arial,sans-serif;
+  --mono:"Courier Prime","Courier New",Courier,ui-monospace,monospace;
+  --serif:"EB Garamond",Garamond,"Times New Roman",serif;
+}
 * {
     margin: 0;
     padding: 0;
@@ -20,11 +29,11 @@
 
 body{
     background:black;
-    font-family:'Inter',sans-serif;
+    font-family:var(--sans);
     font-size:16px;
-    color:rgb(180,180,180);
+    color:var(--text);
     overflow-x:hidden;
-    cursor:none;              
+    cursor:none;
     user-select:none;
 }
 
@@ -34,6 +43,23 @@ a{
 }
 
 ::-webkit-scrollbar{width:0;height:0;}
+
+/* ======================== */
+/*      왼쪽 상단 로고      */
+/* ======================== */
+.home-logo {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10000;
+    display: block;
+    width: 36px;
+    height: 36px;
+    filter: drop-shadow(0 0 8px rgba(0,0,0,.8));
+    transition: transform .5s ease;
+}
+.home-logo img { display: block; width: 36px; height: 36px; }
+.home-logo:hover { transform: rotate(-24deg); }
 
 /* ======================== */
 /*      오른쪽 상단 About   */
@@ -46,13 +72,20 @@ a{
 }
 
 .navbar a {
-    color: gray;
+    color: var(--grey);
     text-decoration: none;
-    font-size: 19px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
+    font-size: 14px;
+    font-family: var(--sans);
+    font-weight: 400;
     cursor: none;
     transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.navbar a i {
+    font: 11px var(--mono);
+    font-style: normal;
+    color: var(--dim);
+    margin-right: 6px;
 }
 
 .navbar a.beam-hover,
@@ -76,6 +109,11 @@ a{
 /*   모바일 네비게이션 축소 */
 /* ======================== */
 @media (max-width: 768px) {
+    .home-logo {
+        top: 14px;
+        left: 14px;
+    }
+
     .navbar {
         top: 14px;        /* 살짝 위로 */
         right: 14px;      /* 가장자리 여백 줄이기 */
@@ -155,11 +193,12 @@ a{
 /* text */
 .work-text{
     position:absolute;
-    font-family: "Manrope", sans-serif;
+    font-family: var(--sans);
     bottom:50px;
     left:50%;
     transform:translateX(-50%);
-    font-weight:200;
+    font-weight:400;
+    letter-spacing: .01em;
     font-size:17px;
     color:rgba(255,255,255,0);
     transition:.35s;
@@ -338,8 +377,9 @@ a{
 
 <body>
 
+<a class="home-logo" href="index.html" aria-label="Home"><img src="img/monogram.png" alt="" width="36" height="36"></a>
 <nav class="navbar">
-<a href="index.html">Home</a>
+<a href="about.html">About</a>
 </nav>
 
 <div class="beam"></div>
@@ -579,7 +619,7 @@ if(window.innerWidth <= 768){
         updateBeam(t.clientX, t.clientY);
     });
 
- 
+
   +
    window.history.replaceState({}, "", "/works");
 }

@@ -5,12 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap">
 
 <style>
+:root{
+  --black:#000;
+  --white:#fff;
+  --text:#e4e4e4;
+  --grey:#8d8d8d;
+  --dim:#5e5e5e;
+  --sans:"Helvetica Neue",Helvetica,"Nimbus Sans","Nimbus Sans L",FreeSans,Arial,sans-serif;
+  --mono:"Courier Prime","Courier New",Courier,ui-monospace,monospace;
+  --serif:"EB Garamond",Garamond,"Times New Roman",serif;
+}
 * {
     margin: 0;
     padding: 0;
@@ -22,9 +31,9 @@
 /* ======================== */
 body {
     background-color: black;
-    font-family: "Manrope", sans-serif;
+    font-family: var(--sans);
     font-size: 16px;
-    color: rgb(180,180,180);
+    color: var(--text);
     margin: 0;
     padding: 0;
     overflow-x: hidden;
@@ -55,6 +64,20 @@ body, html {
 
 ::-webkit-scrollbar { width: 0; height: 0; }
 
+.home-logo {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10000;
+    display: block;
+    width: 36px;
+    height: 36px;
+    filter: drop-shadow(0 0 8px rgba(0,0,0,.8));
+    transition: transform .5s ease;
+}
+.home-logo img { display: block; width: 36px; height: 36px; }
+.home-logo:hover { transform: rotate(-24deg); }
+
 .navbar {
     position: fixed;
     top: 20px;
@@ -63,13 +86,19 @@ body, html {
 }
 
 .navbar a {
-    color: gray;
+    color: var(--grey);
     text-decoration: none;
-    font-size: 19px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
+    font-size: 14px;
+    font-family: var(--sans);
+    font-weight: 400;
     cursor: none;
     transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+.navbar a i {
+    font: 11px var(--mono);
+    font-style: normal;
+    color: var(--dim);
+    margin-right: 6px;
 }
 
 .navbar a.beam-hover,
@@ -93,6 +122,11 @@ body, html {
 /*   모바일 네비게이션 축소 */
 /* ======================== */
 @media (max-width: 768px) {
+    .home-logo {
+        top: 14px;
+        left: 14px;
+    }
+
     .navbar {
         top: 14px;        /* 살짝 위로 */
         right: 14px;      /* 가장자리 여백 줄이기 */
@@ -207,23 +241,25 @@ body, html {
 /* ======================== */
 .inquiry {
     max-width: 800px;
-    font-family: "Manrope", sans-serif;
+    font-family: var(--sans);
     margin: 80px auto 220px;
     font-size: 0.95rem;
 }
 
 .inquiry h3 {
-    font-size: 1rem;
-    font-family: "Manrope", sans-serif;
-    font-weight: 500;
+    font-size: 11px;
+    font-family: var(--mono);
+    font-weight: 400;
+    letter-spacing: .14em;
+    text-transform: uppercase;
     margin-bottom: 16px;
     margin-top: 80px;
-    color: white;
+    color: var(--grey);
 }
 
 .inquiry form {
     display: flex;
-    font-family: "Manrope", sans-serif;
+    font-family: var(--sans);
     flex-direction: column;
     gap: 12px;
 }
@@ -244,15 +280,16 @@ body, html {
     border: 1px solid rgba(255,255,255,0.4);
     color: white;
     padding: 8px 18px;
-    font-family: "Manrope", sans-serif;
+    font-family: var(--sans);
     font-size: 0.85rem;
 }
 
 .ig-link {
-    font-size: 0.9rem;
+    font-family: var(--mono);
+    font-size: 0.85rem;
     letter-spacing: 0.05em;
     text-decoration: underline;
-    color: rgba(180,180,180,0.8);
+    color: var(--grey);
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 .ig-link:hover {
@@ -263,14 +300,18 @@ body, html {
 .location {
   margin-top: 30px;
   margin-bottom: 8px;
-  font-size: 0.90rem;
-  color: rgba(255,255,255,0.45);
-  letter-spacing: 0.05em;
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--grey);
+  letter-spacing: 0.11em;
 }
 .contact-email {
   margin-top: 3px;
-  font-size: 0.90rem;
-  color: rgba(255,255,255,0.6);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--text);
 }
 
 /* ======================== */
@@ -424,8 +465,9 @@ body, html {
 
 <body>
 
+<a class="home-logo" href="index.html" aria-label="Home"><img src="img/monogram.png" alt="" width="36" height="36"></a>
 <nav class="navbar">
-<a href="works.html">Works</a>
+<a href="work.html">Work</a>
 </nav>
 
 <div class="beam"></div>
