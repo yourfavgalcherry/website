@@ -2014,11 +2014,14 @@ const simAdvect = simMat(/* glsl */`
     N /= length(N) + 1e-5;
     v += uVort * vec2(N.y, -N.x) * texture2D(tCurl, vUv).r * uDt;
     vec2 pm = vUv * uDomain + uOrigin;
-    // Soft curl-noise swirl (divergence-free), strongest where the fog is thick
-    float a1 = pm.x * 0.9 + uTime * 0.06, b1 = pm.y * 0.8 - uTime * 0.045, a2 = pm.x * 2.1 - uTime * 0.09 + pm.y * 1.3;
-    float a3 = pm.x * 3.7 + uTime * 0.13, b3 = pm.y * 3.1 - uTime * 0.1;
-    float dPdx = 0.9 * cos(a1) * cos(b1) + 1.05 * cos(a2) + 1.295 * cos(a3) * cos(b3);
-    float dPdz = -0.8 * sin(a1) * sin(b1) + 0.65 * cos(a2) - 1.085 * sin(a3) * sin(b3);
+    // Four travelling octaves of a 2D stream function keep the swirl divergence-free without needing
+    // a true curl-noise permutation table; the high-frequency fourth term adds fine boil under the drift
+    float a1 = pm.x * 1.15 + uTime * 0.071, b1 = pm.y * 0.95 - uTime * 0.052;
+    float a2 = pm.x * 2.35 - uTime * 0.098 + pm.y * 1.68;
+    float a3 = pm.x * 4.6 + uTime * 0.142, b3 = pm.y * 3.65 - uTime * 0.118;
+    float a4 = pm.x * 7.9 - uTime * 0.21 + pm.y * 6.05;
+    float dPdx = 0.828 * cos(a1) * cos(b1) + 0.778 * cos(a2) + 0.994 * cos(a3) * cos(b3) - 0.967 * sin(a4);
+    float dPdz = -0.684 * sin(a1) * sin(b1) + 0.556 * cos(a2) - 0.788 * sin(a3) * sin(b3) - 0.741 * sin(a4);
     v += vec2(dPdz, -dPdx) * uCurl * min(1.0, d * 1.5) * uDt;
     // Slow draughts across the room
     vec3 q = vec3(vUv * vec2(1.9, 1.45), uTime * 0.016);
