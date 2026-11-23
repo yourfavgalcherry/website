@@ -465,7 +465,6 @@ async function unlockAudioOnce() {
 }
 
 // ✅ “첫 인터랙션”에서만 오디오 언락
-// (너 페이지 컨셉상 Click/Touch가 이미 있으니 자연스럽게 맞음)
 window.addEventListener("pointerdown", unlockAudioOnce, { once: true });
 
 // 스트로브 SFX 재생
