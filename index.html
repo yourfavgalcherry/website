@@ -30,6 +30,12 @@ button{font:inherit;color:inherit;background:none;border:0;border-radius:0;paddi
 #stage.dragging{cursor:crosshair}
 .boot{position:fixed;inset:0;z-index:1;display:grid;place-items:center;background:var(--black);color:var(--grey);font:11px var(--mono);letter-spacing:.14em;text-transform:uppercase;transition:opacity .9s ease;pointer-events:none}
 .boot.done{opacity:0}
+.boot .bar{position:relative;width:140px;height:1px;overflow:hidden;background:rgba(255,255,255,.14)}
+/* transform (not left) so the bar keeps moving on the compositor while the room is built on the main thread */
+.boot .bar::after{content:'';position:absolute;inset:0;width:40%;background:var(--white);transform:translateX(-100%);animation:boot-bar 1.15s cubic-bezier(.45,0,.25,1) infinite}
+@keyframes boot-bar{to{transform:translateX(250%)}}
+@media (prefers-reduced-motion:reduce){.boot .bar::after{width:100%;transform:none;animation:boot-pulse 1.6s ease-in-out infinite alternate}}
+@keyframes boot-pulse{from{opacity:.15}to{opacity:.6}}
 .hint{display:none}
 body.nogl-site{background:#000 url(img/3hd-render-1.jpg) center 40%/cover no-repeat}
 body.nogl-site .needs-gl{display:none!important}
@@ -227,7 +233,7 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
 </style>
 
 <canvas id="stage" tabindex="-1" aria-label="Interactive 3D model of the 3hd 2026 room at Cank, Berlin, built from the light plot. Drag to move and look around."></canvas>
-<div class="boot" id="boot" role="status">Loading the room</div>
+<div class="boot" id="boot" role="status" aria-label="Loading the room"><span class="bar"></span></div>
 <p class="hint" id="hint" aria-hidden="true"></p>
 <div id="marks" aria-hidden="true"></div>
 <div class="shade" aria-hidden="true"></div>
@@ -245,7 +251,7 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
 <div class="c c-bl needs-gl">
   <p>Light Plot for Creamcake 𝟹𝚑𝚍 𝟸0𝟸𝟼: 𝔅𝔢𝔶𝔬𝔫𝔡 Imagining at&nbsp;Cank</p>
   <div class="meta">To navigate the lights, turn off the running sequence in the control panel.</div>
-  <div class="seqline" id="seqline" hidden><span>Cue <b id="seq-cue">01</b> <span id="seq-name">Blackout, fog</span></span><button type="button" id="seq-strobes" role="switch" aria-checked="true">Strobe Full<span class="switch" aria-hidden="true"></span></button></div>
+  <div class="seqline" id="seqline" hidden><span>Cue <b id="seq-cue">01</b> <span id="seq-name">Blackout</span></span><button type="button" id="seq-strobes" role="switch" aria-checked="true">Strobe Full<span class="switch" aria-hidden="true"></span></button></div>
 </div>
 <div class="camread needs-gl" id="camread" aria-hidden="true"></div>
 <div class="c c-br needs-gl"><button type="button" id="ctl-toggle" aria-expanded="false" aria-controls="ctl">CONTROL<i id="ctl-sign">(+)</i></button></div>
@@ -283,7 +289,7 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
   </div>
 
   <div class="pane" data-pane="strobe" hidden>
-    <p class="lab">Patterns <small>Atomic 3000 · Zenit W600 ×4</small></p>
+    <p class="lab">Patterns <small>Atomic 3000 · Zenit W600 ×5</small></p>
     <div class="pads" id="pads">
       <button type="button" class="pad" data-pattern="burst">Burst</button>
       <button type="button" class="pad" data-pattern="taptap">Tap tap</button>
@@ -472,8 +478,10 @@ const FIX = {
     { ch: 202, addr: '1.205', pillar: [23.85, 11.0], side: 1, row: 'front' },
     { ch: 203, addr: '1.220', pillar: [13.9, 21.0], side: -1, row: 'back' },
     { ch: 204, addr: '1.235', pillar: [23.85, 21.0], side: -1, row: 'back' },
+    // One more hung from the ceiling in the middle, above the dance floor between the four mirror pillars
+    { ch: 205, addr: '1.250', hang: [18.9, 16.0], row: 'mid' },
   ],
-  atomic: { ch: 301, addr: '1.250', pos: [19.0, 0.0, 5.95] },
+  atomic: { ch: 301, addr: '1.265', pos: [19.0, 0.0, 5.95] },
   // Only the three uplights on the back walls, across the room from the stage and the escalator, are lit;
   // every other par is blacked out and stays in the rig as a body
   ax9: [
@@ -1282,11 +1290,19 @@ collider(19.0, 0.4, 3.3, 0.22, 0.4, 0.18); collider(15.0, 0.4, 8.6, 0.22, 0.4, 0
 /* ---------------- Strobes: Zenit W600 panels and the Atomic 3000 ---------------- */
 const strobes = [];
 for (const f of FIX.zenits) {
-  const [px, pz] = f.pillar;
-  const pos = V(px, 2.7, pz + f.side * (PS / 2 + 0.17));
   const dir = V(0, -1, 0);   // straight down at the floor
-  const bracket = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.04, 0.17), M.body);
-  bracket.position.set(px, 2.86, pz + f.side * (PS / 2 + 0.085));
+  let pos, bracket;
+  if (f.hang) {
+    const [hx, hz] = f.hang;
+    pos = V(hx, 3.45, hz);
+    bracket = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, CEIL - 3.51, 6), M.body);
+    bracket.position.set(hx, (CEIL + 3.51) / 2, hz);
+  } else {
+    const [px, pz] = f.pillar;
+    pos = V(px, 2.7, pz + f.side * (PS / 2 + 0.17));
+    bracket = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.04, 0.17), M.body);
+    bracket.position.set(px, 2.86, pz + f.side * (PS / 2 + 0.085));
+  }
   const lens = orientedFixture(pos, dir, new THREE.BoxGeometry(0.44, 0.12, 0.32), new THREE.PlaneGeometry(0.38, 0.26), 0.063, bracket);
   const b = makeBeam({ name: f.addr, intensity: 0, base: 900, angle: 18 * DEG, penumbra: 0.55, real: true, glowSize: 0.5, vol: 0.55, k: 0.25, lensGain: 1.2, lensIdle: 0.02 });
   b.pos.copy(pos).addScaledVector(dir, 0.07); b.dir.copy(dir); b.lens = lens; b.isStrobe = true;
@@ -1300,7 +1316,7 @@ const atomicBeam = (() => {
   b.pos.copy(pos).addScaledVector(dir, 0.08); b.dir.copy(dir); b.lens = lens; b.isStrobe = true;
   return b;
 })();
-const atomic = { beam: atomicBeam, row: 'front', addr: '1.250', peak: 42000, tau: 0.035, level: 0 };
+const atomic = { beam: atomicBeam, row: 'front', addr: '1.265', peak: 42000, tau: 0.035, level: 0 };
 strobes.push(atomic);
 const zenitStrobes = strobes.filter((s) => s !== atomic);
 const chaseOrder = ['1.190', '1.205', '1.235', '1.220'].map((a) => strobes.find((s) => s.addr === a));
@@ -1899,14 +1915,11 @@ const simAdvect = simMat(/* glsl */`
     N /= length(N) + 1e-5;
     v += uVort * vec2(N.y, -N.x) * texture2D(tCurl, vUv).r * uDt;
     vec2 pm = vUv * uDomain + uOrigin;
-    // Four travelling octaves of a 2D stream function keep the swirl divergence-free without needing
-    // a true curl-noise permutation table; the high-frequency fourth term adds fine boil under the drift
-    float a1 = pm.x * 1.15 + uTime * 0.071, b1 = pm.y * 0.95 - uTime * 0.052;
-    float a2 = pm.x * 2.35 - uTime * 0.098 + pm.y * 1.68;
-    float a3 = pm.x * 4.6 + uTime * 0.142, b3 = pm.y * 3.65 - uTime * 0.118;
-    float a4 = pm.x * 7.9 - uTime * 0.21 + pm.y * 6.05;
-    float dPdx = 0.828 * cos(a1) * cos(b1) + 0.778 * cos(a2) + 0.994 * cos(a3) * cos(b3) - 0.967 * sin(a4);
-    float dPdz = -0.684 * sin(a1) * sin(b1) + 0.556 * cos(a2) - 0.788 * sin(a3) * sin(b3) - 0.741 * sin(a4);
+    // Soft curl-noise swirl (divergence-free), strongest where the fog is thick
+    float a1 = pm.x * 0.9 + uTime * 0.06, b1 = pm.y * 0.8 - uTime * 0.045, a2 = pm.x * 2.1 - uTime * 0.09 + pm.y * 1.3;
+    float a3 = pm.x * 3.7 + uTime * 0.13, b3 = pm.y * 3.1 - uTime * 0.1;
+    float dPdx = 0.9 * cos(a1) * cos(b1) + 1.05 * cos(a2) + 1.295 * cos(a3) * cos(b3);
+    float dPdz = -0.8 * sin(a1) * sin(b1) + 0.65 * cos(a2) - 1.085 * sin(a3) * sin(b3);
     v += vec2(dPdz, -dPdx) * uCurl * min(1.0, d * 1.5) * uDt;
     // Slow draughts across the room
     vec3 q = vec3(vUv * vec2(1.9, 1.45), uTime * 0.016);
@@ -2030,7 +2043,7 @@ function simReset(warm) {
    by the haze glow, and from inside by the heads standing in it, the strobes
    when they fire and the back-wall uplights.
    -------------------------------------------------------------------------- */
-const NGLOW = 11;
+const NGLOW = 12;
 const fogMat = new THREE.ShaderMaterial({
   defines: { FOGN: Q.fogN, NGLOW },
   uniforms: {
@@ -2511,29 +2524,118 @@ function padState() { $$('[data-pattern]').forEach((b) => b.classList.toggle('on
    machines. Until a visitor allows flashing light, every flash is softened into
    a slow pulse, never more than two a second.
    -------------------------------------------------------------------------- */
-const SEQ_LEN = 64;
+const SEQ_LEN = 117;
 const CUES = [
-  [0, 'Blackout, fog'], [3, 'Mid shimmer'], [13, 'Blackout'], [14.2, 'Pillars'], [20.5, 'Pillars, mirrors'], [28, 'Blackout'],
-  [29.5, 'Atomic build'], [37.6, 'Climax'], [40, 'Blackout'], [43, 'Side beam'], [55, 'Dim out'], [61.5, 'Blackout'],
+  [0, 'Blackout'], [3, 'Artist Fade In'], [12, 'Strobe Ramp'], [19, 'Center Beam'],
+  [22, 'Hit'], [23.2, 'Stage Strobe'], [29.5, 'Front / Back'], [34, 'Circle'],
+  [38, 'Sweep'], [49, 'Center Hit'], [50.5, 'Wash'], [56, 'Diagonals'],
+  [60.5, 'Beat'], [64.5, 'Gobo Strobe'], [69.5, 'Blackout'], [71, 'Build'],
+  [79.1, 'Full Strobe'], [81.5, 'Blackout'], [84.5, 'Dimmer Chase'], [90, 'Zoom Out'],
+  [97, 'Wave'], [102, 'Bursts'], [106, 'Fade Out'], [112.5, 'Flood'],
+  [114.5, 'Blackout'],
 ];
+// Single hits on top of the cues: [time, what fires]
+const ACCENTS = [[22.0, 'all'], [43.5, 'center'], [49.0, 'centerAtomic'], [93.5, 'zenitAtomic']];
 const [MID, LEFT, RIGHT, SIDE] = heads;
-const seq = { on: false, t: 0, cue: -1, next: 0, ph: 0, phN: -1, n: 0, q: [], hits: [], swell: 0, atmosHand: false };
-for (const s of strobes) { s.soft = 0; s.softT = 0; s.softAt = -9; }
+// The five Zenits by position, seen from the dance floor
+const ZN = Object.fromEntries([['FL', '1.190'], ['FR', '1.205'], ['BL', '1.220'], ['BR', '1.235'], ['C', '1.250']].map(([k, a]) => [k, strobes.find((s) => s.addr === a)]));
+const ZG = {
+  front: [ZN.FL, ZN.FR], back: [ZN.BL, ZN.BR], left: [ZN.FL, ZN.BL], right: [ZN.FR, ZN.BR],
+  diagA: [ZN.FL, ZN.BR], diagB: [ZN.FR, ZN.BL], ring: [ZN.FL, ZN.FR, ZN.BR, ZN.BL], center: [ZN.C],
+  corners: [ZN.FL, ZN.FR, ZN.BL, ZN.BR], all: [ZN.FL, ZN.FR, ZN.BL, ZN.BR, ZN.C],
+};
+// Where the two stage heads point for the opening cue: the artist, standing between the two DJ tables;
+// the beams cross there and run on up to the ceiling instead of stopping on a table
+const ARTIST = [19.0, 1.6, 8.95];
+const seq = { on: false, t: 0, prevT: 0, cue: -1, next: 0, ph: 0, phN: -1, n: 0, q: [], hits: [], swell: 0, atmosHand: false, flk: 1, flkN: -1 };
+for (const s of strobes) { s.soft = 0; s.softT = 0; s.softAt = -9; s.hold = 0; s.holdNow = 0; }
 const seqFull = () => flashOK === true;
+// Candle flicker for the slow dim-ins: an irregular wobble a few times a second with the odd dip,
+// a separate flame for each fixture. With flashing soft it only drifts slowly.
+const flames = new Map();
+function candle(key, dt) {
+  let c = flames.get(key);
+  if (!c) { c = { v: 1, t: 1, next: 0 }; flames.set(key, c); }
+  const full = seqFull();
+  if (clock >= c.next) {
+    c.t = Math.random() < 0.08 ? 0.45 + 0.15 * Math.random() : 0.72 + 0.28 * Math.random();
+    c.next = clock + (full ? 0.05 + 0.13 * Math.random() : 0.4 + 0.4 * Math.random());
+  }
+  c.v += (c.t - c.v) * (1 - Math.exp(-dt / (full ? 0.045 : 0.35)));
+  return full ? c.v : 0.88 + 0.12 * c.v;
+}
+// A random level that drifts between lo and hi, moving to a new target at uneven intervals
+function wander(key, dt, lo, hi, iMin, iMax, tau) {
+  let c = flames.get(key);
+  if (!c) { c = { v: hi, t: hi, next: 0 }; flames.set(key, c); }
+  if (clock >= c.next) { c.t = lo + (hi - lo) * Math.random(); c.next = clock + iMin + (iMax - iMin) * Math.random(); }
+  c.v += (c.t - c.v) * (1 - Math.exp(-dt / tau));
+  return c.v;
+}
+// Uneven dimming for fades and washes: drops of up to `depth`, quick and jagged with flashing on, slow drifts with it soft
+function rough(key, dt, depth) {
+  return seqFull() ? wander(key, dt, 1 - depth, 1, 0.06, 0.35, 0.05) : wander(key, dt, 1 - depth * 0.4, 1, 0.6, 1.4, 0.4);
+}
+// A gap stretched or squeezed at random by up to k, and a hit level between 0.55 and 1
+const jit = (g, k) => g * (1 - k + 2 * k * Math.random());
+const amp01 = () => 0.55 + 0.45 * Math.random();
 // A flash on a head: a sharp hit when flashing is allowed, otherwise a slow pulse at most twice a second
 function headHit(h, amp) {
   if (seqFull()) { h.fl = Math.max(h.fl, amp); return; }
   if (clock - h.softAt < 0.5) return;
   h.softAt = clock; h.flT = Math.max(h.flT, amp * 0.72);
 }
+const zen = (group, amp = 1) => { for (const s of group) seq.hits.push([s, amp]); };
+function accent(kind) {
+  if (kind === 'all') { seq.hits.push([atomic, 1]); zen(ZG.all); }
+  if (kind === 'center') zen(ZG.center);
+  if (kind === 'centerAtomic') { seq.hits.push([atomic, 0.7]); zen(ZG.center); }
+  if (kind === 'zenitAtomic') { seq.hits.push([atomic, 0.55]); zen(ZG.all); }
+}
+// Next event after g seconds; never faster than twice a second while flashing is soft
+function seqAfter(T, g) { seq.next = T + (seqFull() ? g : Math.max(0.5, g)); }
+function aimHead(h, x, y, z) { h.follow = false; const [p, t] = solveAim(h, _v4.set(x, y, z)); h.tPan = p; h.tTilt = t; }
+// The far beam's sweep: from the stage-left wall, over the dance floor, to the back of the room and back
+const SWEEP_A = [9.0, 2.2, 7.0], SWEEP_B = [14.0, 2.5, 29.0], SWEEP_T = 11;
+function sweepAt(k, wob) { aimHead(SIDE, SWEEP_A[0] + (SWEEP_B[0] - SWEEP_A[0]) * k, SWEEP_A[1] + (SWEEP_B[1] - SWEEP_A[1]) * k + wob, SWEEP_A[2] + (SWEEP_B[2] - SWEEP_A[2]) * k); }
+// A single hard burst from both fog machines as the strobes come in: full output at once, a thick plume out of each nozzle
+const FOG_BLAST_CUES = [2, 4, 9, 11, 16];
+function fogBlast() {
+  fogBoost = Math.max(fogBoost, 5);
+  for (const j of JETS) {
+    if (!j.mach || j.angNow === undefined) continue;
+    j.mach.on = true; j.mach.level = 1; j.mach.end = Math.max(j.mach.end, simClock + 2.5);
+    for (let k = 0; k < 28 && puffs.length < PUFF_MAX; k++) {
+      const a = j.angNow + (Math.random() - 0.5) * 0.45, sp = (1.6 + 3.2 * motionLevel) * (0.7 + 0.6 * Math.random());
+      puffs.push({ x: j.x - Math.cos(j.angNow) * 0.3, y: 0.3 + 0.15 * Math.random(), z: j.z - Math.sin(j.angNow) * 0.3, vx: Math.cos(a) * sp, vz: Math.sin(a) * sp, vy: (Math.random() - 0.2) * 0.25,
+        age: Math.random() * 0.15, life: 4.5 + Math.random() * 3 + fogLevel * 3, seed: Math.random() * 50, r0: 0.16 + Math.random() * 0.08 });
+    }
+  }
+}
 function seqCue(i) {
-  seq.cue = i; seq.next = seq.t; seq.ph = 0; seq.phN = -1;
+  seq.cue = i; seq.next = seq.t; seq.ph = 0; seq.phN = -1; seq.n = 0;
   if (i === 0) {
     // top of the loop: everything out, the machines fire hard and the floor fills
-    seq.n = 0; seq.q.length = 0;
+    seq.q.length = 0;
     fogBoost = 2.6;
     for (const j of JETS) if (j.mach) { j.mach.on = true; j.mach.end = simClock + 8 + Math.random() * 3; }
   }
+  // Positions only change while a head is dark: the stage heads go to the artist in the opening blackout
+  // and back home once that cue is over; the far beam goes to its start before the sweep and home after it
+  MID.tPan = MID.def.pan; MID.tTilt = MID.def.tilt;
+  // Mid already faces the audience: for its gobo cue it only changes to the dot gobo, which stays still
+  const dots = i === 13;
+  MID.spinSpeed = 0;
+  if ((MID.gobo === 1) !== dots) { MID.gobo = dots ? 1 : 0; MID.goboAngle = 0; drawGobo(MID); }
+  MID.zoom = MID.def.zoom;
+  for (const h of [LEFT, RIGHT]) {
+    if (i <= 1) { aimHead(h, ...ARTIST); h.zoom = 12; } else { h.tPan = h.def.pan; h.tTilt = h.def.tilt; h.zoom = h.def.zoom; }
+  }
+  if (i === 6 || i === 7) sweepAt(0, 0);
+  else if (i !== 8) { SIDE.tPan = SIDE.def.pan; SIDE.tTilt = SIDE.def.tilt; }
+  if (i === 8) SIDE.zoom = 2.5;   // thin beam while it moves
+  else if (i < 19 || i > 22) SIDE.zoom = SIDE.def.zoom;
+  if (FOG_BLAST_CUES.includes(i)) fogBlast();
   const num = String(i + 1).padStart(2, '0'), name = CUES[i][1];
   $('#seq-cue').textContent = num; $('#seq-name').textContent = name;
   $('#seq-cue-v').textContent = num + ' ' + name;
@@ -2545,79 +2647,176 @@ function seqStep(dt) {
     h.fs += (h.flT - h.fs) * (1 - Math.exp(-dt / 0.07));
   }
   fogBoost += (1 - fogBoost) * (1 - Math.exp(-dt / 7));
+  for (const s of strobes) s.hold = 0;
   if (!seq.on) { upLv = 1; return; }
+  seq.prevT = seq.t;
   seq.t += dt;
-  if (seq.t >= SEQ_LEN) { seq.t -= SEQ_LEN; seq.cue = -1; }
-  const T = seq.t, full = seqFull();
+  if (seq.t >= SEQ_LEN) { seq.t -= SEQ_LEN; seq.prevT = -1; seq.cue = -1; }
+  const T = seq.t, full = seqFull(), beat = 60 / bpm;
   let ci = 0;
   for (let i = 0; i < CUES.length; i++) if (T >= CUES[i][0]) ci = i;
   if (ci !== seq.cue) seqCue(ci);
+  for (const [at, kind] of ACCENTS) if (seq.prevT < at && T >= at) accent(kind);
   for (let i = seq.q.length - 1; i >= 0; i--) if (T >= seq.q[i][0]) { const fn = seq.q[i][1]; seq.q.splice(i, 1); fn(); }
-  let mid = 0, lr = 0, side = 0;
+  let mid = 0, lr = 0, side = 0, lrL = -1, lrR = -1;
   upLv = 0; seq.swell = 0;
-  if (T >= 3 && T < 13) {
-    // 02 Mid: a strobe that speeds up until it is too fast to see, while it comes up
-    const u = (T - 3) / 10, amp = Math.pow(u, 1.7);   // from nothing, brighter all the way
+  const go = T >= seq.next;
+  if (T >= 3 && T < 12) {
+    // 02 Left/Right on the artist: a slow dim in flickering like candles, held, then cut
+    // the zoom opens as it comes up, so the light spreads wider round the artist
+    // (a wider zoom spreads the same output, so the level goes up with it)
+    lr = 1.5 * Math.pow(smooth(3, 10, T), 1.5);
+    LEFT.zoom = RIGHT.zoom = 12 + 16 * smooth(3, 10, T);
+    lrL = lr * candle('L', dt); lrR = lr * candle('R', dt);
+  } else if (T >= 12 && T < 22) {
+    // 03-04 Mid: a strobe that speeds up until it fuses, at uneven intervals and levels; the steady part wavers
+    const u = (T - 12) / 10, amp = Math.pow(u, 1.7);
     if (full) {
-      seq.ph += 2 * Math.pow(14, u) * dt;   // 2 Hz up to 28 Hz
-      if (Math.floor(seq.ph) !== seq.phN) { seq.phN = Math.floor(seq.ph); MID.fl = Math.max(MID.fl, amp); }
-      mid = amp * 0.55 * smooth(0.6, 1, u);
-    } else mid = amp * (0.8 + 0.2 * Math.sin(T * Math.PI * 2 * 0.55));
-  } else if (T >= 14.2 && T < 28) {
-    // 04-05 Pillars: Left and Right as one group, out of step with themselves; the mirror strobes answer
-    if (T >= seq.next) {
-      const u = (T - 14.2) / 13.8, r = Math.random(), amp = 0.75 + 0.25 * Math.random();
+      if (go) {
+        MID.fl = Math.max(MID.fl, amp * (0.55 + 0.45 * Math.random()));
+        seq.next = T + jit(1 / (2 * Math.pow(14, u)), 0.6);
+      }
+      mid = amp * 0.55 * smooth(0.6, 1, u) * wander('mid', dt, 0.6, 1, 0.06, 0.3, 0.05);
+    } else mid = amp * wander('mid', dt, 0.75, 1, 0.5, 1.4, 0.35);
+  } else if (T >= 23.2 && T < 29.5) {
+    // 06 Left/Right as one group, out of step with themselves
+    if (go) {
+      const u = (T - 23.2) / 6.3, r = Math.random(), amp = 0.75 + 0.25 * Math.random();
       if (r < 0.5) { headHit(LEFT, amp); headHit(RIGHT, amp); }
       else if (r < 0.72) { const [a, b] = Math.random() < 0.5 ? [LEFT, RIGHT] : [RIGHT, LEFT]; headHit(a, amp); seq.q.push([T + 0.07, () => headHit(b, amp)]); }
       else if (r < 0.88) { headHit(LEFT, amp); headHit(RIGHT, amp); seq.q.push([T + 0.09, () => { headHit(LEFT, amp * 0.8); headHit(RIGHT, amp * 0.8); }]); }
       else headHit(Math.random() < 0.5 ? LEFT : RIGHT, amp);
-      if (T >= 20.5 && Math.random() < 0.3 + 0.55 * smooth(20.5, 27, T)) {
-        seq.hits.push([zenitStrobes[(Math.random() * 4) | 0], 1]);
-        if (Math.random() < 0.4) seq.hits.push([zenitStrobes[(Math.random() * 4) | 0], 1]);
-        if (T > 24.5 && Math.random() < 0.22) for (const s of zenitStrobes) seq.hits.push([s, 0.9]);
-      }
       const gaps = [0.09, 0.12, 0.16, 0.22, 0.3, 0.42, 0.6];
       let g = gaps[Math.min(gaps.length - 1, Math.floor(Math.pow(Math.random(), 1 + 1.6 * u) * gaps.length))];
-      if (Math.random() < 0.08) g += 0.5 + Math.random() * 0.4;   // a held breath now and then
-      seq.next = T + (full ? g : Math.max(0.5, g));
+      if (Math.random() < 0.08) g += 0.5 + Math.random() * 0.4;
+      seqAfter(T, g);
     }
-  } else if (T >= 29.5 && T < 37.6) {
-    // 07 Atomic build: pa ... pa .. pa-pa-pa-pat, brighter every time
-    const u = (T - 29.5) / 8.1;
-    if (T >= seq.next) {
-      seq.hits.push([atomic, 0.008 * Math.pow(50, u)]);   // under 1% up to 40%: each hit visibly brighter, full only at the climax
-      if (u > 0.55 && seq.n++ % 2 === 0) for (const s of zenitStrobes) seq.hits.push([s, 0.35 + 0.5 * u]);
-      const iv = 0.95 * Math.pow(0.055 / 0.95, u);
-      seq.next = T + (full ? iv : Math.max(0.5, iv));
+  } else if (T >= 29.5 && T < 34) {
+    // 07 Front pair and back pair answer each other, unevenly: they sometimes repeat, skip or bring in the centre
+    if (go) {
+      const r = Math.random();
+      seq.n = r < 0.7 ? 1 - seq.n : seq.n;
+      zen(r > 0.88 ? ZG.center : seq.n ? ZG.back : ZG.front, amp01());
+      seqAfter(T, jit(beat / 2, 0.55) + (Math.random() < 0.1 ? 0.35 : 0));
     }
-  } else if (T >= 37.6 && T < 40) {
-    // 08 Climax: everything at once
+  } else if (T >= 34 && T < 38) {
+    // 08 Round the four pillars, getting faster, now and then turning back or jumping across; centre at random
+    if (go) {
+      const u = (T - 34) / 4, r = Math.random();
+      seq.ph = (seq.ph + (r < 0.15 ? 2 : r < 0.3 ? -1 : 1) + 4) % 4;
+      zen([ZG.ring[seq.ph]], amp01());
+      if (Math.random() < 0.18) seq.q.push([T + 0.05, () => zen(ZG.center, 0.8)]);
+      seqAfter(T, jit(beat / 2 * Math.pow(0.4, u), 0.5));
+    }
+  } else if (T >= 38 && T < 49) {
+    // 09 Far beam: zoomed in to a thin beam, crosses the room slowly; dimmer on an invisible flicker
+    const k = 0.5 - 0.5 * Math.cos((T - 38) / SWEEP_T * Math.PI * 2);
+    sweepAt(k, 0.35 * Math.sin((T - 38) * Math.PI * 2 / 7));
     if (full) {
-      if (T >= seq.next) {
-        seq.hits.push([atomic, 1]);
-        for (const s of zenitStrobes) seq.hits.push([s, 1]);
-        headHit(LEFT, 1); headHit(RIGHT, 1);
-        seq.next = T + 1 / (15 + 6 * Math.random());
+      const n = Math.floor(T * 30);   // a new level 30 times a second, a few percent deep
+      if (n !== seq.flkN) { seq.flkN = n; seq.flk = 0.84 + 0.16 * Math.random(); }
+    } else seq.flk = 0.95 + 0.05 * Math.sin(T * Math.PI * 2 * 0.7);
+    side = seq.flk * smooth(38, 39.2, T) * (1 - smooth(48.3, 49, T));
+  } else if (T >= 50.5 && T < 56) {
+    // 11 All Zenits as a wash: up in a second, then a long fade that drops and catches unevenly, each panel its own way
+    const k = smooth(50.5, 51.6, T) * (1 - smooth(52.6, 56, T));
+    ZG.all.forEach((s, i) => { s.hold = 0.75 * k * rough('w' + i, dt, T > 52.3 ? 0.55 : 0.2); });
+    atomic.hold = 0.035 * k;
+  } else if (T >= 56 && T < 60.5) {
+    // 12 The two diagonals, getting faster on the whole but uneven, the centre now and then
+    if (go) {
+      const u = (T - 56) / 4.5;
+      if (Math.random() < 0.75) seq.n = 1 - seq.n;
+      zen(seq.n ? ZG.diagB : ZG.diagA, amp01());
+      if (Math.random() < 0.15) zen(ZG.center);
+      seqAfter(T, jit(0.36 * Math.pow(0.3, u), 0.6));
+    }
+  } else if (T >= 60.5 && T < 64.5) {
+    // 13 Left/Right and the corners with the centre between them, pushed and pulled off the grid; three fast hits at the end
+    if (go) {
+      if (T > 63.6) { for (let k = 0; k < 3; k++) seq.q.push([T + k * jit(0.08, 0.4), () => { zen(ZG.all); headHit(LEFT, 1); headHit(RIGHT, 1); }]); seq.next = 64.5; }
+      else {
+        if (Math.random() < 0.6) { zen(ZG.corners, amp01()); headHit(LEFT, amp01()); headHit(RIGHT, amp01()); } else zen(ZG.center, amp01());
+        seqAfter(T, jit(beat / 2, 0.5) * (Math.random() < 0.15 ? 2 : 1));
       }
-    } else { seq.swell = smooth(37.6, 38.8, T); lr = 0.8 * seq.swell; }
-  } else if (T >= 43 && T < 55) {
-    // 10 Side beam: a slow dim in while it zooms out
-    const u = ease((T - 43) / 12);
-    side = u; SIDE.zoom = 1.5 + 9.5 * u;
-  } else if (T >= 55 && T < 61.5) {
-    // 11 Dim out
-    side = 1 - ease((T - 55) / 6.5); SIDE.zoom = 11;
+    }
+  } else if (T >= 64.5 && T < 69.5) {
+    // 14 Mid: full zoom, still dot gobo, strobing at uneven gaps and levels, a harder hit every so often
+    const u = (T - 64.5) / 5;
+    if (go) {
+      const big = Math.random() < 0.14;
+      headHit(MID, big ? 1 : (0.4 + 0.5 * u) * amp01());
+      if (big) zen(ZG.center, 0.7);
+      seqAfter(T, jit(beat / 2, 0.6) * (Math.random() < 0.12 ? 2.5 : 1));
+    }
+  } else if (T >= 71 && T < 79.1) {
+    // 16 Atomic hits, closer together and brighter overall, each one a little early or late, a little brighter or darker
+    const u = (T - 71) / 8.1;
+    if (go) {
+      seq.hits.push([atomic, 0.008 * Math.pow(50, u) * (0.6 + 0.6 * Math.random())]);
+      if (u > 0.55 && Math.random() < 0.5) zen(ZG.all, (0.35 + 0.5 * u) * amp01());
+      seqAfter(T, jit(0.95 * Math.pow(0.055 / 0.95, u), 0.4));
+    }
+  } else if (T >= 79.1 && T < 81.5) {
+    // 17 Everything strobing together, the rate and level always moving
+    if (full) {
+      if (go) {
+        seq.hits.push([atomic, 0.7 + 0.3 * Math.random()]); zen(ZG.all, amp01());
+        headHit(LEFT, amp01()); headHit(RIGHT, amp01());
+        seq.next = T + 1 / (11 + 12 * Math.random());
+      }
+    } else { seq.swell = smooth(79.1, 80.3, T); lr = 0.8 * seq.swell; }
+  } else if (T >= 84.5 && T < 90) {
+    // 19 Dimmer chase: each Zenit swells and falls on its own uneven timing
+    const env = smooth(84.5, 85.5, T) * (1 - smooth(89.2, 90, T));
+    ZG.all.forEach((s, i) => {
+      const v = full ? wander('dc' + i, dt, 0, 1, 0.2, 1.0, 0.16) : wander('dc' + i, dt, 0, 1, 0.7, 1.6, 0.45);
+      s.hold = (s === ZN.C ? 0.4 : 0.6) * env * Math.pow(v, 2.5);
+    });
+  } else if (T >= 90 && T < 97) {
+    // 20 Far beam: a slow dim in while it zooms out
+    const u = ease((T - 90) / 7);
+    side = u * candle('S', dt); SIDE.zoom = 1.5 + 9.5 * u;
+  } else if (T >= 97 && T < 102) {
+    // 21 Front, centre, back in steps, reversing at random, the steps and the gaps uneven, under the open far beam
+    side = 1; SIDE.zoom = 11;
+    if (go) {
+      if (Math.random() < 0.7) seq.n = 1 - seq.n;
+      const steps = seq.n ? [ZG.back, ZG.center, ZG.front] : [ZG.front, ZG.center, ZG.back];
+      let at = T;
+      steps.forEach((g) => { const a = amp01(); seq.q.push([at, () => zen(g, 0.9 * a)]); at += jit(0.16, 0.5); });
+      seqAfter(T, jit(1.2, 0.5));
+    }
+  } else if (T >= 102 && T < 106) {
+    // 22 A random group fires two or three times quickly, then a gap
+    side = 1; SIDE.zoom = 11;
+    if (go) {
+      const pick = [ZG.left, ZG.right, ZG.diagA, ZG.diagB, ZG.center, ZG.front, ZG.back][(Math.random() * 7) | 0];
+      const k = 2 + (Math.random() < 0.4 ? 1 : 0);
+      for (let i = 0; i < k; i++) seq.q.push([T + i * jit(0.055, 0.4), () => zen(pick, amp01())]);
+      seqAfter(T, 0.4 + Math.random() * 0.5);
+    }
+  } else if (T >= 106 && T < 112.5) {
+    // 23 Far beam fades out unevenly: it dips, catches and sinks again on the way down
+    side = (1 - ease((T - 106) / 6.5)) * rough('sf', dt, 0.55); SIDE.zoom = 11;
+  } else if (T >= 112.5 && T < 114.5) {
+    // 24 The room flooded white by the Atomic and the Zenits, shaking unevenly, then cut
+    const k = smooth(112.5, 112.8, T);
+    atomic.hold = 0.16 * k * rough('fa', dt, 0.4);
+    ZG.all.forEach((s, i) => { s.hold = 0.55 * k * rough('fz' + i, dt, 0.45); });
   }
   seqAir(T);
   MID.lv = Math.max(mid, MID.fl, MID.fs);
-  LEFT.lv = Math.max(lr, LEFT.fl, LEFT.fs);
-  RIGHT.lv = Math.max(lr, RIGHT.fl, RIGHT.fs);
+  LEFT.lv = Math.max(lrL >= 0 ? lrL : lr, LEFT.fl, LEFT.fs);
+  RIGHT.lv = Math.max(lrR >= 0 ? lrR : lr, RIGHT.fl, RIGHT.fs);
   SIDE.lv = side;
+  // Move in black: a stage head that is still travelling stays dark
+  for (const h of [MID, LEFT, RIGHT]) if (Math.abs(h.vPan) + Math.abs(h.vTilt) > 0.03) h.lv = 0;
 }
 // Haze, fog and blower ride with the sequence (like motor faders) unless moved by hand
 function seqAir(T) {
   if (seq.atmosHand) return;
-  const k1 = smooth(3, 40, T), k2 = smooth(40, 58, T);
+  const k1 = smooth(3, 81, T), k2 = smooth(81, 113, T);
   const fz = 0.45 + 0.45 * k1 + 0.1 * k2, hz = 0.45 + 0.35 * k1 + 0.2 * k2, bz = 0.45 + 0.35 * k1 + 0.2 * k2;
   if (Math.abs(fz - fogLevel) > 0.004 || Math.abs(hz - hazeLevel) > 0.004 || Math.abs(bz - motionLevel) > 0.004) {
     fogLevel = fz; hazeLevel = hz; motionLevel = bz;
@@ -2640,6 +2839,9 @@ function seqStrobes(dt) {
   }
   seq.hits.length = 0;
   for (const s of strobes) {
+    // held levels (washes, dimmer chases, floods) follow their target smoothly; a cut is quick
+    s.holdNow += (s.hold - s.holdNow) * (1 - Math.exp(-dt / (full ? 0.04 : 0.25)));
+    s.level = Math.max(s.level, s.holdNow);
     s.softT *= Math.exp(-dt / 0.3);
     s.soft += (Math.max(s.softT, seq.swell * (s === atomic ? 0.02 : 0.26)) - s.soft) * (1 - Math.exp(-dt / 0.08));
     s.level = Math.max(s.level, s.soft);
@@ -2652,7 +2854,7 @@ function headDefaults() {
     h.tPan = h.def.pan; h.tTilt = h.def.tilt;
     h.lv = 1; h.fl = 0; h.fs = 0; h.flT = 0;
   }
-  for (const s of strobes) { s.soft = 0; s.softT = 0; s.level = 0; }
+  for (const s of strobes) { s.soft = 0; s.softT = 0; s.level = 0; s.hold = 0; s.holdNow = 0; }
   syncConsole(true);
 }
 function seqLine() {
@@ -2662,7 +2864,7 @@ function seqLine() {
 // On or off, the rig starts from its defaults; off leaves it there
 function setSeq(on) {
   seq.on = !!on;
-  Object.assign(seq, { t: 0, cue: -1, next: 0, ph: 0, phN: -1, n: 0, swell: 0 });
+  Object.assign(seq, { t: 0, prevT: 0, cue: -1, next: 0, ph: 0, phN: -1, n: 0, swell: 0 });
   seq.q.length = 0; seq.hits.length = 0;
   headDefaults();
   if (!seq.on) {
@@ -3207,7 +3409,7 @@ window.hd3 = {
   setBlower: (v) => { motionLevel = clamp(v, 0, 1); el.blower.value = Math.round(motionLevel * 100); el.blowerV.textContent = el.blower.value; },
   get puffs() { return puffs.length; },
   get seq() { return { on: seq.on, t: +seq.t.toFixed(2), cue: seq.cue + 1, room: +roomLight.toFixed(2), lv: heads.map((h) => +h.lv.toFixed(2)), strobes: strobes.map((s) => +s.level.toFixed(2)), sideZoom: +SIDE.zoom.toFixed(1), air: [+hazeLevel.toFixed(2), +fogLevel.toFixed(2)], hand: seq.atmosHand }; },
-  setSeq, seqJump: (t) => { seq.t = t; seq.cue = -1; seq.next = t; },
+  setSeq, seqJump: (t) => { seq.t = t; seq.prevT = t; seq.cue = -1; seq.next = t; },
   puffList: (n = 8) => puffs.slice(-n).map((P) => [+P.x.toFixed(2), +P.y.toFixed(2), +P.z.toFixed(2), +P.age.toFixed(2), +pfA[puffs.indexOf(P)].toFixed(3)]),
   project: (x, y, z) => { const v = new THREE.Vector3(x, y, z).project(camera); return [Math.round((v.x + 1) / 2 * innerWidth), Math.round((1 - v.y) / 2 * innerHeight), +v.z.toFixed(4)]; },
   get nav() { return { active: nav.active, yaw: +nav.yaw.toFixed(3), pitch: +nav.pitch.toFixed(3), pos: cam.pos.toArray().map((v) => +v.toFixed(2)) }; },
