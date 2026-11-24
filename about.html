@@ -50,7 +50,7 @@ button,
 input,
 textarea,
 select {
-    cursor: url('works/UI/Star.png'), auto !important;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Ccircle cx='5' cy='5' r='3' fill='white'/%3E%3C/svg%3E") 5 5, auto !important;
 }
 
 body, html {
@@ -77,6 +77,7 @@ body, html {
 }
 .home-logo img { display: block; width: 36px; height: 36px; }
 .home-logo:hover { transform: rotate(-24deg); }
+.home-logo::before { content: ''; position: absolute; inset: -14px; }
 
 .navbar {
     position: fixed;
@@ -115,7 +116,7 @@ body, html {
     width: calc(100% + 60px);
     height: calc(100% + 40px);
     pointer-events: auto;
-    cursor: url('works/UI/Star.png'), auto;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Ccircle cx='5' cy='5' r='3' fill='white'/%3E%3C/svg%3E") 5 5, auto;
 }
 
 /* ======================== */
@@ -161,10 +162,12 @@ body, html {
     border-radius: 50%;
     background-color: white;
     filter: blur(90px) brightness(1);
-    transform: translate(-50%, -50%);
+    translate: -50% -50%;
     z-index: 9998;
     animation: flickerPC 0.25s infinite;
+    transition: scale 0.25s ease;
 }
+.beam.small { scale: 0.35; }
 
 @media (max-width: 768px) {
     .beam {
@@ -592,7 +595,8 @@ const BEAM_RADIUS = 90;
 const MOBILE_BEAM_RADIUS = 50;
 
 function updateBeam(x, y) {
-    beam.style.transform = `translate(${x - beam.offsetWidth/2}px, ${y - beam.offsetHeight/2}px)`;
+    // translate (not transform) so the scale on .beam.small shrinks around the beam's own centre
+    beam.style.translate = `${x - beam.offsetWidth/2}px ${y - beam.offsetHeight/2}px`;
     const radius = window.innerWidth <= 768 ? MOBILE_BEAM_RADIUS : BEAM_RADIUS;
     chars.forEach(char => {
         const rect = char.getBoundingClientRect();
@@ -604,6 +608,15 @@ function updateBeam(x, y) {
 }
 
 document.addEventListener("mousemove", e => updateBeam(e.clientX, e.clientY));
+
+let overLogo = false, pressed = false;
+const syncBeamSize = () => beam.classList.toggle("small", overLogo || pressed);
+const homeLogo = document.querySelector(".home-logo");
+homeLogo.addEventListener("mouseenter", () => { overLogo = true; syncBeamSize(); });
+homeLogo.addEventListener("mouseleave", () => { overLogo = false; syncBeamSize(); });
+document.addEventListener("mousedown", e => { if (e.button === 0) { pressed = true; syncBeamSize(); } });
+document.addEventListener("mouseup", e => { if (e.button === 0) { pressed = false; syncBeamSize(); } });
+window.addEventListener("blur", () => { pressed = false; syncBeamSize(); });
 document.addEventListener("touchmove", e => {
     const t = e.touches[0];
     if (!t) return;

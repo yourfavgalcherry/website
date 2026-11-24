@@ -42,6 +42,7 @@ body {
 }
 .home-logo img { display: block; width: 36px; height: 36px; }
 .home-logo:hover { transform: rotate(-24deg); }
+.home-logo::before { content: ''; position: absolute; inset: -14px; }
 
 .navbar {
     position: fixed;
@@ -71,7 +72,7 @@ body {
     width: calc(100% + 60px);
     height: calc(100% + 40px);
     pointer-events: auto;
-    cursor: url('../UI/Star.png'), auto;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Ccircle cx='5' cy='5' r='3' fill='white'/%3E%3C/svg%3E") 5 5, auto;
 }
 /* ======================== */
 /*   모바일 네비게이션 축소 */
