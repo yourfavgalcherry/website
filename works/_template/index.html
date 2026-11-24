@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+  New project:
+  1. Copy this whole _template folder into works/ and rename it, e.g. works/my-project/ (lowercase, hyphens)
+  2. Put the images in that folder, plus a cover image named cover.jpg (shown when hovering the name on the Work page)
+  3. Edit the title, the meta line, the text and the <img> lines below
+  4. In work.html, add one <li> line at the top of the list (newest first):
+     <li><a href="works/my-project/index.html" data-cover="works/my-project/cover.jpg"><span class="w-title">Project title</span><span class="w-cat">Light Design</span><span class="w-year">2026</span></a></li>
+  Folders starting with _ are not published, so this template never appears on the site.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project title — Chaery Yoon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../works.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="home-logo" href="../../index.html" aria-label="Home"><img src="../../img/monogram.png" alt="" width="36" height="36"></a>
+  <nav class="nav"><a href="../../work.html" aria-current="page">WORK</a><a href="../../about.html">ABOUT</a></nav>
+</header>
+
+<main class="proj">
+  <h1>Project title</h1>
+  <p class="proj-meta">Light Design · Berlin, 2026 | <a target="_blank" rel="noopener" href="https://example.com">Event Link</a></p>
+  <div class="proj-text">
+    <p>A paragraph about the project.</p>
+  </div>
+  <div class="proj-images">
+    <img src="1.jpg" alt="Project title 01" loading="lazy">
+    <img src="2.jpg" alt="Project title 02" loading="lazy">
+  </div>
+  <a class="back" href="../../work.html">← All work</a>
+</main>
+
+<script src="../works.js"></script>
+</body>
+</html>

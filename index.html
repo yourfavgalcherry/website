@@ -245,7 +245,7 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
 </header>
 <nav class="c c-tr" aria-label="Sections">
   <button type="button" class="to-room" id="to-room" hidden><i>(×)</i>Room</button>
-  <!-- Work temporarily unlisted while being reworked -->
+  <a href="work.html">WORK</a>
   <a href="about.html">ABOUT</a>
 </nav>
 <div class="c c-bl needs-gl">
@@ -366,6 +366,8 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
 <script>
 /* Site behaviour that does not need WebGL: the two sheets, reloading, the image viewer */
 (function () {
+  // Show just the domain, not /index.html (only when served over http)
+  if (location.protocol.startsWith('http') && location.pathname.endsWith('/index.html')) history.replaceState(null, '', location.pathname.slice(0, -10) + location.search + location.hash);
   const $ = (s) => document.querySelector(s);
   const body = document.body;
   window.__heroHidden = false;

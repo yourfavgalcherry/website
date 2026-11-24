@@ -81,13 +81,16 @@ body, html {
 
 .navbar {
     position: fixed;
-    top: 20px;
+    top: 22px;
     right: 20px;
     z-index: 10000;
+    display: flex;
+    gap: 24px;
 }
 
 .navbar a {
-    color: var(--grey);
+    position: relative;
+    color: var(--text);
     text-decoration: none;
     font-size: 14px;
     font-family: var(--sans);
@@ -103,7 +106,8 @@ body, html {
 }
 
 .navbar a.beam-hover,
-.navbar a:hover {
+.navbar a:hover,
+.navbar a[aria-current="page"] {
     color: white !important;
     text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
 }
@@ -111,10 +115,7 @@ body, html {
 .navbar a::before {
     content: '';
     position: absolute;
-    top: -30px;
-    left: -50px;
-    width: calc(100% + 60px);
-    height: calc(100% + 40px);
+    inset: -12px -10px;
     pointer-events: auto;
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Ccircle cx='5' cy='5' r='3' fill='white'/%3E%3C/svg%3E") 5 5, auto;
 }
@@ -140,11 +141,8 @@ body, html {
     }
 
     /* 터치 영역도 같이 줄여줌 (before 영역) */
-    .navbar a::before {
-        top: -18px;
-        left: -28px;
-        width: calc(100% + 36px);
-        height: calc(100% + 30px);
+    .navbar {
+        gap: 16px;
     }
 }
 
@@ -213,7 +211,7 @@ body, html {
 /* ======================== */
 .intro-text {
     max-width: 800px;
-    margin: 150px auto 10px auto;
+    margin: 230px auto 10px auto;
     font-size: 0.95rem;
     line-height: 1.5;
     font-family: var(--sans);
@@ -310,14 +308,31 @@ body, html {
   letter-spacing: 0.11em;
 }
 .contact-email {
-  margin-top: 3px;
+  margin-top: 10px;
   font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  color: var(--text);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: var(--grey);
   user-select: text;
   -webkit-user-select: text;
-  cursor: text;
+  display: inline-block;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Ccircle cx='5' cy='5' r='3' fill='white'/%3E%3C/svg%3E") 5 5, pointer;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+.contact-email:hover {
+  color: white;
+  text-shadow: 0 0 8px rgba(255,255,255,0.6);
+}
+.copied {
+  margin-left: 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--grey);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.copied.on {
+  opacity: 1;
 }
 
 /* ======================== */
@@ -407,11 +422,8 @@ body, html {
     }
 
     /* 터치 영역도 같이 줄여줌 (before 영역) */
-    .navbar a::before {
-        top: -18px;
-        left: -28px;
-        width: calc(100% + 36px);
-        height: calc(100% + 30px);
+    .navbar {
+        gap: 16px;
     }
 }
 
@@ -425,7 +437,7 @@ body, html {
         font-weight: 400;
         font-size: 0.80rem;
         line-height: 1.4;
-        margin-top: 60px;
+        margin-top: 110px;
         margin-bottom: 20px;
         white-space: normal;
     }
@@ -473,7 +485,8 @@ body, html {
 
 <a class="home-logo" href="index.html" aria-label="Home"><img src="img/monogram.png" alt="" width="36" height="36"></a>
 <nav class="navbar">
-<!-- Work temporarily unlisted while being reworked -->
+<a href="work.html">WORK</a>
+<a href="about.html" aria-current="page">ABOUT</a>
 </nav>
 
 <div class="beam"></div>
@@ -519,7 +532,7 @@ lighting systems (GrandMA2/3, Capture) in her practice.</p>
       @chaery.yoon
     </a>
   </div>
-  <div class="contact-email">chaeryyoon.de@gmail.com</div>
+  <div><span class="contact-email" role="button" tabindex="0" title="Click to copy">chaeryyoon.de@gmail.com</span><span class="copied" aria-live="polite"></span></div>
 
   <h3>Full cv / Any inquiries:</h3>
 
@@ -580,6 +593,26 @@ const allowCopy = e => {
 };
 document.addEventListener("selectstart", e => { if (!allowCopy(e)) e.preventDefault(); });
 document.addEventListener("contextmenu", e => { if (!allowCopy(e)) e.preventDefault(); });
+
+// Clicking the email copies it; the clipboard API needs https, so fall back to selecting and copying
+const emailEl = document.querySelector(".contact-email");
+const copiedEl = document.querySelector(".copied");
+let copiedTimer = 0;
+async function copyEmail() {
+  const text = emailEl.textContent.trim();
+  let ok = false;
+  try { await navigator.clipboard.writeText(text); ok = true; } catch (e) {
+    const r = document.createRange(); r.selectNodeContents(emailEl);
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    ok = document.execCommand("copy"); s.removeAllRanges();
+  }
+  copiedEl.textContent = ok ? "Copied" : "Copy failed";
+  copiedEl.classList.add("on");
+  clearTimeout(copiedTimer);
+  copiedTimer = setTimeout(() => copiedEl.classList.remove("on"), 1600);
+}
+emailEl.addEventListener("click", () => { if (!getSelection().toString()) copyEmail(); });
+emailEl.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); copyEmail(); } });
 
 function wrapText(p) {
     const text = p.textContent;
@@ -650,8 +683,8 @@ if (inquiryForm) {
   });
 }
 
-if (window.location.pathname === "/about.html") {
-  window.history.replaceState({}, "", "/about");
+if (location.protocol.startsWith("http") && location.pathname.endsWith("/about.html")) {
+  history.replaceState(null, "", location.pathname.slice(0, -5) + location.search + location.hash);
 }
 
 </script>

@@ -3,537 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Work</title>
-
+<title>Work — Chaery Yoon</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap">
-
-<style>
-
-:root{
-  --black:#000;
-  --white:#fff;
-  --text:#e4e4e4;
-  --grey:#8d8d8d;
-  --dim:#5e5e5e;
-  --sans:"Inter","Helvetica Neue",Helvetica,"Nimbus Sans","Nimbus Sans L",FreeSans,Arial,sans-serif;
-  --mono:var(--sans);
-  --serif:var(--sans);
-}
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body{
-    background:black;
-    font-family:var(--sans);
-    font-size:16px;
-    color:var(--text);
-    overflow-x:hidden;
-    cursor:none;
-    user-select:none;
-}
-
-a{
-    color:inherit;
-    text-decoration:none;
-}
-
-a,
-button,
-input,
-textarea,
-select {
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Ccircle cx='5' cy='5' r='3' fill='white'/%3E%3C/svg%3E") 5 5, auto !important;
-}
-
-::-webkit-scrollbar{width:0;height:0;}
-
-/* ======================== */
-/*      왼쪽 상단 로고      */
-/* ======================== */
-.home-logo {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 10000;
-    display: block;
-    width: 36px;
-    height: 36px;
-    filter: drop-shadow(0 0 8px rgba(0,0,0,.8));
-    transition: transform .5s ease;
-}
-.home-logo img { display: block; width: 36px; height: 36px; }
-.home-logo:hover { transform: rotate(-24deg); }
-.home-logo::before { content: ''; position: absolute; inset: -14px; }
-
-/* ======================== */
-/*      오른쪽 상단 About   */
-/* ======================== */
-.navbar {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 10000;
-}
-
-.navbar a {
-    color: var(--grey);
-    text-decoration: none;
-    font-size: 14px;
-    font-family: var(--sans);
-    font-weight: 400;
-    cursor: none;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-
-.navbar a i {
-    font: 11px var(--mono);
-    font-style: normal;
-    color: var(--dim);
-    margin-right: 6px;
-}
-
-.navbar a.beam-hover,
-.navbar a:hover {
-    color: white !important;
-    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white;
-}
-
-.navbar a::before {
-    content: '';
-    position: absolute;
-    top: -30px;
-    left: -50px;
-    width: calc(100% + 60px);
-    height: calc(100% + 40px);
-    pointer-events: auto;
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Ccircle cx='5' cy='5' r='3' fill='white'/%3E%3C/svg%3E") 5 5, auto;
-}
-
-/* ======================== */
-/*   모바일 네비게이션 축소 */
-/* ======================== */
-@media (max-width: 768px) {
-    .home-logo {
-        top: 14px;
-        left: 14px;
-    }
-
-    .navbar {
-        top: 14px;        /* 살짝 위로 */
-        right: 14px;      /* 가장자리 여백 줄이기 */
-    }
-
-    .navbar a {
-        font-size: 14px;
-        font-weight: 500;
-        letter-spacing: -0.01em;
-    }
-
-    /* 터치 영역도 같이 줄여줌 (before 영역) */
-    .navbar a::before {
-        top: -18px;
-        left: -28px;
-        width: calc(100% + 36px);
-        height: calc(100% + 30px);
-    }
-}
-
-
-/* ================= BEAM (PC) ================= */
-.beam{
-    position:fixed;
-    top:0;
-    left:0;
-    width:360px;
-    height:360px;
-    border-radius:50%;
-    pointer-events:none;
-    background:rgba(255,255,255,.22);
-    filter:blur(95px);
-    z-index:9998;
-    animation:flicker .9s infinite;
-}
-@keyframes flicker{
-    0%,100%{opacity:.85}
-    50%{opacity:1}
-}
-
-/* ================= UPDATING NOTICE ================= */
-.works-updating{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:0 24px;
-    font-family:var(--serif);
-    font-size:18px;
-    color:var(--grey);
-    letter-spacing:.02em;
-}
-
-/* ================= GRID ================= */
-.works-wrapper{
-    padding:110px 50px 60px;
-}
-.works-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(460px,1fr));
-    gap:40px;
-}
-.work-card{
-    position:relative;
-    overflow:hidden;
-    aspect-ratio:4/5;
-}
-
-/* gray base */
-.img-gray{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    filter:grayscale(100%) brightness(.85);
-}
-
-/* color layer (PC mask) */
-.img-color{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    pointer-events:none;
-    mask-image:radial-gradient(circle 0px at 50% 50%,black 0%,transparent 100%);
-    -webkit-mask-image:radial-gradient(circle 0px at 50% 50%,black 0%,transparent 100%);
-    transition:.35s;
-}
-
-/* text */
-.work-text{
-    position:absolute;
-    font-family: var(--sans);
-    bottom:50px;
-    left:50%;
-    transform:translateX(-50%);
-    font-weight:400;
-    letter-spacing: .01em;
-    font-size:17px;
-    color:rgba(255,255,255,0);
-    transition:.35s;
-    cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Ccircle cx='5' cy='5' r='3' fill='white'/%3E%3C/svg%3E") 5 5, auto;
-    z-index:9999;
-    padding:0 8px; /* 좌우 여백 좁힘 */
-    text-align:center;
-    word-break: break-word;
-}
-
-.work-text::before{
-    content:"";
-    position:absolute;
-    inset:-40px -80px;
-    pointer-events:auto;
-}
-
-.work-card:hover .work-text{
-    opacity:1;
-}
-.work-text:hover{
-    color:white;
-    text-shadow:0 0 10px white,0 0 20px white,0 0 40px white;
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Ccircle cx='5' cy='5' r='3' fill='white'/%3E%3C/svg%3E") 5 5, auto;
-    z-index: 9999;
-}
-
-
-/* ======================== */
-/*        슬라이드 푸터     */
-/* ======================== */
-.footer-marquee {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  padding: 8px 0;
-  background: transparent;   /* 배경 투명 유지 */
-  border: none;              /* 테두리 없음 */
-  z-index: 9999;
-  pointer-events: none;
-}
-
-.marquee-text {
-  overflow: clip;
-}
-
-.marquee-text-track {
-  display: flex;
-  align-items: center;
-  gap: 5rem;               /* 문장 사이 기본 간격 */
-  width: max-content;
-  will-change: transform;
-  animation: marquee-move-text var(--speed, 40s) linear infinite;
-}
-
-/* 텍스트만 */
-.marquee-text-track span {
-  font-family: var(--sans);
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: rgba(218,218,218,0.75);
-  white-space: nowrap;
-
-  /* pill 스타일 없이 텍스트만 노출 */
-  background: none;
-  border: none;
-  padding: 0;
-}
-
-/* ✴︎ separator 전용 */
-.marquee-text-track .separator {
-  font-size: 0.75rem;
-  opacity: 0.6;
-  transform: translateY(-0.02em);
-}
-
-@keyframes marquee-move-text {
-  to { transform: translateX(-50%); }
-}
-
-/* fade out mask */
-.fadeout-horizontal {
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 4rem,
-    black calc(100% - 4rem),
-    transparent
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 4rem,
-    black calc(100% - 4rem),
-    transparent
-  );
-}
-
-
-/* ================= MOBILE ================= */
-@media(max-width:768px){
-
-    /* beam 모바일에서도 사용 */
-    .beam{
-        display:block;
-    }
-
-    /* 텍스트 — 기본 회색 */
-    .work-text{
-        opacity:1;
-        color: rgba(255,255,255,0.25);
-        font-size:14px;
-        bottom:24px;
-        width:calc(100% - 16px);
-        text-align:center;
-        transition: color .2s, text-shadow .2s;
-        pointer-events:auto;
-    }
-
-    /* 모바일도 mask 방식 사용 */
-    .img-color{
-        opacity:1;
-        mask-image: radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%);
-        -webkit-mask-image: radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%);
-        transition:.25s;
-    }
-
-    .works-wrapper{
-        padding:90px 15px 40px;
-    }
-
-    .works-grid{
-        grid-template-columns:1fr;
-        gap:24px;
-    }
-
-  .footer-marquee {
-    padding: 6px 0;
-  }
-
-  .marquee-text-track {
-    gap: 3rem;
-    animation-duration: 30s;
-  }
-
-  .marquee-text-track span {
-    font-size: 0.7rem;
-  }
-
-  .separator {
-    font-size: 0.65rem;
-  }
-
-  .fadeout-horizontal {
-    -webkit-mask-image: linear-gradient(
-      to right,
-      transparent,
-      black 2rem,
-      black calc(100% - 2rem),
-      transparent
-    );
-    mask-image: linear-gradient(
-      to right,
-      transparent,
-      black 2rem,
-      black calc(100% - 2rem),
-      transparent
-    );
-  }
-
-}
-
-</style>
+<link rel="stylesheet" href="works/works.css">
 </head>
-
 <body>
 
-<a class="home-logo" href="index.html" aria-label="Home"><img src="img/monogram.png" alt="" width="36" height="36"></a>
-<nav class="navbar">
-<a href="about.html">ABOUT</a>
-</nav>
+<header class="top">
+  <a class="home-logo" href="index.html" aria-label="Home"><img src="img/monogram.png" alt="" width="36" height="36"></a>
+  <nav class="nav"><a href="work.html" aria-current="page">WORK</a><a href="about.html">ABOUT</a></nav>
+</header>
 
-<div class="beam"></div>
+<main class="work">
+  <h1 class="sr-only">Work</h1>
+  <div class="work-head" aria-hidden="true"><span>Project</span><span>Category</span><span>Year</span></div>
+  <!-- One <li> per project, newest first. To add one, see README.md -->
+  <ul class="work-list">
+    <li><a href="works/creamcake-3hd-2026/index.html"><span class="w-title">Creamcake 3hd 2026: Beyond Imagining</span><span class="w-cat">Light Design</span><span class="w-year">2026</span></a></li>
+    <li><a href="works/scribble-silent-green/index.html"><span class="w-title">scribble.mp3: silent green</span><span class="w-cat">Light Design</span><span class="w-year">2026</span></a></li>
+    <li><a href="works/the-flip/index.html" data-cover="works/the-flip/1.jpg"><span class="w-title">THE FLIP: Transmoderna</span><span class="w-cat">Light Design</span><span class="w-year">2026</span></a></li>
+    <li><a href="works/kontext-2-years/index.html"><span class="w-title">KONTEXT: 2 Years</span><span class="w-cat">Light Design</span><span class="w-year">2026</span></a></li>
+    <li><a href="works/kyiv-biennial/index.html" data-cover="works/kyiv-biennial/cover.jpg"><span class="w-title">Kyiv Biennial: KW</span><span class="w-cat">Light Design</span><span class="w-year">2025</span></a></li>
+    <li><a href="works/kontext/index.html" data-cover="works/kontext/cover.jpg"><span class="w-title">KONTEXT: GS present</span><span class="w-cat">Light Design</span><span class="w-year">2025</span></a></li>
+    <li><a href="works/one-year-of-endless-clubbing/index.html" data-cover="works/one-year-of-endless-clubbing/cover.jpg"><span class="w-title">One Year of Endless Clubbing</span><span class="w-cat">Light Design</span><span class="w-year">2025</span></a></li>
+    <li><a href="works/buttechno/index.html" data-cover="works/buttechno/cover.png"><span class="w-title">Buttechno: Live</span><span class="w-cat">Light Design</span><span class="w-year">2026</span></a></li>
+    <li><a href="works/creamcake-3hd-2025/index.html" data-cover="works/creamcake-3hd-2025/cover.jpg"><span class="w-title">Creamcake 3hd 2025: Vertigo</span><span class="w-cat">Previz &amp; Laser Operation</span><span class="w-year">2025</span></a></li>
+    <li><a href="works/asid/index.html" data-cover="works/asid/cover.jpg"><span class="w-title">ASID: Drowned God</span><span class="w-cat">Light Design</span><span class="w-year">2025</span></a></li>
+    <li><a href="works/massive-gain/index.html" data-cover="works/massive-gain/cover.jpg"><span class="w-title">[8]: MASSIVE GAIN &amp; KONTEXT</span><span class="w-cat">Light Design</span><span class="w-year">2025</span></a></li>
+    <li><a href="works/luna/index.html" data-cover="works/luna/cover.jpg"><span class="w-title">unguarded x LUNA</span><span class="w-cat">Light Design</span><span class="w-year">2025</span></a></li>
+    <li><a href="works/semiotics-of-light/index.html" data-cover="works/semiotics-of-light/cover.png"><span class="w-title">The Semiotics of Light</span><span class="w-cat">Light Installation</span><span class="w-year">2025</span></a></li>
+    <li><a href="works/luminal-screening/index.html" data-cover="works/luminal-screening/cover.jpg"><span class="w-title">TOO SOON TO SAY: Luminal</span><span class="w-cat">Exhibition</span><span class="w-year">2025</span></a></li>
+    <li><a href="works/luminal-vr/index.html" data-cover="works/luminal-vr/cover.jpeg"><span class="w-title">Luminal: First-Person VR Simulation</span><span class="w-cat">Artwork</span><span class="w-year">2025</span></a></li>
+    <li><a href="works/tincon/index.html" data-cover="works/tincon/cover.jpg"><span class="w-title">TINCON: re:publica</span><span class="w-cat">Light Installation</span><span class="w-year">2025</span></a></li>
+    <li><a href="works/oxydoom/index.html" data-cover="works/oxydoom/cover.jpg"><span class="w-title">Oxydoom</span><span class="w-cat">Light Object Design</span><span class="w-year">2023</span></a></li>
+    <li><a href="works/ableton/index.html" data-cover="works/ableton/cover.jpg"><span class="w-title">Ableton x MUTEK: Push3</span><span class="w-cat">Light Design</span><span class="w-year">2025</span></a></li>
+  </ul>
+</main>
 
-<div class="works-updating">Work is being updated — check back soon.</div>
-
-<!-- Grid hidden while work is being reworked; left in place (and still auto-rebuilt) so it can be restored by removing this display:none -->
-<div class="works-wrapper" style="display:none">
-<div class="works-grid">
-
-<!-- WORKS_GRID_START (auto-generated by zine-builder/build-works.js, do not hand-edit between these markers) -->
-<div class="work-card">
-<img class="img-gray" src="works/assets/KW_Kyiv_Biennial.jpg">
-<img class="img-color" src="works/assets/KW_Kyiv_Biennial.jpg">
-<a href="works/projects/KW_Kyiv_Biennial/KW_Kyiv_Biennial.html" class="work-text">
-Kyiv Biennial | KW
-</a>
-</div>
-
-<div class="work-card">
-<img class="img-gray" src="works/assets/Kontext.jpg">
-<img class="img-color" src="works/assets/Kontext.jpg">
-<a href="works/projects/Kontext/Kontext.html" class="work-text">
-KONTEXT &amp; GS present
-</a>
-</div>
-
-<div class="work-card">
-<img class="img-gray" src="works/assets/OneYearofEndlessClubbing.jpg">
-<img class="img-color" src="works/assets/OneYearofEndlessClubbing.jpg">
-<a href="works/projects/OneYearofEndlessClubbing/OneYearofEndlessClubbing.html" class="work-text">
-One Year of Endless Clubbing
-</a>
-</div>
-
-<div class="work-card">
-<img class="img-gray" src="works/assets/Buttechno_kuboraum.png">
-<img class="img-color" src="works/assets/Buttechno_kuboraum.png">
-<a href="works/projects/Buttechno_kuboraum/Buttechno_kuboraum.html" class="work-text">
-Buttechno Live
-</a>
-</div>
-
-<div class="work-card">
-<img class="img-gray" src="works/assets/creamcake.jpg">
-<img class="img-color" src="works/assets/creamcake.jpg">
-<a href="works/projects/creamcake/creamcake.html" class="work-text">
-Creamcake 3hd 2025: Vertigo
-</a>
-</div>
-
-<div class="work-card">
-<img class="img-gray" src="works/assets/ASID.jpg">
-<img class="img-color" src="works/assets/ASID.jpg">
-<a href="works/projects/ASID/ASID.html" class="work-text">
-ASID: Drowned God
-</a>
-</div>
-
-<div class="work-card">
-<img class="img-gray" src="works/assets/club8.jpg">
-<img class="img-color" src="works/assets/club8.jpg">
-<a href="works/projects/club8/club8.html" class="work-text">
-[8]: MASSIVE GAIN &amp; Kontext
-</a>
-</div>
-
-<div class="work-card">
-<img class="img-gray" src="works/assets/Luna.jpg">
-<img class="img-color" src="works/assets/Luna.jpg">
-<a href="works/projects/Luna/Luna.html" class="work-text">
-unguarded x LUNA
-</a>
-</div>
-
-<div class="work-card">
-<img class="img-gray" src="works/assets/Thesis.png">
-<img class="img-color" src="works/assets/Thesis.png">
-<a href="works/projects/Thesis/Thesis.html" class="work-text">
-The Semiotics of Light
-</a>
-</div>
-
-<div class="work-card">
-<img class="img-gray" src="works/assets/Luminal_screening.jpg">
-<img class="img-color" src="works/assets/Luminal_screening.jpg">
-<a href="works/projects/Luminal_screening/Luminal_screening.html" class="work-text">
-TOO SOON TO SAY: Luminal
-</a>
-</div>
-
-<div class="work-card">
-<img class="img-gray" src="works/assets/Luminal_vr.jpeg">
-<img class="img-color" src="works/assets/Luminal_vr.jpeg">
-<a href="works/projects/Luminal_vr/Luminal_vr.html" class="work-text">
-Luminal, first-person VR simulation
-</a>
-</div>
-
-<div class="work-card">
-<img class="img-gray" src="works/assets/TINCON.jpg">
-<img class="img-color" src="works/assets/TINCON.jpg">
-<a href="works/projects/TINCON/TINCON.html" class="work-text">
-Light Installation, TINCON/re:publica
-</a>
-</div>
-
-<div class="work-card">
-<img class="img-gray" src="works/assets/Oxydoom.jpg">
-<img class="img-color" src="works/assets/Oxydoom.jpg">
-<a href="works/projects/Oxydoom/Oxydoom.html" class="work-text">
-Light Object, Oxydoom
-</a>
-</div>
-
-<div class="work-card">
-<img class="img-gray" src="works/assets/Ableton.jpg">
-<img class="img-color" src="works/assets/Ableton.jpg">
-<a href="works/projects/Ableton/Ableton.html" class="work-text">
-Ableton x MUTEK Push3
-</a>
-</div>
-<!-- WORKS_GRID_END -->
-
-</div>
-</div>
-
-<footer class="footer-marquee fadeout-horizontal">
+<footer class="footer-marquee">
   <div class="marquee-text" aria-label="copyright marquee">
     <div class="marquee-text-track">
-      <!-- set A -->
       <span>© 2026 Chaery Yoon. All rights reserved.</span>
       <span class="separator">✴︎</span>
       <span>© 2026 Chaery Yoon. All rights reserved.</span>
@@ -541,7 +52,6 @@ Ableton x MUTEK Push3
       <span>© 2026 Chaery Yoon. All rights reserved.</span>
       <span class="separator">✴︎</span>
 
-      <!-- set B (duplicate) -->
       <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
       <span class="separator" aria-hidden="true">✴︎</span>
       <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
@@ -549,111 +59,16 @@ Ableton x MUTEK Push3
       <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
       <span class="separator" aria-hidden="true">✴︎</span>
 
-      <!-- set C (extra for large screens) -->
       <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
       <span class="separator" aria-hidden="true">✴︎</span>
       <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
       <span class="separator" aria-hidden="true">✴︎</span>
       <span aria-hidden="true">© 2026 Chaery Yoon. All rights reserved.</span>
-     <span class="separator" aria-hidden="true">✴︎</span>
-
-
+      <span class="separator" aria-hidden="true">✴︎</span>
     </div>
   </div>
 </footer>
 
-
-<script>
-/* ===== PC beam interaction only ===== */
-if(window.innerWidth > 768){
-    const beam=document.querySelector(".beam");
-    const cards=document.querySelectorAll(".work-card");
-
-    document.addEventListener("mousemove",e=>{
-        const x=e.clientX;
-        const y=e.clientY;
-
-        beam.style.transform=`translate(${x-180}px,${y-180}px)`;
-
-        cards.forEach(card=>{
-            const rect=card.getBoundingClientRect();
-            const img=card.querySelector(".img-color");
-            const lx=x-rect.left;
-            const ly=y-rect.top;
-
-            if(lx>=0 && lx<=rect.width && ly>=0 && ly<=rect.height){
-                img.style.maskImage=`radial-gradient(circle 450px at ${lx}px ${ly}px, black 0%, transparent 60%)`;
-                img.style.webkitMaskImage=img.style.maskImage;
-            }else{
-                img.style.maskImage=`radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%)`;
-                img.style.webkitMaskImage=img.style.maskImage;
-            }
-        });
-    });
-}
-
-/* ===== MOBILE click to reveal color + text ===== */
-/* ===== MOBILE beam touch interaction ===== */
-if(window.innerWidth <= 768){
-
-    const beam = document.querySelector(".beam");
-    const cards = document.querySelectorAll(".work-card");
-
-    function updateBeam(x,y){
-
-        beam.style.transform = `translate(${x-180}px,${y-180}px)`;
-
-        cards.forEach(card=>{
-            const rect = card.getBoundingClientRect();
-            const img = card.querySelector(".img-color");
-            const text = card.querySelector(".work-text");
-
-            const lx = x - rect.left;
-            const ly = y - rect.top;
-
-            if(lx>=0 && lx<=rect.width && ly>=0 && ly<=rect.height){
-
-                const mask = `radial-gradient(circle 420px at ${lx}px ${ly}px, black 0%, transparent 100%)`;
-
-                img.style.maskImage = mask;
-                img.style.webkitMaskImage = mask;
-
-                /* 텍스트 glow */
-                text.style.color = "white";
-                text.style.textShadow =
-                    "0 0 10px white, 0 0 20px white, 0 0 40px white";
-
-            } else {
-
-                img.style.maskImage =
-                  `radial-gradient(circle 0px at 50% 50%, black 0%, transparent 100%)`;
-                img.style.webkitMaskImage = img.style.maskImage;
-
-                text.style.color = "rgba(255,255,255,0.25)";
-                text.style.textShadow = "none";
-            }
-        });
-    }
-
-    document.addEventListener("touchstart", e=>{
-        const t = e.touches[0];
-        updateBeam(t.clientX, t.clientY);
-    });
-
-    document.addEventListener("touchmove", e=>{
-        const t = e.touches[0];
-        updateBeam(t.clientX, t.clientY);
-    });
-
-
-  +
-   window.history.replaceState({}, "", "/works");
-}
-
-
-
-</script>
-
+<script src="works/works.js"></script>
 </body>
 </html>
-
