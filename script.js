@@ -23,11 +23,11 @@ if (customCursor) {
 }
 
 // ============================
-// ✅ 스트로브 컬러 (요청 반영)
+// 스트로브 컬러 동작
 // - 기본: White (시작은 화이트)
 // - PC: 스크롤하면 Aurora pastel 팔레트 순환
-// - Mobile: 터치 움직임 "커지면" 팔레트 / "작아지면" 화이트 복귀
-// - ✅ 클릭/터치 시작 시: 화이트 리셋
+// - Mobile: 터치 움직임이 커지면 팔레트 / 작아지면 화이트로 복귀
+// - 클릭/터치를 새로 시작하면 항상 화이트로 리셋
 // ============================
 let strobeMode = "white"; // "white" | "palette"
 let paletteIndex = 1;     // 0은 white, 1부터 팔레트
@@ -55,7 +55,7 @@ function getStrobeRGB() {
   return PALETTE[paletteIndex];
 }
 
-// ✅ 실제 제논 플래시처럼: 피크 순간엔 흰색에 가깝고, 감쇠하며 원래 색이 드러남
+// 실제 제논 플래시처럼: 피크 순간엔 흰색에 가깝고, 감쇠하며 원래 색이 드러남
 function mixWithWhite(c, amount) {
   // amount: 0 = 원래 색, 1 = 완전 흰색
   return {
@@ -135,7 +135,7 @@ if (!isMobile) {
   });
 
   document.addEventListener("mousedown", () => {
-    // ✅ 클릭 시작할 때마다 화이트로 리셋
+    // 클릭을 시작할 때마다 화이트로 리셋
     resetStrobeToWhite();
 
     isMouseDown = true;
@@ -158,7 +158,7 @@ const STROBE_DELAY_AFTER_DRAG = 400;
 const MIN_STROBE_INTERVAL = 80;
 const MAX_STROBE_INTERVAL = 400;
 
-// ✅ 모바일 움직임 강도 기반 컬러 전환
+// 모바일 움직임 강도 기반 컬러 전환
 let lastTouchX = null;
 let lastTouchY = null;
 let lastMoveTime = 0;
@@ -187,7 +187,7 @@ function mobileUpdateColorByIntensity(intensity) {
     if (calmSince === null) calmSince = now;
 
     if (now - calmSince >= MOBILE_CALM_HOLD_MS) {
-      // ✅ “작아지면 화이트” 복귀
+      // 움직임이 작아지면 화이트로 복귀
       resetStrobeToWhite();
     }
     return;
@@ -203,7 +203,7 @@ document.addEventListener(
   e => {
     if (e.target.closest(".navbar a")) return;
 
-    // ✅ 다시 터치했을 때도 화이트여야 함
+    // 다시 터치를 시작해도 화이트로 리셋
     resetStrobeToWhite();
 
     e.preventDefault();
@@ -256,7 +256,7 @@ document.addEventListener(
       const dt = Math.max(now - lastMoveTime, 1); // ms
       const intensity = dist / dt; // px/ms
 
-      // ✅ 커지면 팔레트 / 작아지면 화이트
+      // 움직임이 커지면 팔레트, 작아지면 화이트
       mobileUpdateColorByIntensity(intensity);
     }
 
@@ -277,7 +277,7 @@ document.addEventListener(
     beam.style.display = "none";
     clearTimeout(longPressTimeout);
 
-    // ✅ 터치 끝나면 화이트로 복귀 (원하면 유지로 바꿀 수도 있음)
+    // 터치가 끝나면 화이트로 복귀
     resetStrobeToWhite();
 
     lastTouchX = null;
@@ -311,8 +311,7 @@ function screenStrobe() {
   const { r, g, b } = getStrobeRGB();
 
 
-  // ✅ 여기 추가: strobe가 실제로 터질 때마다 SFX도 같이
-  // 에너지는 “눌린 시간” 기반으로 넣으면 속도감 맞음 (아래 예시)
+  // 플래시가 터질 때마다 눌린 시간 기반 에너지로 SFX를 함께 재생
   const heldTime = Date.now() - pressStartTime;
   const energy = Math.min(1, heldTime / 2000); // 0~1
   playStrobeSfx(energy);
@@ -406,7 +405,7 @@ requestAnimationFrame(animateBeam);
 
 
 // ============================
-// ✅ AUDIO: first-gesture unlock + ambient loop + strobe SFX sync
+// AUDIO: first-gesture unlock + ambient loop + strobe SFX sync
 // ============================
 const ambientEl = document.getElementById("ambient");
 const sfxEl = document.getElementById("sfx");
@@ -418,7 +417,7 @@ let ambientSource = null;
 let ambientGain = null;
 let sfxGain = null;
 
-// (선택) 속도에 따라 SFX pitch 약간 변형하고 싶을 때
+// 값을 범위 안으로 고정 (SFX pitch를 속도에 따라 변형할 때 사용)
 function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
 
 async function unlockAudioOnce() {
@@ -464,7 +463,7 @@ async function unlockAudioOnce() {
   }
 }
 
-// ✅ “첫 인터랙션”에서만 오디오 언락
+// “첫 인터랙션”에서만 오디오 언락
 window.addEventListener("pointerdown", unlockAudioOnce, { once: true });
 
 // 스트로브 SFX 재생

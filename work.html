@@ -128,7 +128,7 @@ select {
     }
 
     .navbar a {
-        font-size: 14px;  /* 19px → 14px */
+        font-size: 14px;
         font-weight: 500;
         letter-spacing: -0.01em;
     }
@@ -258,8 +258,8 @@ select {
   bottom: 0;
   width: 100%;
   padding: 8px 0;
-  background: transparent;   /* ❌ 배경 제거 */
-  border: none;              /* ❌ 라인 제거 */
+  background: transparent;   /* 배경 투명 유지 */
+  border: none;              /* 테두리 없음 */
   z-index: 9999;
   pointer-events: none;
 }
@@ -285,7 +285,7 @@ select {
   color: rgba(218,218,218,0.75);
   white-space: nowrap;
 
-  /* ❌ pill 스타일 전부 제거 */
+  /* pill 스타일 없이 텍스트만 노출 */
   background: none;
   border: none;
   padding: 0;
@@ -617,7 +617,7 @@ if(window.innerWidth <= 768){
                 img.style.maskImage = mask;
                 img.style.webkitMaskImage = mask;
 
-                /* 🔥 텍스트 glow */
+                /* 텍스트 glow */
                 text.style.color = "white";
                 text.style.textShadow =
                     "0 0 10px white, 0 0 20px white, 0 0 40px white";

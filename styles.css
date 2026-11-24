@@ -116,7 +116,6 @@ body {
 }
 
 /* 빔 가까이 접근 or 호버 시 글로우 */
-/* 빔 가까이 접근 or 호버 시 글로우 */
 .navbar a.beam-hover,
 .navbar a:hover {
     color: white !important;
@@ -144,7 +143,7 @@ body {
     }
 
     .navbar a {
-        font-size: 14px;  /* 19px → 14px */
+        font-size: 14px;
         font-weight: 500;
         letter-spacing: -0.01em;
     }
