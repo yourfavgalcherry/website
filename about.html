@@ -7,7 +7,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap">
 
 <style>
 :root{
@@ -17,8 +17,8 @@
   --grey:#8d8d8d;
   --dim:#5e5e5e;
   --sans:"Inter","Helvetica Neue",Helvetica,"Nimbus Sans","Nimbus Sans L",FreeSans,Arial,sans-serif;
-  --mono:"Courier Prime","Courier New",Courier,ui-monospace,monospace;
-  --serif:"EB Garamond",Garamond,"Times New Roman",serif;
+  --mono:var(--sans);
+  --serif:var(--sans);
 }
 * {
     margin: 0;
@@ -315,6 +315,9 @@ body, html {
   font-size: 12px;
   letter-spacing: 0.04em;
   color: var(--text);
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
 }
 
 /* ======================== */
@@ -344,7 +347,7 @@ body, html {
 }
 
 .marquee-text-track span {
-  font-family: "Manrope", sans-serif;
+  font-family: var(--sans);
   font-size: 0.85rem;
   font-weight: 500;
   color: rgba(218,218,218,0.75);
@@ -570,8 +573,13 @@ lighting systems (GrandMA2/3, Capture) in her practice.</p>
 </footer>
 
 <script>
-document.addEventListener("selectstart", e => e.preventDefault());
-document.addEventListener("contextmenu", e => e.preventDefault());
+// Everything is unselectable except the contact email, so visitors can copy it
+const allowCopy = e => {
+  const el = e.target.nodeType === Node.TEXT_NODE ? e.target.parentElement : e.target;
+  return el?.closest(".contact-email");
+};
+document.addEventListener("selectstart", e => { if (!allowCopy(e)) e.preventDefault(); });
+document.addEventListener("contextmenu", e => { if (!allowCopy(e)) e.preventDefault(); });
 
 function wrapText(p) {
     const text = p.textContent;

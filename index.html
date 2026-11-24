@@ -2,10 +2,10 @@
 <title>Chaery Yoon</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap">
 <style>
 /* Layout: the room is the whole site, full screen. Type sits straight on the image in the four
-   corners, poster style: grotesk for names, typewriter mono for data, Garamond for voice. No boxes,
+   corners, poster style, all in one Helvetica-style grotesk (Inter): size, weight and case do the work. No boxes,
    no rules. Work and About open as black sheets over the room. Black and white only. */
 :root{
   --black:#000;
@@ -13,9 +13,8 @@
   --text:#e4e4e4;
   --grey:#8d8d8d;
   --dim:#5e5e5e;
-  --sans:"Inter","Helvetica Neue",Helvetica,"Nimbus Sans","Nimbus Sans L",FreeSans,Arial,sans-serif;
-  --mono:"Courier Prime","Courier New",Courier,ui-monospace,monospace;
-  --serif:"EB Garamond",Garamond,"Times New Roman",serif;
+  --sans:"Inter","Helvetica Neue",Helvetica,"Nimbus Sans","Nimbus Sans L",FreeSans,Arial,sans-serif;  --mono:var(--sans);
+  --serif:var(--sans);
   --lift:0 0 14px rgba(0,0,0,.9),0 0 3px rgba(0,0,0,.8),0 0 30px rgba(0,0,0,.55);
   color-scheme:dark;
 }
@@ -53,9 +52,9 @@ body.sheet-open .keys{visibility:hidden}
 .c-tr button:hover,.c-tr a:hover,.c-tr button[aria-pressed="true"]{color:var(--white) !important;text-shadow:0 0 10px #fff,0 0 20px #fff,0 0 40px #fff}
 .c-tr i{font:11px var(--mono);font-style:normal;color:var(--grey);margin-right:6px}
 .c-bl{left:20px;bottom:calc(18px + env(safe-area-inset-bottom,0px));max-width:min(640px,calc(100% - 150px));transition:opacity .3s ease}
-.c-bl p{margin:0;font:italic 21px/1.2 var(--serif);letter-spacing:.005em}
+.c-bl p{margin:0;font:400 21px/1.3 var(--sans);letter-spacing:-.01em;opacity:.7}
 .c-bl p b{font-style:normal;font-weight:500}
-.c-bl .meta{margin-top:9px;font:10.5px/1.45 var(--mono);font-style:normal;letter-spacing:.11em;text-transform:uppercase;color:var(--grey)}
+.c-bl .meta{margin-top:9px;font:400 12px/1.5 var(--sans);font-style:normal;letter-spacing:-.01em;color:var(--grey)}
 .seqline{display:flex;flex-wrap:wrap;gap:2px 14px;margin-top:3px;font:10.5px/1.45 var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--grey)}
 .seqline[hidden]{display:none}
 .seqline b{font-weight:400;color:var(--white)}
@@ -63,8 +62,9 @@ body.sheet-open .keys{visibility:hidden}
 .seqline button:hover{color:var(--white)}
 .switch{position:relative;width:24px;height:12px;border-radius:6px;background:rgba(255,255,255,.18);transition:background .15s}
 .switch::after{content:'';position:absolute;top:2px;left:2px;width:8px;height:8px;border-radius:50%;background:var(--grey);transition:transform .15s,background .15s}
-.seqline button[aria-checked="true"] .switch{background:rgba(255,255,255,.35)}
-.seqline button[aria-checked="true"] .switch::after{transform:translateX(12px);background:var(--white)}
+[aria-checked="true"] > .switch{background:rgba(255,255,255,.35)}
+[aria-checked="true"] > .switch::after{transform:translateX(12px);background:var(--white)}
+.tog{display:inline-flex;align-items:center;padding:6px 0}
 .c-br{right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 .c-br button{font-size:14px;color:var(--text);font-weight:400;transition:color .15s}
 .c-br button:hover{color:var(--white);text-shadow:0 0 10px #fff,0 0 20px #fff,0 0 40px #fff}
@@ -159,7 +159,7 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
 .run li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;padding:7px 0;line-height:1.35}
 .run li span{font:12px var(--mono);color:var(--grey)}
 .run li b{font-size:15px;font-weight:700;letter-spacing:-.01em}
-.run li em{display:block;font:italic 17px/1.3 var(--serif);color:var(--grey)}
+.run li em{display:block;font:300 17px/1.3 var(--serif);color:var(--grey)}
 .rig{min-width:0}
 .rig-scroll{overflow-x:auto}
 .rig table{width:100%;border-collapse:collapse;font:12px/1.4 var(--mono)}
@@ -179,7 +179,7 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
 .go i{font:12px var(--mono);font-style:normal;font-weight:400;color:var(--grey);margin-right:8px}
 .go:hover{color:var(--grey)}
 .about-lede{margin:0 0 clamp(56px,8vw,96px);max-width:22em;font:clamp(30px,3.6vw,48px)/1.12 var(--serif);letter-spacing:-.005em}
-.about-lede em{font-style:italic}
+.about-lede em{font-style:normal;font-weight:500}
 .about-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 32px}
 .about-list h4{margin:0 0 8px;font:10.5px var(--mono);font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
 .about-list p{margin:0;font-size:15px;line-height:1.45;color:var(--text)}
@@ -213,7 +213,8 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
   .camread,.edge{display:none}
 }
 @media (max-width:560px){
-  .c-tl{left:14px;top:calc(14px + env(safe-area-inset-top,0px));gap:10px}
+  .c-tl{left:14px;top:calc(14px + env(safe-area-inset-top,0px));gap:14px}
+  .keys{line-height:1.9}
   .c-tr{right:14px;top:calc(18px + env(safe-area-inset-top,0px));gap:16px}
   body.sheet-open .c-tr i{display:none}
   .c-bl{left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));max-width:calc(100% - 120px)}
@@ -242,7 +243,7 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
   <a href="about.html">ABOUT</a>
 </nav>
 <div class="c c-bl needs-gl">
-  <p>Explore the lighting plot for Creamcake 𝟹𝚑𝚍 𝟸0𝟸𝟼: 𝔅𝔢𝔶𝔬𝔫𝔡 Imagining at&nbsp;Cank!</p>
+  <p>Light Plot for Creamcake 𝟹𝚑𝚍 𝟸0𝟸𝟼: 𝔅𝔢𝔶𝔬𝔫𝔡 Imagining at&nbsp;Cank</p>
   <div class="meta">To navigate the lights, turn off the running sequence in the control panel.</div>
   <div class="seqline" id="seqline" hidden><span>Cue <b id="seq-cue">01</b> <span id="seq-name">Blackout, fog</span></span><button type="button" id="seq-strobes" role="switch" aria-checked="true">Strobe Full<span class="switch" aria-hidden="true"></span></button></div>
 </div>
@@ -259,9 +260,8 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
 
   <div class="pane" data-pane="view">
     <p class="lab">Sequence <small id="seq-cue-v"></small></p>
-    <div class="opts" role="group" aria-label="Sequence">
-      <button type="button" class="btn" data-seq="on" aria-pressed="false">On</button>
-      <button type="button" class="btn" data-seq="off" aria-pressed="true">Off</button>
+    <div class="opts">
+      <button type="button" class="btn tog" id="seq-toggle" role="switch" aria-checked="false" aria-label="Sequence"><span class="switch" aria-hidden="true"></span></button>
     </div>
     <p class="lab">Camera</p>
     <div class="opts" role="group" aria-label="Camera position">
@@ -2675,10 +2675,10 @@ function setSeq(on) {
     }
   }
   seq.atmosHand = false;
-  $$('[data-seq]').forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.seq === 'on') === seq.on)));
+  $('#seq-toggle').setAttribute('aria-checked', String(seq.on));
   seqLine();
 }
-$$('[data-seq]').forEach((b) => b.addEventListener('click', () => { if ((b.dataset.seq === 'on') !== seq.on) setSeq(b.dataset.seq === 'on'); }));
+$('#seq-toggle').addEventListener('click', () => setSeq(!seq.on));
 $('#seq-strobes').addEventListener('click', () => answerSafety(flashOK !== true));
 
 /* ---------------- Flashing-light notice ---------------- */
