@@ -58,8 +58,12 @@ body.sheet-open .keys{visibility:hidden}
 .seqline{display:flex;flex-wrap:wrap;gap:2px 14px;margin-top:3px;font:10.5px/1.45 var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--grey)}
 .seqline[hidden]{display:none}
 .seqline b{font-weight:400;color:var(--white)}
-.seqline button{font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--text);text-decoration:underline;text-decoration-color:rgba(255,255,255,.35);text-underline-offset:3px}
-.seqline button:hover{color:var(--white);text-decoration-color:var(--white)}
+.seqline button{display:inline-flex;align-items:center;gap:8px;font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--text)}
+.seqline button:hover{color:var(--white)}
+.switch{position:relative;width:24px;height:12px;border:1px solid var(--grey);border-radius:6px;transition:border-color .15s,background .15s}
+.switch::after{content:'';position:absolute;top:1px;left:1px;width:8px;height:8px;border-radius:50%;background:var(--grey);transition:transform .15s,background .15s}
+.seqline button[aria-checked="true"] .switch{border-color:var(--white);background:rgba(255,255,255,.15)}
+.seqline button[aria-checked="true"] .switch::after{transform:translateX(12px);background:var(--white)}
 .c-br{right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 .c-br button{font-size:14px;color:var(--text);font-weight:400;transition:color .15s}
 .c-br button:hover{color:var(--white);text-shadow:0 0 10px #fff,0 0 20px #fff,0 0 40px #fff}
@@ -239,10 +243,10 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
 <div class="c c-bl needs-gl">
   <p>Explore the lighting plot for Creamcake 𝟹𝚑𝚍 𝟸0𝟸𝟼: 𝔅𝔢𝔶𝔬𝔫𝔡 Imagining at&nbsp;Cank!</p>
   <div class="meta">To navigate the lights, turn off the running sequence in the control panel.</div>
-  <div class="seqline" id="seqline" hidden><span>Cue <b id="seq-cue">01</b> <span id="seq-name">Blackout, fog</span></span><button type="button" id="seq-strobes">Strobes soft — show full</button></div>
+  <div class="seqline" id="seqline" hidden><span>Cue <b id="seq-cue">01</b> <span id="seq-name">Blackout, fog</span></span><button type="button" id="seq-strobes" role="switch" aria-checked="true">Strobe Full<span class="switch" aria-hidden="true"></span></button></div>
 </div>
 <div class="camread needs-gl" id="camread" aria-hidden="true"></div>
-<div class="c c-br needs-gl"><button type="button" id="ctl-toggle" aria-expanded="false" aria-controls="ctl">Control Panel<i id="ctl-sign">(+)</i></button></div>
+<div class="c c-br needs-gl"><button type="button" id="ctl-toggle" aria-expanded="false" aria-controls="ctl">CONTROL<i id="ctl-sign">(+)</i></button></div>
 
 <section class="ctl" id="ctl" hidden aria-label="Control">
   <div class="tabs" role="tablist" aria-label="Control sections">
@@ -2438,8 +2442,8 @@ function updateHeads(dt, t) {
    one lands on at least one frame however fast the pattern runs.
    -------------------------------------------------------------------------- */
 let bpm = 128, taps = [];
-let flashOK = null;
-try { const v = localStorage.getItem('hd3-flash'); if (v === 'on') flashOK = true; if (v === 'off') flashOK = false; } catch (e) { /* storage blocked */ }
+let flashOK = true;
+try { if (localStorage.getItem('hd3-flash') === 'off') flashOK = false; } catch (e) { /* storage blocked */ }
 const PATTERNS = {
   burst: { dur: 1.4 },
   taptap: { beats: 8 },
@@ -2652,7 +2656,7 @@ function headDefaults() {
 }
 function seqLine() {
   $('#seqline').hidden = !seq.on;
-  $('#seq-strobes').textContent = flashOK === true ? 'Strobes full — soften' : 'Strobes soft — show full';
+  $('#seq-strobes').setAttribute('aria-checked', String(flashOK === true));
 }
 // On or off, the rig starts from its defaults; off leaves it there
 function setSeq(on) {
@@ -2674,7 +2678,7 @@ function setSeq(on) {
   seqLine();
 }
 $$('[data-seq]').forEach((b) => b.addEventListener('click', () => { if ((b.dataset.seq === 'on') !== seq.on) setSeq(b.dataset.seq === 'on'); }));
-$('#seq-strobes').addEventListener('click', () => { if (flashOK === true) answerSafety(false); else askSafety(null); });
+$('#seq-strobes').addEventListener('click', () => answerSafety(flashOK !== true));
 
 /* ---------------- Flashing-light notice ---------------- */
 const safetyEl = $('#safety');
