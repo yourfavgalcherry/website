@@ -16,3 +16,9 @@ Plain HTML, CSS and JavaScript, served by GitHub Pages from `main`. No build ste
 4. In `work.html`, add one `<li>` at the top of the list (newest first), copying an existing line.
 
 Folders starting with `_` are not published, so the template never appears on the site.
+
+Before adding photos taken on a phone, check they don't carry GPS location data (most export or "save for web" options strip it).
+
+## Copyright
+
+© 2026 Chaery Yoon. All rights reserved. The code is public so the site can be hosted here, but no licence is granted: the code, text, light designs and images may not be copied or reused without permission. Photographs remain © their photographers, as credited on each project page.
