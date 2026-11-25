@@ -303,6 +303,8 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
       <button type="button" class="pad" data-pattern="random">Random</button>
       <button type="button" class="pad wide" data-pattern="hit">Atomic hit</button>
     </div>
+    <p class="lab">Atomic <small>in patterns</small></p>
+    <div class="opts"><button type="button" class="btn tog" id="atomic-toggle" role="switch" aria-checked="true" aria-label="Atomic in patterns"><span class="switch" aria-hidden="true"></span></button></div>
     <div class="tempo">
       <button type="button" class="btn" id="tap">Tap tempo</button>
       <output id="bpm">128 BPM</output>
@@ -345,6 +347,7 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
       <button type="button" class="btn" data-gobo="1" aria-pressed="false">Dots</button>
       <button type="button" class="btn" data-gobo="2" aria-pressed="false">Breakup</button>
       <button type="button" class="btn" data-gobo="3" aria-pressed="false">Lines</button>
+      <button type="button" class="btn" data-gobo="4" aria-pressed="false">Circle</button>
     </div>
     <label class="row"><span>Spin</span><input type="range" id="spin" min="-100" max="100" step="1" value="0"><output id="spin-v">0</output></label>
   </div>
@@ -449,13 +452,15 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
 import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { MarchingCubes } from 'three/addons/objects/MarchingCubes.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 /* ==========================================================================
    3hd 2026 · Cank — built from "3hd 2026_Light_Plot_V2" (drawing: Chaery Yoon)
    Plan coordinates in metres. Plan X → world x, plan Y → world z, height → y.
    ========================================================================== */
 
-const CEIL = 4.1;
+const CEIL = 4.6;
 const DEG = Math.PI / 180;
 const UP = new THREE.Vector3(0, 1, 0);
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -663,7 +668,7 @@ const texConc = surface({ seed: 11, tone: 0.52, contrast: 0.42, speck: 0.004, da
 const M = {
   floor: new THREE.MeshStandardMaterial({ color: 0x9c9c9e, ...tiled(texFloor, 3.2), roughness: 1, metalness: 0, normalScale: new THREE.Vector2(0.7, 0.7) }),
   wall: new THREE.MeshStandardMaterial({ color: 0x77787c, ...tiled(texConc, 4.0), roughness: 1, normalScale: new THREE.Vector2(0.5, 0.5) }),
-  ceil: new THREE.MeshStandardMaterial({ color: 0x5a5b5f, ...tiled(texConc, 4.6), roughness: 1, normalScale: new THREE.Vector2(0.6, 0.6) }),
+  ceil: new THREE.MeshStandardMaterial({ color: 0x323337, ...tiled(texConc, 4.6), roughness: 1, normalScale: new THREE.Vector2(0.6, 0.6) }),
   pillar: new THREE.MeshStandardMaterial({ color: 0x8b8c90, ...tiled(texConc, 2.2), roughness: 1, normalScale: new THREE.Vector2(0.45, 0.45) }),
   black: new THREE.MeshStandardMaterial({ color: 0x0b0b0c, roughness: 0.62, metalness: 0.05 }),
   body: new THREE.MeshStandardMaterial({ color: 0x131315, roughness: 0.42, metalness: 0.4 }),
@@ -716,11 +721,28 @@ function solid(mat, w, h, d, x, y, z, ry = 0, kind = 'solid', cast = true) {
 }
 
 // Walls
+// The two long walls behind the stage are bare brick, as in the building: a metre-by-half-metre tile of bricks
+// (24 x 7 cm with 1 cm joints, every course offset by half a brick), each brick a slightly different fired red
+M.brick = (() => {
+  const c = document.createElement('canvas'); c.width = 256; c.height = 128;
+  const g = c.getContext('2d');
+  g.fillStyle = '#c9b8a6'; g.fillRect(0, 0, 256, 128);
+  let sd = 4242; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+  const bw = 64, bh = 128 / 6;
+  for (let row = 0; row < 6; row++) for (let i = -1; i < 5; i++) {
+    const x = i * bw + (row % 2 ? bw / 2 : 0) + 1.5, y = row * bh + 1.5, l = 0.82 + rnd() * 0.3;
+    g.fillStyle = 'rgb(' + Math.round(168 * l) + ',' + Math.round(86 * l) + ',' + Math.round(58 * l) + ')';
+    g.fillRect(x, y, bw - 3, bh - 3);
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 2); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  return new THREE.MeshStandardMaterial({ map: t, roughness: 0.92, metalness: 0, color: 0xb0a69c });
+})();
 for (const path of WALLS) {
   for (let i = 0; i < path.length - 1; i++) {
     const [ax, az] = path[i], [bx, bz] = path[i + 1];
     const dx = bx - ax, dz = bz - az, len = Math.hypot(dx, dz), ry = -Math.atan2(dz, dx);
-    solid(M.wall, len + 0.3, CEIL, 0.3, (ax + bx) / 2, CEIL / 2, (az + bz) / 2, ry, 'wall');
+    solid(path === WALLS[0] && i < 2 ? M.brick : M.wall, len + 0.3, CEIL, 0.3, (ax + bx) / 2, CEIL / 2, (az + bz) / 2, ry, 'wall');
   }
 }
 for (const [x0, z0, x1, z1, ry] of CORES) solid(M.wall, x1 - x0, CEIL, z1 - z0, (x0 + x1) / 2, CEIL / 2, (z0 + z1) / 2, ry, 'wall');
@@ -744,15 +766,17 @@ function slab(hole, y, flip) {
 addStatic(M.floor, slab(HOLE_DOWN, 0, false));
 const ceilingGeos = [slab(HOLE_UP, CEIL, true)];
 
-// Ceiling structure: primary beams on the pillar rows, girders on the columns, ribs between
-for (const z of ROWS) ceilingGeos.push(boxGeo(77, 0.66, 0.78, 37.5, CEIL - 0.33, z));
-for (const x of COLS) ceilingGeos.push(boxGeo(0.62, 0.5, 36, x, CEIL - 0.25, 17));
+// Ceiling structure: a slim rectangular grid, only a little heavier than the pipes. Beams on the pillar rows,
+// girders on the columns, ribs between.
+const BEAM_D = 0.4;
+for (const z of ROWS) ceilingGeos.push(boxGeo(77, BEAM_D, 0.16, 37.5, CEIL - BEAM_D / 2, z));
+for (const x of COLS) ceilingGeos.push(boxGeo(0.14, 0.34, 36, x, CEIL - 0.17, 17));
 for (let z = 1.25; z < 34; z += 2.5) {
   if (ROWS.some((r) => Math.abs(r - z) < 0.9)) continue;
-  ceilingGeos.push(boxGeo(77, 0.3, 0.16, 37.5, CEIL - 0.15, z));
+  ceilingGeos.push(boxGeo(77, 0.18, 0.08, 37.5, CEIL - 0.09, z));
 }
-for (const z of ROWS) collider(37.5, CEIL - 0.33, z, 38.5, 0.33, 0.39, 0, 'ceil');
-for (const x of COLS) collider(x, CEIL - 0.25, 17, 0.31, 0.25, 18, 0, 'ceil');
+for (const z of ROWS) collider(37.5, CEIL - BEAM_D / 2, z, 38.5, BEAM_D / 2, 0.08, 0, 'ceil');
+for (const x of COLS) collider(x, CEIL - 0.17, 17, 0.07, 0.17, 18, 0, 'ceil');
 
 // Pillars: concrete shaft and capital, mirror panels on all four shaft faces
 const mirrorPlanes = new Map();
@@ -764,6 +788,8 @@ for (const [x, z] of PILLARS) {
   addStatic(M.pillar, boxGeo(PS, SHAFT, PS, x, SHAFT / 2, z));
   addStatic(M.pillar, boxGeo(1.06, 0.56, 1.06, x, SHAFT + 0.28, z));
   addStatic(M.pillar, boxGeo(0.4, 0.24, 1.08, x + 0.3, SHAFT + 0.68, z));
+  // the column carries on above the capital up to the beam over the row
+  { const y0 = SHAFT + 0.55, y1 = CEIL - BEAM_D + 0.02; addStatic(M.pillar, boxGeo(PS, y1 - y0, PS, x, (y0 + y1) / 2, z)); collider(x, (y0 + y1) / 2, z, PS / 2, (y1 - y0) / 2, PS / 2, 0, 'solid'); }
   collider(x, SHAFT / 2, z, PS / 2, SHAFT / 2, PS / 2, 0, 'shaft');
   collider(x, SHAFT + 0.4, z, 0.53, 0.4, 0.53, 0, 'solid');
   const off = PS / 2 + 0.004, w = PS - 0.06, h = MIR1 - MIR0, yc = (MIR0 + MIR1) / 2;
@@ -780,8 +806,6 @@ for (const [x, z] of PILLARS) {
 solid(M.black, 4.0, 0.05, 0.95, 19.0, 0.975, 9.8, 0, 'solid');
 for (const x of [17.05, 18.95, 19.05, 20.95]) for (const z of [9.36, 10.24]) addStatic(M.black, boxGeo(0.05, 0.95, 0.05, x, 0.475, z));
 collider(19.0, 0.5, 9.8, 2.0, 0.5, 0.48, 0, 'solid');
-solid(M.black, 1.6, 0.05, 0.6, 19.0, 0.975, 8.3);
-for (const x of [18.25, 19.75]) for (const z of [8.04, 8.56]) addStatic(M.black, boxGeo(0.05, 0.95, 0.05, x, 0.475, z));
 for (const [x, w, h] of [[18.38, 0.32, 0.1], [19.0, 0.32, 0.09], [19.62, 0.32, 0.1]]) {
   addStatic(M.body, boxGeo(w, h, 0.41, x, 1.0 + h / 2, 9.62));
   const sc = new THREE.PlaneGeometry(x === 19.0 ? 0.2 : 0.13, x === 19.0 ? 0.05 : 0.08);
@@ -789,52 +813,187 @@ for (const [x, w, h] of [[18.38, 0.32, 0.1], [19.0, 0.32, 0.09], [19.62, 0.32, 0
   addStatic(M.screen, sc);
 }
 
-// Speaker stacks against the inner faces of the two front pillars:
-// an 18" sub on the floor and a 12" + horn top, drivers exposed behind a recessed lip
-function speakerStack(cx, cz) {
-  const front = cz + 0.36;
-  const lip = 0.075, t = 0.034, w = 0.66;
-  function cabinet(y0, h, d) {
-    const zc = front - d / 2;
-    addStatic(M.cab, boxGeo(w, h, d - lip, cx, y0 + h / 2, zc - lip / 2));
-    addStatic(M.cab, boxGeo(w, t, lip, cx, y0 + h - t / 2, front - lip / 2));
-    addStatic(M.cab, boxGeo(w, t, lip, cx, y0 + t / 2, front - lip / 2));
-    addStatic(M.cab, boxGeo(t, h - 2 * t, lip, cx - w / 2 + t / 2, y0 + h / 2, front - lip / 2));
-    addStatic(M.cab, boxGeo(t, h - 2 * t, lip, cx + w / 2 - t / 2, y0 + h / 2, front - lip / 2));
-    const bz = front - lip;
-    addStatic(M.baffle, boxGeo(w - 2 * t, h - 2 * t, 0.01, cx, y0 + h / 2, bz + 0.005));
-    for (const sx of [-1, 1]) for (const top of [0, 1]) {
-      addStatic(M.metal, boxGeo(0.052, 0.052, 0.052, cx + sx * (w / 2 - 0.022), y0 + (top ? h - 0.022 : 0.022), front - 0.022));
-      addStatic(M.metal, boxGeo(0.052, 0.052, 0.052, cx + sx * (w / 2 - 0.022), y0 + (top ? h - 0.022 : 0.022), front - d + 0.022));
+/* ---------------- The DJ: a faceless figure in black, after the sculptures in the reference ---------------- */
+// One continuous, softly curved surface rather than parts: the body is written as a single smooth distance field
+// (tapered limbs, torso, heels and a solid fall of hair blended into each other) and turned into one mesh
+// with marching cubes, once, at load. Local space has the feet at the origin, facing +z (the room); the figure
+// stands between the two tables, one arm raised with the hand behind the head, the other hand on the mixer.
+function buildFigureGeometry(N = 112) {
+  const clamp01 = (t) => (t < 0 ? 0 : t > 1 ? 1 : t);
+  // tapered capsule from a to b, radius r1 → r2
+  const seg = (px, py, pz, a, b, r1, r2) => {
+    const bx = b[0] - a[0], by = b[1] - a[1], bz = b[2] - a[2], ax = px - a[0], ay = py - a[1], az = pz - a[2];
+    const h = clamp01((ax * bx + ay * by + az * bz) / (bx * bx + by * by + bz * bz));
+    return Math.hypot(ax - bx * h, ay - by * h, az - bz * h) - (r1 + (r2 - r1) * h);
+  };
+  // the same, in a space squashed by sx, sz across, for oval sections (torso, skirt, the hair's fall)
+  const segS = (px, py, pz, a, b, r1, r2, sx, sz) => seg(px / sx, py, pz / sz, [a[0] / sx, a[1], a[2] / sz], [b[0] / sx, b[1], b[2] / sz], r1, r2) * Math.min(sx, sz, 1);
+  const ell = (px, py, pz, rx, ry, rz) => { const k0 = Math.hypot(px / rx, py / ry, pz / rz), k1 = Math.hypot(px / (rx * rx), py / (ry * ry), pz / (rz * rz)); return k1 ? (k0 * (k0 - 1)) / k1 : -Math.min(rx, ry, rz); };
+  const smin = (a, b, k) => { const h = Math.max(k - Math.abs(a - b), 0) / k; return Math.min(a, b) - h * h * k * 0.25; };
+  // the upper body leans forward a touch about the hips; the head tips down a little about the top of the neck
+  const rotX = (y, z, cy, cz, t) => { const c = Math.cos(t), s = Math.sin(t), dy = y - cy, dz = z - cz; return [cy + dy * c - dz * s, cz + dy * s + dz * c]; };
+  const LEAN = 0.06, TILT = 0.1, HIP = [0.97, 0], NECK = [1.53, 0.005];
+  const leanPt = (x, y, z) => { const [ly, lz] = rotX(y, z, HIP[0], HIP[1], LEAN); return [x, ly, lz]; };
+  // pose, after the silhouette reference: legs long and close, the right knee crossing a little in front;
+  // the left arm raised with the hand behind the head, the right hand on the mixer
+  const legs = [
+    { hip: [-0.08, 0.97, 0], knee: [-0.048, 0.535, 0.004], calf: [-0.05, 0.4, -0.002], ankle: [-0.054, 0.12, -0.012] },
+    { hip: [0.08, 0.97, 0], knee: [0.02, 0.54, 0.058], calf: [0.012, 0.41, 0.05], ankle: [0.002, 0.13, 0.03] },
+  ];
+  const chain = (px, py, pz, pts, radii, k) => { let d = 1e9; for (let i = 0; i < pts.length - 1; i++) d = smin(d, seg(px, py, pz, pts[i], pts[i + 1], radii[i], radii[i + 1]), k); return d; };
+  const armR = [leanPt(0.158, 1.36, 0.02), [0.22, 1.15, 0.17], [0.14, 1.09, 0.45], [0.12, 1.06, 0.55]];
+  const armL = [leanPt(-0.158, 1.365, 0.0), [-0.235, 1.6, 0.05], [-0.075, 1.7, -0.035], [-0.015, 1.69, -0.055]];
+  const lock = [[0.07, 1.62, 0.03], [0.105, 1.51, 0.062], [0.088, 1.41, 0.088], [0.116, 1.31, 0.082], [0.098, 1.2, 0.07]].map((p) => leanPt(...p));
+
+  function sdf(x, y, z) {
+    let d = 1e9;
+    for (const L of legs) {
+      d = smin(d, chain(x, y, z, [L.hip, L.knee, L.calf, L.ankle], [0.082, 0.046, 0.049, 0.024], 0.012), 0.012);
+      const toe = [L.ankle[0], 0.018, L.ankle[2] + 0.17], heel = [L.ankle[0], 0.004, L.ankle[2] - 0.026];
+      d = smin(d, seg(x, y, z, L.ankle, toe, 0.026, 0.009), 0.02);                                              // arched foot in a pointed shoe
+      d = smin(d, seg(x, y, z, [L.ankle[0], L.ankle[1] - 0.02, L.ankle[2] - 0.02], heel, 0.011, 0.005), 0.01); // stiletto heel
     }
-    collider(cx, y0 + h / 2, zc, w / 2, h / 2, d / 2);
-    return bz + 0.01;
+
+    // upper body, in its leaned frame: hips as wide as the shoulders, a narrow waist, the curve of the hips at the back
+    const [ly, lz] = rotX(y, z, HIP[0], HIP[1], -LEAN), lx = x;
+    let u = segS(lx, ly, lz, [0, 0.92, 0], [0, 1.08, 0.004], 0.138, 0.086, 1.24, 0.78);
+    u = smin(u, ell(lx, ly - 0.93, lz + 0.03, 0.13, 0.095, 0.078), 0.06);
+    u = smin(u, segS(lx, ly, lz, [0, 1.08, 0.004], [0, 1.32, 0.016], 0.086, 0.116, 1.22, 0.74), 0.07);
+    u = smin(u, segS(lx, ly, lz, [-0.13, 1.37, 0.004], [0.13, 1.37, 0.004], 0.052, 0.052, 1, 0.82), 0.08);
+    u = smin(u, seg(lx, ly, lz, [0, 1.38, 0], [0, 1.53, 0.008], 0.045, 0.037), 0.05);
+    const [hy, hz] = rotX(ly, lz, NECK[0], NECK[1], -TILT);
+    u = smin(u, ell(lx, hy - 1.628, hz - 0.018, 0.074, 0.1, 0.087), 0.035);                                    // smooth, faceless head
+    // hair: a cap set back from the face, a long fall down the back, a wavy lock over the right shoulder
+    let hair = ell(lx, hy - 1.64, hz + 0.012, 0.082, 0.105, 0.092);
+    hair = smin(hair, segS(lx, ly, lz, [0, 1.6, -0.035], [0, 1.12, -0.08], 0.072, 0.04, 1.7, 0.5), 0.07);
+    d = smin(d, smin(u, hair, 0.02), 0.05);
+    d = smin(d, chain(x, y, z, lock, [0.024, 0.022, 0.02, 0.018, 0.012], 0.03), 0.04);
+
+    d = smin(d, chain(x, y, z, armR, [0.04, 0.031, 0.022, 0.011], 0.015), 0.045);
+    d = smin(d, chain(x, y, z, armL, [0.04, 0.031, 0.022, 0.012], 0.015), 0.045);
+    return d;
   }
+
+  // Sample the field on a grid over the figure's box and extract the surface
+  const C = [0, 0.9, 0.22], H = [0.36, 0.93, 0.44];
+  const mc = new MarchingCubes(N, new THREE.MeshBasicMaterial(), false, false, 160000);
+  mc.isolation = 0;
+  const f = mc.field, half = N / 2, at = (i, a) => C[a] + ((i - half) / half) * H[a];
+  // Most of the box is empty air: sample a coarse grid first, and only evaluate exactly within a band around the surface
+  const S = 4, Nc = Math.ceil((N - 1) / S) + 1, coarse = new Float32Array(Nc * Nc * Nc);
+  for (let k = 0; k < Nc; k++) for (let j = 0; j < Nc; j++) for (let i = 0; i < Nc; i++) coarse[i + j * Nc + k * Nc * Nc] = sdf(at(Math.min(i * S, N - 1), 0), at(Math.min(j * S, N - 1), 1), at(Math.min(k * S, N - 1), 2));
+  const band = (S / 2 + 2) * Math.hypot(H[0], H[1], H[2]) * 2 / N;   // the nearest coarse sample is at most S/2 cells away, plus two cells of margin
+  for (let k = 0; k < N; k++) for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+    const dc = coarse[Math.round(i / S) + Math.round(j / S) * Nc + Math.round(k / S) * Nc * Nc];
+    f[i + j * N + k * N * N] = Math.abs(dc) > band ? -dc : -sdf(at(i, 0), at(j, 1), at(k, 2));
+  }
+  mc.update();
+  const n = mc.count, pos = new Float32Array(n * 3), nor = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    pos[i * 3] = C[0] + mc.positionArray[i * 3] * H[0];
+    pos[i * 3 + 1] = C[1] + mc.positionArray[i * 3 + 1] * H[1];
+    pos[i * 3 + 2] = C[2] + mc.positionArray[i * 3 + 2] * H[2];
+    // the grid was stretched by H, so normals scale by its inverse
+    const nx = mc.normalArray[i * 3] / H[0], ny = mc.normalArray[i * 3 + 1] / H[1], nz = mc.normalArray[i * 3 + 2] / H[2], l = Math.hypot(nx, ny, nz) || 1;
+    nor[i * 3] = nx / l; nor[i * 3 + 1] = ny / l; nor[i * 3 + 2] = nz / l;
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
+  return g;
+}
+const figureMat = new THREE.MeshStandardMaterial({ color: 0x0c0c0d, roughness: 0.32, metalness: 0.16 });
+// Off for now: set to true to put the DJ figure back on the stage
+const SHOW_FIGURE = false;
+if (SHOW_FIGURE) {
+  const fig = new THREE.Mesh(buildFigureGeometry(tierName === 'low' ? 84 : 112), figureMat);
+  fig.position.set(19.0, 0, 8.95);
+  fig.castShadow = true; fig.receiveShadow = true;
+  scene.add(fig);
+  // No collider: the mid head's wide beam runs almost level through this spot and must not stop at the figure's back.
+  // The figure still catches the light and casts real shadows through the spotlights' shadow maps.
+}
+
+// PA against the inner faces of the two front pillars: an 18" sub on the floor as the base, a speaker pole rising
+// from it, and a 12" + horn top on the pole. Rounded cabinets, perforated steel grilles over the drivers (holes cut
+// with an alpha map, so the drivers show through), recessed handles, rubber feet, the pole's clamp collar and knob.
+const grilleTex = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 32;
+  const g = c.getContext('2d');
+  g.fillStyle = '#fff'; g.fillRect(0, 0, 32, 32);
+  g.fillStyle = '#000'; g.beginPath(); g.arc(16, 16, 10.5, 0, Math.PI * 2); g.fill();
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1 / 0.007, 1 / 0.007);   // a hole every 7 mm (the UVs are in metres)
+  return t;
+})();
+M.grille = new THREE.MeshStandardMaterial({ color: 0x1d1e21, roughness: 0.42, metalness: 0.65, alphaMap: grilleTex, alphaTest: 0.5, side: THREE.DoubleSide });
+function speakerStack(cx, cz) {
+  const front = cz + 0.36;   // the faces towards the room
+  const cab = (w, h, d, y0, zc) => { const g = new RoundedBoxGeometry(w, h, d, 3, 0.022); g.translate(cx, y0 + h / 2, zc); addStatic(M.cab, worldUV(g)); };
+  const tube = (r, y0, y1, z, mat) => { const g = new THREE.CylinderGeometry(r, r, y1 - y0, 20); g.translate(cx, (y0 + y1) / 2, z); addStatic(mat, g); };
   function driver(y, bz, r) {
-    const depth = r * 0.3;
-    const pts = [];
+    const depth = r * 0.3, pts = [];
     for (let i = 0; i <= 12; i++) { const k = i / 12; pts.push(new THREE.Vector2(THREE.MathUtils.lerp(r * 0.25, r * 0.96, k), -depth * Math.pow(1 - k, 1.35))); }
-    const cone = new THREE.LatheGeometry(pts, 44); cone.rotateX(Math.PI / 2); cone.translate(cx, y, bz + depth + 0.003);
-    addStatic(M.cone, cone);
-    const sur = new THREE.TorusGeometry(r * 0.985, r * 0.045, 8, 48); sur.translate(cx, y, bz + depth + 0.004);
-    addStatic(M.rubber, sur);
-    const rim = new THREE.TorusGeometry(r * 1.09, r * 0.03, 6, 48); rim.translate(cx, y, bz + 0.012);
-    addStatic(M.body, rim);
-    const cap = new THREE.SphereGeometry(r * 0.27, 22, 10, 0, Math.PI * 2, 0, Math.PI / 2); cap.rotateX(Math.PI / 2); cap.scale(1, 1, 0.5); cap.translate(cx, y, bz + 0.004);
-    addStatic(M.rubber, cap);
+    const cone = new THREE.LatheGeometry(pts, 44); cone.rotateX(Math.PI / 2); cone.translate(cx, y, bz + depth + 0.003); addStatic(M.cone, cone);
+    const sur = new THREE.TorusGeometry(r * 0.985, r * 0.045, 8, 48); sur.translate(cx, y, bz + depth + 0.004); addStatic(M.rubber, sur);
+    const rim = new THREE.TorusGeometry(r * 1.09, r * 0.03, 6, 48); rim.translate(cx, y, bz + 0.012); addStatic(M.body, rim);
+    const cap = new THREE.SphereGeometry(r * 0.27, 22, 10, 0, Math.PI * 2, 0, Math.PI / 2); cap.rotateX(Math.PI / 2); cap.scale(1, 1, 0.5); cap.translate(cx, y, bz + 0.004); addStatic(M.rubber, cap);
   }
   function horn(y, bz) {
-    const g = new THREE.CylinderGeometry(0.221, 0.05, 0.062, 4, 1, true);
-    g.rotateY(Math.PI / 4); g.rotateX(Math.PI / 2); g.scale(1.6, 0.75, 1); g.translate(cx, y, bz + 0.033);
-    addStatic(M.horn, g);
+    const g = new THREE.CylinderGeometry(0.2, 0.045, 0.06, 4, 1, true);
+    g.rotateY(Math.PI / 4); g.rotateX(Math.PI / 2); g.scale(1.5, 0.7, 1); g.translate(cx, y, bz + 0.032); addStatic(M.horn, g);
   }
-  for (const sx of [-1, 1]) for (const sz of [-1, 1]) addStatic(M.rubber, boxGeo(0.07, 0.02, 0.07, cx + sx * 0.26, 0.01, cz + sz * 0.27));
-  const b1 = cabinet(0.02, 0.94, 0.72);
-  driver(0.02 + 0.53, b1, 0.215);
-  addStatic(M.port, boxGeo(0.5, 0.062, 0.01, cx, 0.02 + 0.115, b1 + 0.002));
-  const b2 = cabinet(0.975, 0.86, 0.6);
-  driver(0.975 + 0.27, b2, 0.145);
-  horn(0.975 + 0.64, b2);
+  function face(w, h, y0) {   // recessed baffle and the grille stretched over the front
+    const bz = front - 0.035;
+    addStatic(M.baffle, boxGeo(w - 0.05, h - 0.05, 0.01, cx, y0 + h / 2, bz));
+    const gp = new THREE.PlaneGeometry(w - 0.036, h - 0.036); gp.translate(cx, y0 + h / 2, front - 0.01); addStatic(M.grille, worldUV(gp));
+    for (const sx of [-1, 1]) addStatic(M.metal, boxGeo(0.008, h - 0.036, 0.01, cx + sx * (w / 2 - 0.018), y0 + h / 2, front - 0.01));   // grille frame
+    return bz + 0.005;
+  }
+  function handles(w, h, d, y0, zc) {
+    for (const sx of [-1, 1]) {
+      addStatic(M.port, boxGeo(0.006, 0.045, 0.15, cx + sx * (w / 2 + 0.001), y0 + h - 0.12, zc));
+      addStatic(M.metal, boxGeo(0.008, 0.012, 0.11, cx + sx * (w / 2 + 0.003), y0 + h - 0.105, zc));
+    }
+  }
+
+  // Sub on rubber feet: 18" driver and a port slot behind the grille
+  const subW = 0.62, subH = 0.66, subD = 0.72, subY = 0.025, subZ = front - subD / 2;
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) addStatic(M.rubber, boxGeo(0.06, 0.025, 0.06, cx + sx * 0.24, 0.0125, subZ + sz * 0.28));
+  cab(subW, subH, subD, subY, subZ);
+  let bz = face(subW, subH, subY);
+  driver(subY + 0.38, bz, 0.215);
+  addStatic(M.port, boxGeo(subW - 0.12, 0.05, 0.01, cx, subY + 0.1, bz + 0.002));
+  handles(subW, subH, subD, subY, subZ);
+
+  // Speaker pole: cup on the sub, lower tube, clamp collar with a T-knob, chromed upper tube
+  const top0 = subY + subH;
+  tube(0.028, top0, top0 + 0.03, subZ, M.metal);
+  tube(0.019, top0, top0 + 0.52, subZ, M.body);
+  tube(0.027, top0 + 0.47, top0 + 0.53, subZ, M.body);
+  const knob = new THREE.CylinderGeometry(0.006, 0.006, 0.05, 10); knob.rotateZ(Math.PI / 2); knob.translate(cx + 0.05, top0 + 0.5, subZ); addStatic(M.metal, knob);
+  addStatic(M.rubber, boxGeo(0.012, 0.045, 0.014, cx + 0.078, top0 + 0.5, subZ));
+  tube(0.0165, top0 + 0.5, top0 + 0.8, subZ, M.metal);
+
+  // Top on the pole: pole socket underneath, 12" woofer and horn behind the grille, carry bar on top
+  const topW = 0.4, topH = 0.64, topD = 0.38, topY = top0 + 0.78, topZ = subZ;
+  tube(0.03, topY - 0.02, topY + 0.01, topZ, M.metal);
+  cab(topW, topH, topD, topY, topZ);
+  const fTop = front - (subD - topD) / 2;
+  bz = fTop - 0.035;
+  addStatic(M.baffle, boxGeo(topW - 0.05, topH - 0.05, 0.01, cx, topY + topH / 2, fTop - 0.035));
+  { const gp = new THREE.PlaneGeometry(topW - 0.036, topH - 0.036); gp.translate(cx, topY + topH / 2, fTop - 0.01); addStatic(M.grille, worldUV(gp)); }
+  for (const sx of [-1, 1]) addStatic(M.metal, boxGeo(0.008, topH - 0.036, 0.01, cx + sx * (topW / 2 - 0.018), topY + topH / 2, fTop - 0.01));
+  const tbz = fTop - 0.03;
+  driver(topY + 0.22, tbz - 0.005, 0.145);
+  horn(topY + 0.5, tbz - 0.005);
+  addStatic(M.metal, boxGeo(0.2, 0.016, 0.028, cx, topY + topH + 0.045, topZ));
+  for (const sx of [-1, 1]) addStatic(M.metal, boxGeo(0.016, 0.045, 0.024, cx + sx * 0.092, topY + topH + 0.02, topZ));
+  handles(topW, topH, topD, topY, topZ);
+
+  collider(cx, subY + subH / 2, subZ, subW / 2, subH / 2, subD / 2);
+  collider(cx, topY + topH / 2, topZ, topW / 2, topH / 2, topD / 2);
+  collider(cx, top0 + 0.4, subZ, 0.02, 0.4, 0.02);
 }
 speakerStack(13.9 + PS / 2 + 0.33, 11.0);
 speakerStack(23.85 - PS / 2 - 0.33, 11.0);
@@ -865,7 +1024,8 @@ function barrierGeo(len = 2.25, h = 1.1) {
   return mergeGeometries(parts.map((g) => g.toNonIndexed()));
 }
 const bGeo = barrierGeo();
-for (const x of [16.55, 18.85, 21.15]) { const g = bGeo.clone(); g.translate(x, 0, 7.95); addStatic(M.metal, g); }
+// Along the two sides of the stage, so that from the floor only the stage is in view
+for (const x of [16.45, 21.55]) { const g = bGeo.clone(); g.rotateY(Math.PI / 2); g.translate(x, 0, 9.3); addStatic(M.metal, g); }
 
 // Truss tower carrying 1.136
 function trussGeo(height = 2.6, w = 0.29) {
@@ -918,6 +1078,130 @@ function flightGeos(x0, x1, y0, y1, zc, out) {
   const vu = new THREE.Mesh(new THREE.BoxGeometry(5.6, 4.4, 1.5), M.voidM); vu.position.set(36.0, CEIL + 2.2, 17.3); scene.add(vu);
   collider(33.6, 0.5, 15.4, 3.6, 0.5, 0.02);
   collider(33.8, 1.0, 17.3, 3.8, 1.0, 0.6, 0, 'solid');
+}
+
+/* ---------------- Ceiling services, as in the building: matte metal pipes, cable trays,
+   loose cables sagging between hangers, red sprinkler pipes, rows of switched-off louvred office lights on
+   rods, and the green exit signs. Everything hangs below the girders (underside 3.6 m). ---------------- */
+{
+  const canvasTex = (w, h, draw, rx, ry, srgb) => {
+    const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h);
+    const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx, ry); t.anisotropy = 4;
+    if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+    return t;
+  };
+  // everything up here is kept dark, so the ceiling sits back in the room instead of catching the eye
+  M.service = new THREE.MeshStandardMaterial({ color: 0x2c2e32, roughness: 0.62, metalness: 0.45 });
+  M.duct = new THREE.MeshStandardMaterial({ color: 0x1b1c1e, roughness: 0.86, metalness: 0.35 });   // matte dark metal pipe
+  // the louvres of the office lights: a fine bright steel grid of 5 cm cells
+  M.troffer = new THREE.MeshStandardMaterial({ color: 0x4a4d52, roughness: 0.5, metalness: 0.4,
+    map: canvasTex(64, 64, (g, w, h) => { g.fillStyle = '#141517'; g.fillRect(0, 0, w, h); g.fillStyle = '#7c8086'; for (let i = 0; i <= 8; i++) { g.fillRect(i * 8 - 1, 0, 2, h); g.fillRect(0, i * 8 - 1, w, 2); } }, 1 / 0.4, 1 / 0.4, true) });
+  M.sprinkler = new THREE.MeshStandardMaterial({ color: 0x3a0e0b, roughness: 0.6, metalness: 0.25 });
+  M.exit = new THREE.MeshBasicMaterial({ fog: false,
+    map: canvasTex(128, 48, (g, w, h) => {
+      g.fillStyle = '#17b95a'; g.fillRect(0, 0, w, h); g.fillStyle = '#f2fff6';
+      g.fillRect(84, 8, 30, 32); g.fillStyle = '#17b95a'; g.fillRect(88, 12, 22, 28); g.fillStyle = '#f2fff6';   // door
+      g.fillRect(40, 21, 30, 5); g.beginPath(); g.moveTo(70, 15); g.lineTo(80, 23.5); g.lineTo(70, 32); g.fill();     // arrow
+      g.beginPath(); g.arc(22, 13, 4.5, 0, Math.PI * 2); g.fill(); g.fillRect(17, 19, 8, 13);                      // figure
+    }, 1, 1, true) });
+
+  const UNDER = CEIL - 0.5;
+  const inRoom = (x, z) => {
+    const p = WALLS[0]; let inside = false;
+    for (let i = 0, j = p.length - 1; i < p.length; j = i++) {
+      const [xi, zi] = p[i], [xj, zj] = p[j];
+      if ((zi > z) !== (zj > z) && x < ((xj - xi) * (z - zi)) / (zj - zi) + xi) inside = !inside;
+    }
+    if (!inside) return false;
+    for (const [x0, z0, x1, z1] of [HOLE_DOWN, HOLE_UP, ...CORES]) if (x > x0 - 0.4 && x < x1 + 0.4 && z > z0 - 0.4 && z < z1 + 0.4) return false;
+    return x < 46 && !(x > 42 && z < 6.6);
+  };
+  const along = (r, x0, x1, y, z, seg) => { const g = new THREE.CylinderGeometry(r, r, x1 - x0, seg); g.rotateZ(Math.PI / 2); g.translate((x0 + x1) / 2, y, z); return worldUV(g); };
+  const rod = (x, y0, y1, z, r = 0.006) => { const g = new THREE.CylinderGeometry(r, r, y1 - y0, 5); g.translate(x, (y0 + y1) / 2, z); return g; };
+
+  // Pipes along the room, hung on rods up to the slab
+  for (const d of [{ z: 7.4, x0: 3.6, x1: 41.4, r: 0.06 }, { z: 7.62, x0: 3.8, x1: 41.4, r: 0.035 }, { z: 15.4, x0: 4.8, x1: 45.6, r: 0.05 }, { z: 26.2, x0: 9.6, x1: 45.5, r: 0.065 }, { z: 26.42, x0: 9.8, x1: 45.5, r: 0.04 }]) {
+    const y = UNDER - d.r - 0.03;
+    addStatic(M.duct, along(d.r, d.x0, d.x1, y, d.z, 20));
+    for (let x = d.x0 + 1; x < d.x1; x += 3) addStatic(M.body, rod(x, y + d.r, CEIL, d.z));
+  }
+
+  // A grid of thin round pipes both ways, threaded just under the beams, each run clipped to the room
+  {
+    const GY = CEIL - 0.75, r = 0.022;
+    const runs = (fixed, alongX, max) => {
+      const out = []; let a0 = null;
+      for (let t = 0; t <= max; t += 0.5) {
+        const ok = alongX ? inRoom(t, fixed) : inRoom(fixed, t);
+        if (ok && a0 === null) a0 = t;
+        if ((!ok || t >= max) && a0 !== null) { out.push([a0, t - 0.5]); a0 = null; }
+      }
+      return out.filter(([a, b]) => b - a >= 2);
+    };
+    for (let z = 1.6; z < 33.5; z += 2.2) for (const [a, b] of runs(z, true, 46)) {
+      addStatic(M.duct, along(r, a, b, GY, z, 10));
+      for (let x = a + 0.8; x < b; x += 3.2) addStatic(M.body, rod(x, GY, CEIL, z, 0.004));
+    }
+    for (let x = 3.2; x < 46; x += 3.0) for (const [a, b] of runs(x, false, 34)) {
+      const g = new THREE.CylinderGeometry(r, r, b - a, 10); g.rotateX(Math.PI / 2); g.translate(x, GY - 2 * r, (a + b) / 2); addStatic(M.duct, worldUV(g));
+    }
+  }
+
+  // Cable trays with a bundle of cables in each, on threaded rods
+  for (const t of [{ z: 10.0, x0: 4.4, x1: 44.5 }, { z: 19.6, x0: 6.2, x1: 41.2 }, { z: 23.9, x0: 7.8, x1: 41.2 }]) {
+    const y = UNDER - 0.1;
+    addStatic(M.service, boxGeo(t.x1 - t.x0, 0.006, 0.3, (t.x0 + t.x1) / 2, y, t.z));
+    for (const s of [-1, 1]) addStatic(M.service, boxGeo(t.x1 - t.x0, 0.06, 0.006, (t.x0 + t.x1) / 2, y + 0.03, t.z + s * 0.15));
+    for (let k = 0; k < 4; k++) addStatic(M.rubber, along(0.014, t.x0, t.x1, y + 0.02, t.z - 0.09 + k * 0.06, 6));
+    for (let x = t.x0 + 0.5; x < t.x1; x += 2.5) for (const s of [-1, 1]) addStatic(M.body, rod(x, y, CEIL, t.z + s * 0.17));
+  }
+
+  // Red sprinkler pipes with heads pointing down every 3 m
+  for (const z of [5.0, 13.6, 18.3, 28.6]) {
+    let x0 = null;
+    const runs = [];
+    for (let x = 0; x <= 46; x += 0.5) { const ok = inRoom(x, z); if (ok && x0 === null) x0 = x; if ((!ok || x >= 46) && x0 !== null) { runs.push([x0, x - 0.5]); x0 = null; } }
+    for (const [a, b] of runs) {
+      if (b - a < 2) continue;
+      addStatic(M.sprinkler, along(0.026, a, b, UNDER + 0.18, z, 10));
+      for (let x = a + 1.5; x < b; x += 3) {
+        addStatic(M.sprinkler, rod(x, UNDER + 0.06, UNDER + 0.18, z, 0.012));
+        addStatic(M.service, rod(x, UNDER + 0.045, UNDER + 0.06, z, 0.03));
+      }
+    }
+  }
+
+  // Office light panels in rows, switched off, each on two rods
+  for (let z = 3.0; z < 33.5; z += 3.4) {
+    if ([7.4, 10.0, 15.4, 19.6, 23.9, 26.2].some((dz) => Math.abs(dz - z) < 0.6) || ROWS.some((r) => Math.abs(r - z) < 0.7)) continue;
+    for (let x = 2.5; x < 45.5; x += 3.0) {
+      if (!inRoom(x, z) || COLS.some((c) => Math.abs(c - x) < 0.9)) continue;
+      addStatic(M.service, boxGeo(1.24, 0.07, 0.32, x, UNDER - 0.3, z));
+      addStatic(M.troffer, boxGeo(1.18, 0.008, 0.26, x, UNDER - 0.339, z));
+      for (const s of [-1, 1]) addStatic(M.body, rod(x + s * 0.5, UNDER - 0.265, CEIL, z, 0.004));
+    }
+  }
+
+  // Loose cables, sagging in long arcs between the hangers
+  let seed = 31;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let n = 0, tries = 0; n < 90 && tries < 400; tries++) {
+    const ax = 3 + rnd() * 42, az = 1 + rnd() * 32;
+    const ang = rnd() * Math.PI * 2, len = 1.5 + rnd() * 4;
+    const bx = ax + Math.cos(ang) * len, bz = az + Math.sin(ang) * len;
+    if (!inRoom(ax, az) || !inRoom(bx, bz)) continue;
+    const ya = UNDER - 0.05 - rnd() * 0.25, yb = UNDER - 0.05 - rnd() * 0.25, sag = 0.12 + rnd() * 0.5;
+    const pts = [];
+    for (let i = 0; i <= 10; i++) { const t = i / 10; pts.push(V(ax + (bx - ax) * t, ya + (yb - ya) * t - sag * 4 * t * (1 - t), az + (bz - az) * t)); }
+    addStatic(M.rubber, new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 14, 0.005 + rnd() * 0.004, 4, false));
+    n++;
+  }
+
+  // Green exit signs, lit, hung where they can be seen from the floor
+  for (const [x, y, z, ry] of [[33.6, 3.0, 14.95, 0], [8.4, 2.95, 13.2, 0], [44.0, 3.0, 6.6, 0], [26.0, 3.05, 25.9, Math.PI]]) {
+    const g = new THREE.BoxGeometry(0.4, 0.15, 0.05); g.rotateY(ry); g.translate(x, y, z); addStatic(M.exit, g);
+    for (const s of [-1, 1]) addStatic(M.body, rod(x + s * 0.15, y + 0.075, CEIL, z, 0.004));
+  }
 }
 
 // Merge statics into one mesh per material
@@ -1242,7 +1526,7 @@ function orientedFixture(pos, dir, bodyGeo, lensGeo, lensOff, mount) {
 
 /* ---------------- Gobos: drawn once, spun on a per-head canvas ---------------- */
 const GOBO_SIZE = 256;
-const goboArt = [0, 1, 2, 3].map((kind) => {
+const goboArt = [0, 1, 2, 3, 4].map((kind) => {
   const s = GOBO_SIZE, c = document.createElement('canvas'); c.width = c.height = s;
   const g = c.getContext('2d');
   g.fillStyle = '#000'; g.fillRect(0, 0, s, s);
@@ -1264,6 +1548,12 @@ const goboArt = [0, 1, 2, 3].map((kind) => {
     }
   }
   if (kind === 3) for (let i = -5; i <= 5; i++) g.fillRect(0, s / 2 + i * s * 0.088 - s * 0.021, s, s * 0.042);
+  if (kind === 4) {
+    // Circle: a thick ring around a dark centre, broken by four narrow gaps on the cross
+    g.beginPath(); g.arc(s / 2, s / 2, s * 0.4, 0, Math.PI * 2); g.arc(s / 2, s / 2, s * 0.27, 0, Math.PI * 2, true); g.fill();
+    g.fillStyle = '#000';
+    g.fillRect(s / 2 - s * 0.018, 0, s * 0.036, s); g.fillRect(0, s / 2 - s * 0.018, s, s * 0.036);
+  }
   g.restore();
   return c;
 });
@@ -1308,24 +1598,77 @@ collider(19.0, 0.4, 3.3, 0.22, 0.4, 0.18); collider(15.0, 0.4, 8.6, 0.22, 0.4, 0
 
 /* ---------------- Strobes: Zenit W600 panels and the Atomic 3000 ---------------- */
 const strobes = [];
-for (const f of FIX.zenits) {
-  const dir = V(0, -1, 0);   // straight down at the floor
-  let pos, bracket;
-  if (f.hang) {
-    const [hx, hz] = f.hang;
-    pos = V(hx, 3.45, hz);
-    bracket = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, CEIL - 3.51, 6), M.body);
-    bracket.position.set(hx, (CEIL + 3.51) / 2, hz);
-  } else {
-    const [px, pz] = f.pillar;
-    pos = V(px, 2.7, pz + f.side * (PS / 2 + 0.17));
-    bracket = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.04, 0.17), M.body);
-    bracket.position.set(px, 2.86, pz + f.side * (PS / 2 + 0.085));
+// Rigging for a Zenit, the way it is flown: the fixture in its yoke, a coupler on top clamping a short pipe as long as
+// the fixture, and two round slings from the pipe's ends straight up to anchor plates on the structure above.
+// ax is the fixture's long side (horizontal, across its aim), so the rig follows whichever way it faces.
+function rigZenit(pos, dir, top) {
+  const parts = { metal: [], body: [], sling: [] };
+  let ax = new THREE.Vector3().crossVectors(dir, UP);
+  ax = ax.lengthSq() < 1e-4 ? V(1, 0, 0) : ax.normalize();
+  const at = (along, y) => V(pos.x + ax.x * along, y, pos.z + ax.z * along);
+  const cyl = (to, r, a, b, seg = 12) => {
+    const d = b.clone().sub(a), g = new THREE.CylinderGeometry(r, r, d.length(), seg);
+    g.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(UP, d.normalize())); g.translate((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);
+    parts[to].push(g);
+  };
+  const flat = (to, len, h, w, c) => {   // a bar lying along ax
+    const g = new THREE.BoxGeometry(len, h, w); g.rotateY(-Math.atan2(ax.z, ax.x)); g.translate(c.x, c.y, c.z); parts[to].push(g);
+  };
+  const pipeY = pos.y + 0.3;
+  // yoke: pivots on the two ends of the fixture, arms up to a bar under the pipe
+  for (const s of [-1, 1]) {
+    cyl('body', 0.018, at(s * 0.228, pos.y), at(s * 0.26, pos.y), 14);   // knob
+    cyl('body', 0.007, at(s * 0.235, pos.y), at(s * 0.235, pipeY - 0.06), 6);
   }
-  const lens = orientedFixture(pos, dir, new THREE.BoxGeometry(0.44, 0.12, 0.32), new THREE.PlaneGeometry(0.38, 0.26), 0.063, bracket);
+  flat('body', 0.49, 0.012, 0.045, at(0, pipeY - 0.06));
+  // coupler: a hinged half clamp round the pipe, bolted to the yoke bar
+  cyl('metal', 0.009, at(0, pipeY - 0.06), at(0, pipeY - 0.025), 8);
+  flat('metal', 0.06, 0.035, 0.05, at(0, pipeY - 0.02));
+  // the pipe, as long as the fixture
+  cyl('metal', 0.024, at(-0.25, pipeY), at(0.25, pipeY), 16);
+  // round slings from the pipe ends straight up to anchor plates, a wrap round the pipe at the bottom
+  for (const s of [-1, 1]) {
+    const lo = at(s * 0.21, pipeY + 0.02), hi = at(s * 0.21, top - 0.03);
+    const g = new THREE.BoxGeometry(0.006, hi.y - lo.y, 0.034); g.rotateY(-Math.atan2(ax.z, ax.x)); g.translate(lo.x, (lo.y + hi.y) / 2, lo.z); parts.sling.push(g);
+    const w = new THREE.TorusGeometry(0.031, 0.006, 6, 18); w.rotateY(-Math.atan2(ax.z, ax.x)); w.translate(lo.x, pipeY, lo.z); parts.sling.push(w);
+    const plate = new THREE.BoxGeometry(0.07, 0.012, 0.07); plate.translate(lo.x, top - 0.006, lo.z); parts.metal.push(plate);   // anchor plate
+    cyl('metal', 0.012, V(lo.x, top - 0.012, lo.z), V(lo.x, top - 0.035, lo.z), 8);                                               // eye bolt
+  }
+  // (built after the statics are merged, so each rig is its own few meshes)
+  for (const [k, list] of Object.entries(parts)) {
+    const mesh = new THREE.Mesh(mergeGeometries(list.map((g) => (g.index ? g.toNonIndexed() : g))), k === 'sling' ? M.rubber : k === 'metal' ? M.service : M[k]);
+    mesh.castShadow = true; mesh.receiveShadow = true; mesh.matrixAutoUpdate = false;
+    scene.add(mesh);
+  }
+}
+for (const f of FIX.zenits) {
+  let pos, dir, top, wide = false;
+  if (f.hang) {
+    // the middle one hangs over the dance floor, straight down, from the slab
+    pos = V(f.hang[0], 3.45, f.hang[1]); dir = V(0, -1, 0); top = CEIL;
+  } else {
+    // the pillar ones hang just inside their pillar, on the pillar row, upright in their yokes (the panel face
+    // vertical) at mirror height, above the PA top on the front row, facing the mirror on that pillar's inner face right
+    // beside them; a slight downward tilt sends each flash's bounce back out across the room as its own reflected beam
+    // through the haze. Long side horizontal; slung from the slab.
+    const [px, pz] = f.pillar, s = px < 18.9 ? 1 : -1;
+    pos = V(px + s * (PS / 2 + 0.35), 2.6, pz);
+    dir = V(-s, -0.12, 0).normalize();
+    top = CEIL; wide = true;
+  }
+  rigZenit(pos, dir, top);
+  const lens = wide
+    ? orientedFixture(pos, dir, new THREE.BoxGeometry(0.32, 0.12, 0.44), new THREE.PlaneGeometry(0.26, 0.38), 0.063, null)
+    : orientedFixture(pos, dir, new THREE.BoxGeometry(0.44, 0.12, 0.32), new THREE.PlaneGeometry(0.38, 0.26), 0.063, null);
   const b = makeBeam({ name: f.addr, intensity: 0, base: 900, angle: 18 * DEG, penumbra: 0.55, real: true, glowSize: 0.5, vol: 0.55, k: 0.25, lensGain: 1.2, lensIdle: 0.02 });
   b.pos.copy(pos).addScaledVector(dir, 0.07); b.dir.copy(dir); b.lens = lens; b.isStrobe = true;
-  strobes.push({ beam: b, row: f.row, addr: f.addr, peak: 900, tau: 0.012, level: 0 });
+  const st = { beam: b, row: f.row, addr: f.addr, peak: 900, tau: 0.012, level: 0 };
+  if (!f.hang) {
+    // the mirror's bounce, kept strong (the cladding gives back most of it) so the strobe patterns read in the reflection
+    st.refl = makeBeam({ name: f.addr + "'", intensity: 0, base: 900 * 0.85, angle: b.angle, penumbra: b.penumbra, real: Q.realUplights, glow: false, vol: 0.9, k: 0.25 });
+    st.refl.isStrobe = true;
+  }
+  strobes.push(st);
 }
 const atomicBeam = (() => {
   const f = FIX.atomic, dir = V(0, 0.2, 1).normalize(), pos = V(f.pos[0], 0.26, f.pos[2]);
@@ -1364,7 +1707,7 @@ scene.add(hemi);
 {
   const pmrem = new THREE.PMREMGenerator(renderer);
   const env = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
-  for (const [m, k] of [[M.cab, 0.16], [M.horn, 0.5], [M.metal, 0.45], [M.cone, 0.1], [M.rubber, 0.14], [M.body, 0.14], [M.black, 0.08]]) { m.envMap = env; m.envMapIntensity = k; }
+  for (const [m, k] of [[M.cab, 0.16], [M.horn, 0.5], [M.metal, 0.45], [M.cone, 0.1], [M.rubber, 0.14], [M.body, 0.14], [M.black, 0.08], [M.grille, 0.5], [M.duct, 0.22], [M.troffer, 0.12], [M.service, 0.18], [figureMat, 0.35]]) { m.envMap = env; m.envMapIntensity = k; }
   pmrem.dispose();
 }
 
@@ -1383,10 +1726,10 @@ const planLines = (() => {
   for (const path of WALLS) for (let i = 0; i < path.length - 1; i++) seg(path[i], path[i + 1]);
   for (const [x0, z0, x1, z1, ry] of CORES) { rect(x0, z0, x1, z1, ry); seg([x0, z0], [x1, z1]); seg([x1, z0], [x0, z1]); }
   for (const [x, z] of PILLARS) rect(x - PS / 2, z - PS / 2, x + PS / 2, z + PS / 2);
-  rect(17.0, 9.32, 21.0, 10.28); rect(18.2, 8.0, 19.8, 8.6);
+  rect(17.0, 9.32, 21.0, 10.28);
   for (const p of PLATFORMS) rect(...p);
   rect(HOLE_DOWN[0], HOLE_DOWN[1], HOLE_DOWN[2], 17.9);
-  seg([15.43, 7.95], [22.28, 7.95]);
+  seg([16.45, 8.17], [16.45, 10.43]); seg([21.55, 8.17], [21.55, 10.43]);
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
   const m = new THREE.LineBasicMaterial({ color: 0xc4c8cf, transparent: true, opacity: 0, depthTest: false, depthWrite: false, fog: false });
@@ -2489,6 +2832,9 @@ const PATTERNS = {
 };
 let pat = null;
 function fire(s, amp = 1) { s.level = Math.max(s.level, amp); }
+// The Atomic switch in Control: off, the patterns run on the Zenits only
+let atomicOn = true;
+const pfire = (s, amp) => { if (s !== atomic || atomicOn) fire(s, amp); };
 function playPattern(id, hold) {
   if (flashOK === null) { askSafety(() => playPattern(id, false)); return; }
   const p = PATTERNS[id], beat = 60 / bpm;
@@ -2509,32 +2855,35 @@ function updateStrobes(dt) {
     if (pat.soft) {
       const env = Math.min(1, T / 0.4) * Math.min(1, Math.max(0, (pat.end - T) / 0.4));
       const k = (0.16 + 0.1 * Math.sin(T * Math.PI * 2 * 0.6)) * env;
-      for (const s of strobes) s.level = Math.max(s.level, s === atomic ? k * 0.25 : k);
+      for (const s of strobes) if (s !== atomic || atomicOn) s.level = Math.max(s.level, s === atomic ? k * 0.25 : k);
     } else {
       const step = (n, fn) => { if (n !== pat.last) { pat.last = n; fn(n); } };
       switch (pat.id) {
-        case 'burst': step(Math.floor(T * 24), () => strobes.forEach((s) => fire(s, s === atomic ? 0.45 : 1))); break;
-        case 'taptap': { const b = T / beat, n = Math.floor(b); step(n * 2 + (b - n >= 0.2 ? 1 : 0), (k) => strobes.forEach((s) => fire(s, s === atomic ? (k % 2 ? 0.25 : 0.6) : 1))); break; }
+        case 'burst': step(Math.floor(T * 24), () => strobes.forEach((s) => pfire(s, s === atomic ? 0.45 : 1))); break;
+        case 'taptap': { const b = T / beat, n = Math.floor(b); step(n * 2 + (b - n >= 0.2 ? 1 : 0), (k) => strobes.forEach((s) => pfire(s, s === atomic ? (k % 2 ? 0.25 : 0.6) : 1))); break; }
         case 'fade': {
           pat.phase += (1.4 + 17 * Math.exp(-T * 0.85)) * dt;
           const amp = Math.pow(Math.max(0, 1 - T / pat.end), 1.4);
-          step(Math.floor(pat.phase), () => strobes.forEach((s) => fire(s, amp)));
+          step(Math.floor(pat.phase), () => strobes.forEach((s) => pfire(s, amp)));
           break;
         }
-        case 'frontback': step(Math.floor(T / (beat / 2)), (n) => strobes.forEach((s) => { if ((n % 2 === 0) === (s.row === 'front')) fire(s, s === atomic ? 0.5 : 1); })); break;
-        case 'chase': step(Math.floor(T / (beat / 4)), (n) => { fire(chaseOrder[n % 4]); if (n % 16 === 0) fire(atomic, 0.8); }); break;
+        case 'frontback': step(Math.floor(T / (beat / 2)), (n) => strobes.forEach((s) => { if ((n % 2 === 0) === (s.row === 'front')) pfire(s, s === atomic ? 0.5 : 1); })); break;
+        case 'chase': step(Math.floor(T / (beat / 4)), (n) => { pfire(chaseOrder[n % 4]); if (n % 16 === 0) pfire(atomic, 0.8); }); break;
         case 'random': step(Math.floor(T / (beat / 4)), () => {
-          fire(zenitStrobes[(Math.random() * 4) | 0]);
-          if (Math.random() < 0.35) fire(zenitStrobes[(Math.random() * 4) | 0]);
-          if (Math.random() < 0.12) fire(atomic, 0.5);
+          pfire(zenitStrobes[(Math.random() * 4) | 0]);
+          if (Math.random() < 0.35) pfire(zenitStrobes[(Math.random() * 4) | 0]);
+          if (Math.random() < 0.12) pfire(atomic, 0.5);
         }); break;
-        case 'hit': step(0, () => strobes.forEach((s) => fire(s))); break;
+        case 'hit': step(0, () => strobes.forEach((s) => pfire(s))); break;
       }
     }
     if (pat.t >= pat.end) { pat = null; padState(); }
   }
   if (seq.on) seqStrobes(dt);
-  for (const s of strobes) s.beam.intensity = s.peak * s.level;
+  for (const s of strobes) {
+    s.beam.intensity = s.peak * s.level;
+    if (s.refl) traceBeam(s.beam, s.refl);   // the mirror's bounce follows every flash
+  }
 }
 function padState() { $$('[data-pattern]').forEach((b) => b.classList.toggle('on', !!pat && pat.id === b.dataset.pattern)); }
 
@@ -2620,12 +2969,12 @@ const SWEEP_A = [9.0, 2.2, 7.0], SWEEP_B = [14.0, 2.5, 29.0], SWEEP_T = 11;
 function sweepAt(k, wob) { aimHead(SIDE, SWEEP_A[0] + (SWEEP_B[0] - SWEEP_A[0]) * k, SWEEP_A[1] + (SWEEP_B[1] - SWEEP_A[1]) * k + wob, SWEEP_A[2] + (SWEEP_B[2] - SWEEP_A[2]) * k); }
 // A single hard burst from both fog machines as the strobes come in: full output at once, a thick plume out of each nozzle
 const FOG_BLAST_CUES = [2, 4, 9, 11, 16];
-function fogBlast() {
+function fogBlast(jets = JETS, plume = 28, hold = 2.5) {
   fogBoost = Math.max(fogBoost, 5);
-  for (const j of JETS) {
+  for (const j of jets) {
     if (!j.mach || j.angNow === undefined) continue;
-    j.mach.on = true; j.mach.level = 1; j.mach.end = Math.max(j.mach.end, simClock + 2.5);
-    for (let k = 0; k < 28 && puffs.length < PUFF_MAX; k++) {
+    j.mach.on = true; j.mach.level = 1; j.mach.end = Math.max(j.mach.end, simClock + hold);
+    for (let k = 0; k < plume && puffs.length < PUFF_MAX; k++) {
       const a = j.angNow + (Math.random() - 0.5) * 0.45, sp = (1.6 + 3.2 * motionLevel) * (0.7 + 0.6 * Math.random());
       puffs.push({ x: j.x - Math.cos(j.angNow) * 0.3, y: 0.3 + 0.15 * Math.random(), z: j.z - Math.sin(j.angNow) * 0.3, vx: Math.cos(a) * sp, vz: Math.sin(a) * sp, vy: (Math.random() - 0.2) * 0.25,
         age: Math.random() * 0.15, life: 4.5 + Math.random() * 3 + fogLevel * 3, seed: Math.random() * 50, r0: 0.16 + Math.random() * 0.08 });
@@ -2643,10 +2992,11 @@ function seqCue(i) {
   // Positions only change while a head is dark: the stage heads go to the artist in the opening blackout
   // and back home once that cue is over; the far beam goes to its start before the sweep and home after it
   MID.tPan = MID.def.pan; MID.tTilt = MID.def.tilt;
-  // Mid already faces the audience: for its gobo cue it only changes to the dot gobo, which stays still
-  const dots = i === 13 || i <= 1;   // cues 01-02 keep the opening's dot gobo while it dims out
+  // Mid already faces the audience: for its gobo cue it only changes to the dot gobo, which stays still;
+  // cues 01-02 keep the opening's Circle gobo while it dims out
+  const gobo = i === 13 ? 1 : i <= 1 ? 4 : 0;
   MID.spinSpeed = 0;
-  if ((MID.gobo === 1) !== dots) { MID.gobo = dots ? 1 : 0; MID.goboAngle = 0; drawGobo(MID); }
+  if (MID.gobo !== gobo) { MID.gobo = gobo; MID.goboAngle = 0; drawGobo(MID); }
   MID.zoom = MID.def.zoom;
   for (const h of [LEFT, RIGHT]) {
     if (i <= 1) { aimHead(h, ...ARTIST); h.zoom = 12; } else { h.tPan = h.def.pan; h.tTilt = h.def.tilt; h.zoom = h.def.zoom; }
@@ -2660,18 +3010,27 @@ function seqCue(i) {
   $('#seq-cue').textContent = num; $('#seq-name').textContent = name;
   $('#seq-cue-v').textContent = num + ' ' + name;
 }
-// Opening, before cue 01: only the mid head, on its dot gobo. It fades in smoothly under a fast, shallow flicker
+// Opening, before cue 01: only the mid head, on its Circle gobo. It fades in smoothly under a fast, shallow flicker
 // (about the pace of cue 04, but never down to black); with flashing soft the flicker only drifts slowly.
 const INTRO = 9;
+// From the opening through cue 03 the centre fog machine keeps running at full, topping up the floor
+function keepCentreFog() {
+  const m = JETS[0].mach;
+  m.on = true; m.end = Math.max(m.end, simClock + 0.5);
+  fogBoost = Math.max(fogBoost, 1.8);
+}
 const introFlicker = (dt) => (seqFull() ? wander('intro', dt, 0.62, 1, 0.025, 0.07, 0.018) : wander('intro', dt, 0.85, 1, 0.4, 1.0, 0.3));
 function seqIntro(dt) {
   if (seq.intro === 0) {
     for (const h of [LEFT, RIGHT, SIDE]) { h.tPan = h.def.pan; h.tTilt = h.def.tilt; h.zoom = h.def.zoom; }
     MID.tPan = MID.def.pan; MID.tTilt = MID.def.tilt; MID.zoom = MID.def.zoom; MID.spinSpeed = 0;
-    if (MID.gobo !== 1) { MID.gobo = 1; MID.goboAngle = 0; drawGobo(MID); }
+    if (MID.gobo !== 4) { MID.gobo = 4; MID.goboAngle = 0; drawGobo(MID); }
     $('#seq-cue').textContent = '00'; $('#seq-name').textContent = 'Gobo Flicker';
     $('#seq-cue-v').textContent = '00 Gobo Flicker';
   }
+  // Half a second in, the fog machine behind the DJ (1.405) fires once, hard: a big plume rolling towards the floor
+  if (seq.intro < 0.5 && seq.intro + dt >= 0.5) fogBlast([JETS[0]], 60, 4);
+  keepCentreFog();
   seq.intro += dt;
   const u = Math.min(1, seq.intro / INTRO);
   const rise = 0.06 + 0.94 * ease(u);
@@ -2851,6 +3210,7 @@ function seqStep(dt) {
   }
   // The opening's gobo flicker dims out over the first seconds of the cue list, overlapping the artist fade-in at 3s
   if (T < 6.5) mid = Math.max(mid, (1 - smooth(0.5, 6.5, T)) * introFlicker(dt));
+  if (T < CUES[3][0]) keepCentreFog();
   seqAir(T);
   MID.lv = Math.max(mid, MID.fl, MID.fs);
   LEFT.lv = Math.max(lrL >= 0 ? lrL : lr, LEFT.fl, LEFT.fs);
@@ -3150,6 +3510,7 @@ $$('[data-pattern]').forEach((b) => {
   b.addEventListener('pointercancel', up);
   b.addEventListener('click', (e) => { if (e.detail === 0) playPattern(b.dataset.pattern, false); });
 });
+$('#atomic-toggle').addEventListener('click', () => { atomicOn = !atomicOn; $('#atomic-toggle').setAttribute('aria-checked', String(atomicOn)); });
 $('#tap').addEventListener('click', () => {
   const now = performance.now() / 1000;
   if (taps.length && now - taps[taps.length - 1] > 2) taps = [];

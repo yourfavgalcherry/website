@@ -104,7 +104,7 @@ body.click-back{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2
   .w-detail[hidden]{display:none}
   .w-slides{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none}
   .w-slides::-webkit-scrollbar{display:none}
-  .w-slides img{flex:0 0 100%;width:100%;max-height:62svh;object-fit:contain;scroll-snap-align:start;background:#0b0b0b}
+  .w-slides img{flex:0 0 100%;width:100%;max-height:62svh;object-fit:contain;scroll-snap-align:start;background:none}
   .w-count{margin:6px 0 0;font-size:9px;color:var(--grey);font-variant-numeric:tabular-nums}
   .w-text{margin-top:12px;font-size:11px;line-height:1.55;color:var(--text)}
   .w-text p{margin:0 0 .8em}
