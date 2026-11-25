@@ -12,7 +12,7 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--black);color:var(--text)}
-body{font:400 15px/1.5 var(--sans);letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+body{font:250 14px/1.5 var(--sans);letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none;cursor:var(--dot),pointer}
 body{-webkit-user-select:none;user-select:none;cursor:var(--dot),auto}
 img{display:block;max-width:100%;height:auto;-webkit-user-drag:none}
@@ -24,29 +24,33 @@ img{display:block;max-width:100%;height:auto;-webkit-user-drag:none}
 .home-logo::before{content:'';position:absolute;inset:-14px}
 .home-logo:hover{transform:rotate(-24deg)}
 .nav{position:fixed;z-index:10;top:22px;right:20px;display:flex;gap:24px}
-.nav a{position:relative;font-size:14px;color:var(--text);transition:color .15s,text-shadow .15s}
+.nav a{position:relative;font-size:13px;color:var(--text);transition:color .15s,text-shadow .15s}
 .nav a::before{content:'';position:absolute;inset:-12px -10px}
 .nav a:hover,.nav a[aria-current="page"]{color:var(--white);text-shadow:0 0 10px #fff,0 0 20px #fff,0 0 40px #fff}
 
-/* Work index: one row per project, newest first */
-.work{padding:clamp(110px,14vw,170px) 20px 60px}
-.work-head,.work-list a{display:grid;grid-template-columns:minmax(0,1fr) 220px 56px;gap:24px;align-items:baseline}
-.work-head{padding:0 0 10px;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--grey)}
-.work-head span:last-child,.w-year{text-align:right;font-variant-numeric:tabular-nums}
-.work-list{list-style:none;margin:0;padding:0;border-bottom:1px solid var(--line)}
-.work-list li{border-top:1px solid var(--line)}
-.work-list a{padding:7px 0}
-.w-title{font-size:clamp(13px,1.15vw,16px);font-weight:300;line-height:1.25;letter-spacing:-.01em;color:rgba(255,255,255,.55);transition:color .2s,text-shadow .2s}
-.w-cat,.w-year{font-size:12px;color:var(--dim);transition:color .2s}
-.work-list a:hover .w-title,.work-list a:focus-visible .w-title{color:var(--white);text-shadow:0 0 10px #fff,0 0 20px rgba(255,255,255,.6)}
-.work-list a:hover .w-cat,.work-list a:hover .w-year{color:var(--text)}
+/* Work index: a line grid, one row per project (newest first). The column lines run the full height of the
+   page; text is uppercase and sits tight in the top-left corner of each cell. */
+.work{--grid:rgba(255,255,255,.32);--cols:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);min-height:100vh;padding:clamp(110px,14vw,170px) 20px 80px;text-transform:uppercase}
+.work::before{content:'';position:fixed;top:0;bottom:0;left:20px;right:20px;z-index:0;pointer-events:none;background:
+  linear-gradient(var(--grid),var(--grid)) 0 0/1px 100% no-repeat,
+  linear-gradient(var(--grid),var(--grid)) 50% 0/1px 100% no-repeat,
+  linear-gradient(var(--grid),var(--grid)) 75% 0/1px 100% no-repeat,
+  linear-gradient(var(--grid),var(--grid)) 100% 0/1px 100% no-repeat}
+.work-head,.work-list{position:relative;z-index:1}
+.work-head,.work-list a{display:grid;grid-template-columns:var(--cols);align-items:start}
+.work-head span,.work-list a span{padding:3px 6px 16px;line-height:1.05}
+.work-head{font-size:10px;letter-spacing:.04em;color:var(--grey)}
+.work-list{list-style:none;margin:0;padding:0}
+.w-title,.w-cat,.w-year{font-size:13px;font-weight:150;letter-spacing:.01em;color:var(--text);transition:color .2s,text-shadow .2s,font-weight .2s}
+.w-year{font-variant-numeric:tabular-nums}
+.work-list a:hover span,.work-list a:focus-visible span{color:var(--white);font-weight:350;text-shadow:0 0 10px #fff,0 0 20px rgba(255,255,255,.5)}
 .preview{position:fixed;z-index:5;left:0;top:0;width:min(560px,42vw);pointer-events:none;opacity:0;transition:opacity .2s;will-change:transform}
 .preview.on{opacity:.78}
 /* Copyright marquee along the bottom, the same as on the About page */
 .footer-marquee{position:fixed;left:0;bottom:0;z-index:9;width:100%;padding:8px 0;pointer-events:none;-webkit-mask-image:linear-gradient(to right,transparent,black 4rem,black calc(100% - 4rem),transparent);mask-image:linear-gradient(to right,transparent,black 4rem,black calc(100% - 4rem),transparent)}
 .marquee-text{overflow:clip}
 .marquee-text-track{display:flex;align-items:center;gap:3.2rem;width:max-content;will-change:transform;animation:marquee-move-text 40s linear infinite}
-.marquee-text-track span{font-size:.85rem;font-weight:500;color:rgba(218,218,218,.75);white-space:nowrap}
+.marquee-text-track span{font-size:.8rem;font-weight:250;text-transform:uppercase;color:rgba(218,218,218,.75);white-space:nowrap}
 .marquee-text-track .separator{font-size:.75rem;opacity:.6;transform:translateY(-.02em)}
 @keyframes marquee-move-text{to{transform:translateX(-50%)}}
 @media (max-width:768px){
@@ -56,52 +60,62 @@ img{display:block;max-width:100%;height:auto;-webkit-user-drag:none}
   .marquee-text-track .separator{font-size:.65rem}
 }
 
-/* Project page */
-.proj{max-width:1120px;margin:0 auto;padding:clamp(110px,14vw,170px) 20px 80px}
-.proj h1{margin:0;font-size:clamp(30px,4.4vw,56px);font-weight:400;line-height:1.05;letter-spacing:-.03em;color:var(--white)}
-.proj-meta{margin:14px 0 0;font-size:13px;color:var(--grey)}
-.proj-meta a,.proj-text a{text-decoration:underline;text-decoration-color:rgba(255,255,255,.35);text-underline-offset:3px}
-.proj-meta a:hover,.proj-text a:hover{color:var(--white);text-decoration-color:var(--white)}
-.proj-text{max-width:640px;margin-top:36px}
+/* Project page: an info column on the left that stays put, the photos large on the right, every line of type
+   the same small size. Full-height column lines frame it, like the Work page. */
+.proj{--grid:rgba(255,255,255,.32);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);min-height:100vh;padding:0 20px}
+.proj::before{content:'';position:fixed;top:0;bottom:0;left:20px;right:20px;z-index:0;pointer-events:none;background:
+  linear-gradient(var(--grid),var(--grid)) 0 0/1px 100% no-repeat,
+  linear-gradient(var(--grid),var(--grid)) 33.333% 0/1px 100% no-repeat,
+  linear-gradient(var(--grid),var(--grid)) 100% 0/1px 100% no-repeat}
+.proj-info{position:sticky;top:0;align-self:start;z-index:1;min-height:100vh;display:flex;flex-direction:column;padding:110px 24px 56px 8px}
+.proj h1,.proj-meta,.proj-text{margin:0;font-size:11px;font-weight:250;line-height:1.5;letter-spacing:.01em}
+.proj h1{color:var(--white);text-transform:uppercase}
+.proj-meta{color:var(--grey);text-transform:uppercase}
+.proj-text{max-width:36em;margin-top:auto;color:var(--text)}
 .proj-text p{margin:0 0 1em}
 .proj-text em{font-style:normal;color:var(--white)}
-.proj-images{display:grid;gap:16px;margin-top:56px}
+.proj-meta a,.proj-text a{text-decoration:underline;text-decoration-color:rgba(255,255,255,.35);text-underline-offset:3px}
+.proj-meta a:hover,.proj-text a:hover{color:var(--white);text-decoration-color:var(--white)}
+.proj-images{position:relative;z-index:1;display:grid;gap:20px;align-content:start;padding:110px 0 80px 20px}
 .proj-images img{width:100%;background:#0b0b0b;opacity:.86;transition:opacity .3s}
 .proj-images img:hover{opacity:1}
-.back{display:inline-block;margin-top:48px;font-size:13px;color:var(--grey)}
-.back:hover{color:var(--white)}
+/* With a mouse, the cursor on a project page is a back arrow: one click outside a link returns to Work */
+body.click-back{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M23 14H5M11 8l-6 6 6 6' stroke='black' stroke-width='3.5'/%3E%3Cpath d='M23 14H5M11 8l-6 6 6 6' stroke='white' stroke-width='1.4'/%3E%3C/g%3E%3C/svg%3E") 5 14,w-resize}
 .w-more,.w-detail{display:none}
 
 @media (max-width:640px){
   .home-logo{top:14px;left:14px}
   .nav{top:18px;right:14px;gap:16px}
+  .nav a{font-size:11px}
   .work,.proj{padding-left:14px;padding-right:14px}
   .work-head{display:none}
-  /* One line per project: title, category, year, then a + that opens the text and a photo slider in place */
-  .work-list li{display:flex;flex-wrap:wrap;align-items:center}
-  .work-list a{flex:1;min-width:0;grid-template-columns:minmax(0,1fr) auto 30px;gap:10px;padding:9px 0}
-  .w-title{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .w-cat{max-width:32vw;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .w-year{font-size:10px}
-  .w-more{display:block;width:30px;padding:9px 0;border:0;background:none;text-align:right;font:300 17px/1 var(--sans);color:var(--text);cursor:var(--dot),pointer}
+  /* One line per project: title, category, year, then a + that opens the text and a photo slider in place.
+     The column lines are left out on phones; they would not match this narrower layout. */
+  .work::before{display:none}
+  .work-list li{display:flex;flex-wrap:wrap;align-items:flex-start}
+  .work-list a{flex:1;min-width:0;grid-template-columns:minmax(0,1fr) auto 30px;gap:10px}
+  .work-list a span{padding:4px 0 10px}
+  .w-title,.w-cat,.w-year{font-size:11px}
+  .w-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .w-cat{max-width:32vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .w-more{display:block;width:30px;padding:3px 0 8px;border:0;background:none;text-align:right;font:200 15px/1 var(--sans);color:var(--text);cursor:var(--dot),pointer}
   .w-more[aria-expanded="true"]{color:var(--white)}
   .w-detail{display:block;flex-basis:100%;padding:2px 0 20px}
   .w-detail[hidden]{display:none}
   .w-slides{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none}
   .w-slides::-webkit-scrollbar{display:none}
   .w-slides img{flex:0 0 100%;width:100%;max-height:62svh;object-fit:contain;scroll-snap-align:start;background:#0b0b0b}
-  .w-count{margin:6px 0 0;font-size:10px;color:var(--grey);font-variant-numeric:tabular-nums}
-  .w-text{margin-top:12px;font-size:12px;line-height:1.55;color:var(--text)}
+  .w-count{margin:6px 0 0;font-size:9px;color:var(--grey);font-variant-numeric:tabular-nums}
+  .w-text{margin-top:12px;font-size:11px;line-height:1.55;color:var(--text)}
   .w-text p{margin:0 0 .8em}
   .w-text em{font-style:normal;color:var(--white)}
   .w-text a{text-decoration:underline;text-decoration-color:rgba(255,255,255,.35);text-underline-offset:3px}
-  .w-open{font-size:11px;color:var(--grey)}
-  /* Project pages on phones: quieter type, a touch smaller than the About text */
-  .proj{padding-top:96px}
-  .proj h1{font-size:16px;line-height:1.3;letter-spacing:-.01em}
-  .proj-meta{margin-top:6px;font-size:11px}
-  .proj-text{margin-top:20px;font-size:12px;line-height:1.55}
-  .proj-images{margin-top:32px;gap:10px}
-  .back{font-size:11px}
+  .w-open{font-size:10px;color:var(--grey)}
+  /* Project pages on phones: one column, info first, then the photos */
+  .proj{grid-template-columns:minmax(0,1fr);padding:0 14px}
+  .proj::before{display:none}
+  .proj-info{position:static;min-height:0;padding:96px 0 0}
+  .proj-text{margin-top:20px}
+  .proj-images{gap:10px;padding:28px 0 60px}
 }
 @media (prefers-reduced-motion:reduce){.home-logo,.preview,.w-title,.w-cat,.w-year,.proj-images img{transition:none}}

@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="tdm-reservation" content="1"><meta name="robots" content="noai, noimageai">
 <title>About</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..700&display=swap">
 
 <style>
 :root{
@@ -33,6 +34,7 @@ body {
     background-color: black;
     font-family: var(--sans);
     font-size: 16px;
+    font-weight: 250;
     color: var(--text);
     margin: 0;
     padding: 0;
@@ -92,9 +94,9 @@ body, html {
     position: relative;
     color: var(--text);
     text-decoration: none;
-    font-size: 14px;
+    font-size: 13px;
     font-family: var(--sans);
-    font-weight: 400;
+    font-weight: 250;
     cursor: none;
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
@@ -130,13 +132,13 @@ body, html {
     }
 
     .navbar {
-        top: 14px;        /* 살짝 위로 */
-        right: 14px;      /* 가장자리 여백 줄이기 */
+        top: 18px;
+        right: 14px;
     }
 
     .navbar a {
-        font-size: 14px;
-        font-weight: 500;
+        font-size: 11px;
+        font-weight: 250;
         letter-spacing: -0.01em;
     }
 
@@ -212,10 +214,10 @@ body, html {
 .intro-text {
     max-width: 800px;
     margin: 230px auto 10px auto;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     line-height: 1.5;
     font-family: var(--sans);
-    font-weight: 400;
+    font-weight: 250;
     white-space: normal;
 }
 
@@ -244,13 +246,13 @@ body, html {
     max-width: 800px;
     font-family: var(--sans);
     margin: 80px auto 220px;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
 }
 
 .inquiry h3 {
     font-size: 11px;
     font-family: var(--mono);
-    font-weight: 400;
+    font-weight: 250;
     letter-spacing: .14em;
     text-transform: uppercase;
     margin-bottom: 16px;
@@ -282,12 +284,12 @@ body, html {
     color: white;
     padding: 8px 18px;
     font-family: var(--sans);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
 
 .ig-link {
     font-family: var(--mono);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     letter-spacing: 0.05em;
     text-decoration: underline;
     color: var(--grey);
@@ -310,7 +312,7 @@ body, html {
 .contact-email {
   margin-top: 10px;
   font-family: var(--mono);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   letter-spacing: 0.05em;
   color: var(--grey);
   user-select: text;
@@ -363,8 +365,8 @@ body, html {
 
 .marquee-text-track span {
   font-family: var(--sans);
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.8rem;
+  font-weight: 250;
   color: rgba(218,218,218,0.75);
   white-space: nowrap;
   background: none;
@@ -411,13 +413,13 @@ body, html {
 
 @media (max-width: 768px) {
     .navbar {
-        top: 14px;        /* 살짝 위로 */
-        right: 14px;      /* 가장자리 여백 줄이기 */
+        top: 18px;
+        right: 14px;
     }
 
     .navbar a {
-        font-size: 14px;
-        font-weight: 500;
+        font-size: 11px;
+        font-weight: 250;
         letter-spacing: -0.01em;
     }
 
@@ -434,8 +436,8 @@ body, html {
     .intro-text {
         padding: 14px;
         font-family: var(--sans);
-        font-weight: 400;
-        font-size: 0.80rem;
+        font-weight: 250;
+        font-size: 0.75rem;
         line-height: 1.4;
         margin-top: 110px;
         margin-bottom: 20px;
@@ -478,6 +480,99 @@ body, html {
     .location { font-size: 0.70rem; }
     .contact-email { font-size: 0.70rem; }
 }
+
+/* ======================== */
+/*  Layout shared with Work and the project pages: full-height column lines,
+    contact on the left (1/3), the bio on the right (2/3), small thin type, uppercase labels */
+/* ======================== */
+.about {
+  --grid: rgba(255,255,255,.32);
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,2fr);
+  min-height: 100vh;
+  padding: 0 20px;
+}
+.about::before {
+  content: '';
+  position: fixed;
+  top: 0; bottom: 0; left: 20px; right: 20px;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--grid),var(--grid)) 0 0/1px 100% no-repeat,
+    linear-gradient(var(--grid),var(--grid)) 33.333% 0/1px 100% no-repeat,
+    linear-gradient(var(--grid),var(--grid)) 100% 0/1px 100% no-repeat;
+}
+.about-info {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 110px 24px 64px 8px;
+}
+.about-bio {
+  position: relative;
+  z-index: 1;
+  padding: 110px 8px 120px 20px;
+}
+.about .intro-text {
+  max-width: 44em;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.about .location,
+.about .inquiry h3 {
+  margin: 0 0 6px;
+  font-size: 11px;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+.about .ig-link,
+.about .contact-email {
+  font-size: 11px;
+  letter-spacing: .01em;
+}
+.about .contact-email { margin-top: 4px; }
+@media (min-width: 769px) {
+  .about .ig-link,
+  .about .contact-email { font-size: 13px; }
+  .about .contact-email { margin-top: 5px; }
+}
+.about .inquiry {
+  max-width: none;
+  margin: auto 0 0;
+  font-size: 11px;
+}
+.about .inquiry form { gap: 8px; }
+.about .inquiry input,
+.about .inquiry textarea {
+  padding: 8px 10px;
+  font-size: 11px;
+  border-color: var(--grid);
+}
+.about .inquiry button {
+  padding: 6px 14px;
+  font-size: 11px;
+  text-transform: uppercase;
+  border-color: var(--grid);
+}
+.marquee-text-track span { text-transform: uppercase; }
+
+@media (max-width: 768px) {
+  .about { grid-template-columns: minmax(0,1fr); padding: 0 14px; }
+  .about::before { display: none; }
+  .about-bio { order: -1; padding: 96px 0 0; }
+  .about .intro-text { font-size: 12px; margin: 0; padding: 0; }
+  .about-info { position: static; min-height: 0; padding: 36px 0 90px; }
+  .about .inquiry { margin: 32px 0 0; }
+  .about .inquiry input, .about .inquiry textarea { font-size: 16px; }
+}
 </style>
 </head>
 
@@ -491,6 +586,30 @@ body, html {
 
 <div class="beam"></div>
 
+<main class="about">
+
+<aside class="about-info">
+  <div class="contact">
+    <div class="location">Berlin | Germany</div>
+    <div class="social">
+      <a href="https://www.instagram.com/chaery.yoon/" target="_blank" rel="noopener" class="ig-link">@chaery.yoon</a>
+    </div>
+    <div><span class="contact-email" role="button" tabindex="0" title="Click to copy">chaeryyoon.de@gmail.com</span><span class="copied" aria-live="polite"></span></div>
+  </div>
+
+  <section class="inquiry">
+    <h3>Full cv / Any inquiries:</h3>
+
+    <!-- 메일 앱을 열어 사용자가 직접 발송 -->
+    <form id="inquiryForm">
+      <input type="email" id="senderEmail" name="email" placeholder="Your email" required>
+      <textarea id="messageBody" name="message" rows="3" placeholder="Message" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+</aside>
+
+<div class="about-bio">
 <!-- 데스크톱 텍스트 -->
 <div class="intro-text" id="desktop-text">
 <p>Chaery Yoon is a Seoul-born, Berlin-based Light Designer and Visual Artist. 
@@ -521,42 +640,10 @@ while its intensity, rhythm and texture function
 as sculptural elements in both physical and digital spaces. 
 She works with TouchDesigner, Unreal Engine, sensors and 
 lighting systems (GrandMA2/3, Capture) in her practice.</p>
-
-
+</div>
 </div>
 
-<section class="inquiry">
-  <div class="location">Berlin | Germany</div>
-  <div class="social">
-    <a href="https://www.instagram.com/chaery.yoon/" target="_blank" rel="noopener" class="ig-link">
-      @chaery.yoon
-    </a>
-  </div>
-  <div><span class="contact-email" role="button" tabindex="0" title="Click to copy">chaeryyoon.de@gmail.com</span><span class="copied" aria-live="polite"></span></div>
-
-  <h3>Full cv / Any inquiries:</h3>
-
-  <!-- 메일 앱을 열어 사용자가 직접 발송 -->
-  <form id="inquiryForm">
-    <input
-      type="email"
-      id="senderEmail"
-      name="email"
-      placeholder="Your email"
-      required
-    >
-
-    <textarea
-      id="messageBody"
-      name="message"
-      rows="3"
-      placeholder="Message"
-      required
-    ></textarea>
-
-    <button type="submit">Send</button>
-  </form>
-</section>
+</main>
 
 <footer class="footer-marquee fadeout-horizontal">
   <div class="marquee-text" aria-label="copyright marquee">

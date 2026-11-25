@@ -1,0 +1,5 @@
+# GitHub Pages builds with Jekyll, which skips dot-folders by default; publish the TDM reservation file
+include:
+  - .well-known
+exclude:
+  - README.md

@@ -9,6 +9,19 @@ document.addEventListener('contextmenu', (e) => { if (e.target.tagName === 'IMG'
 document.addEventListener('dragstart', (e) => e.preventDefault());
 document.addEventListener('selectstart', (e) => e.preventDefault());
 
+// Project pages with a mouse: a click anywhere outside a link goes back to Work (back in history if we came from there,
+// so the list keeps its scroll position). Touch screens use the WORK menu link instead, so a tap while scrolling can't leave.
+const backLink = document.querySelector('.proj') && document.querySelector('.nav a[href$="work.html"]');
+if (backLink && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  document.body.classList.add('click-back');
+  document.addEventListener('click', (e) => {
+    if (e.button !== 0 || e.target.closest('a, button')) return;
+    const from = document.referrer ? new URL(document.referrer) : null;
+    if (from && from.origin === location.origin && /\/work(\.html)?$/.test(from.pathname)) history.back();
+    else location.href = backLink.href;
+  });
+}
+
 const list = document.querySelector('.work-list');
 
 // Work index on phones: a + on each row opens that project's photos (as a swipe slider) and text in place.
@@ -32,11 +45,11 @@ if (list) {
       detail.hidden = !open;
       more.textContent = open ? '–' : '+';
       more.setAttribute('aria-expanded', String(open));
-      if (open && !detail.dataset.loaded) { detail.dataset.loaded = '1'; loadDetail(a.href, detail); }
+      if (open && !detail.dataset.loaded) { detail.dataset.loaded = '1'; loadDetail(a.href, detail, a.dataset.cover); }
     });
   }
 }
-async function loadDetail(url, detail) {
+async function loadDetail(url, detail, cover) {
   const open = document.createElement('a');
   open.className = 'w-open';
   open.href = url;
@@ -46,13 +59,19 @@ async function loadDetail(url, detail) {
     if (!res.ok) throw new Error(res.status);
     const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
     const abs = (v) => new URL(v, url).href;
-    const imgs = [...doc.querySelectorAll('.proj-images img')];
+    const imgs = [...doc.querySelectorAll('.proj-images img')].map((im) => ({ src: abs(im.getAttribute('src')), alt: im.alt }));
+    // The Work list cover (the desktop hover image) opens the slider: moved to the front if it is one of the photos, added if not
+    if (cover) {
+      const c = new URL(cover, location.href).href, i = imgs.findIndex((im) => im.src === c);
+      if (i > 0) imgs.unshift(imgs.splice(i, 1)[0]);
+      else if (i < 0) imgs.unshift({ src: c, alt: imgs[0] ? imgs[0].alt : '' });
+    }
     if (imgs.length) {
       const slides = document.createElement('div');
       slides.className = 'w-slides';
       for (const im of imgs) {
         const img = document.createElement('img');
-        img.src = abs(im.getAttribute('src'));
+        img.src = im.src;
         img.alt = im.alt;
         img.loading = 'lazy';
         slides.append(img);
