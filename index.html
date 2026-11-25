@@ -6,7 +6,7 @@
 <style>
 /* Layout: the room is the whole site, full screen. Type sits straight on the image in the four
    corners, poster style, all in one Helvetica-style grotesk (Inter): size, weight and case do the work. No boxes,
-   no rules. Work and About open as black sheets over the room. Black and white only. */
+   no rules. Black and white only. */
 :root{
   --black:#000;
   --white:#fff;
@@ -51,7 +51,6 @@ body.nogl-site .needs-gl{display:none!important}
 .keys span{display:block}
 .keys .k-touch{display:none}
 @media (pointer:coarse){.keys .k-desk{display:none}.keys .k-touch{display:block}}
-body.sheet-open .keys{visibility:hidden}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .c-tr{top:calc(22px + env(safe-area-inset-top,0px));right:20px;display:flex;gap:24px}
 .c-tr button,.c-tr a{font-size:13px;font-weight:250;color:var(--text);transition:color .15s;text-decoration:none}
@@ -130,75 +129,6 @@ kbd{font:11px var(--mono)}
 .mk.follow{box-shadow:0 0 0 6px rgba(255,255,255,.14),0 0 0 13px rgba(255,255,255,.06)}
 .mk b{position:absolute;top:14px;left:50%;transform:translateX(-50%);font:10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--white);white-space:nowrap;text-shadow:var(--lift)}
 
-/* Sheets: Work and About */
-.sheet{position:fixed;inset:0;z-index:20;overflow-y:auto;overscroll-behavior:contain;background:var(--black)}
-.sheet[hidden]{display:none}
-/* With a sheet open the two top corners stay on top of it, over a soft black fade */
-.sheet-fade{position:fixed;left:0;right:0;top:0;z-index:21;height:calc(96px + env(safe-area-inset-top,0px));background:linear-gradient(#000 45%,rgba(0,0,0,0));pointer-events:none;display:none}
-body.sheet-open .sheet-fade{display:block}
-body.sheet-open .c-tl,body.sheet-open .c-tr{z-index:22}
-.to-room{display:none}
-body.sheet-open .to-room{display:inline}
-.sheet::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
-.sheet-in{position:relative;max-width:1240px;margin:0 auto;padding:calc(110px + env(safe-area-inset-top,0px)) 20px calc(90px + env(safe-area-inset-bottom,0px))}
-.s-kicker{display:flex;justify-content:space-between;gap:20px;margin:0 0 clamp(56px,8vw,110px);font:10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
-.proj + .proj{margin-top:clamp(110px,14vw,190px)}
-.p-top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:18px 40px;margin-bottom:clamp(22px,3vw,34px)}
-.p-num{display:block;margin-bottom:10px;font:12px var(--mono);letter-spacing:.12em;color:var(--grey)}
-.p-top h3{margin:0;font-size:clamp(50px,8.5vw,118px);font-weight:700;line-height:.9;letter-spacing:-.05em}
-.facts{display:grid;grid-template-columns:auto auto;gap:4px 18px;margin:0;font:11px/1.45 var(--mono);letter-spacing:.1em;text-transform:uppercase}
-.facts dt{color:var(--grey)}
-.facts dd{margin:0}
-figure{margin:0}
-figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--grey)}
-.zoom{display:block;width:100%;cursor:zoom-in}
-.zoom img{width:100%}
-.shot img{aspect-ratio:16/9;object-fit:cover;background:#0b0b0b}
-.mono-img img{filter:grayscale(1) contrast(1.08)}
-.p-body{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(32px,6vw,90px);margin:clamp(40px,6vw,72px) 0}
-.p-text{min-width:0}
-.p-text p{margin:0 0 .9em;max-width:34em;font:20px/1.42 var(--serif);color:var(--text)}
-.p-text p:first-child::first-line{font-variant-caps:all-small-caps;letter-spacing:.04em}
-.run{margin-top:34px}
-.run h4,.rig h4{margin:0 0 12px;font:10.5px var(--mono);font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
-.run ol{list-style:none;margin:0;padding:0}
-.run li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;padding:7px 0;line-height:1.35}
-.run li span{font:12px var(--mono);color:var(--grey)}
-.run li b{font-size:15px;font-weight:700;letter-spacing:-.01em}
-.run li em{display:block;font:250 17px/1.3 var(--serif);color:var(--grey)}
-.rig{min-width:0}
-.rig-scroll{overflow-x:auto}
-.rig table{width:100%;border-collapse:collapse;font:12px/1.4 var(--mono)}
-.rig th{padding:0 12px 10px 0;text-align:left;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);white-space:nowrap}
-.rig td{padding:6px 12px 6px 0;vertical-align:top}
-.rig td.n,.rig th.n{text-align:right}
-.rig td:last-child,.rig th:last-child{padding-right:0}
-.rig td b{display:block;font:700 14px/1.25 var(--sans);letter-spacing:-.01em}
-.rig td small{display:block;margin-top:1px;font:11px var(--mono);color:var(--grey);letter-spacing:.06em}
-.rig tfoot td{padding-top:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey)}
-.gallery{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(10px,1.6vw,20px);margin-top:clamp(28px,4vw,48px)}
-.gallery .g-a{grid-column:span 3}
-.gallery .g-b{grid-column:span 2}
-.sheets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,2vw,24px);margin-top:clamp(44px,6vw,80px)}
-.p-cta{margin-top:clamp(36px,5vw,60px)}
-.go{font-size:15px;font-weight:700;letter-spacing:-.01em}
-.go i{font:12px var(--mono);font-style:normal;font-weight:400;color:var(--grey);margin-right:8px}
-.go:hover{color:var(--grey)}
-.about-lede{margin:0 0 clamp(56px,8vw,96px);max-width:22em;font:clamp(30px,3.6vw,48px)/1.12 var(--serif);letter-spacing:-.005em}
-.about-lede em{font-style:normal;font-weight:500}
-.about-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 32px}
-.about-list h4{margin:0 0 8px;font:10.5px var(--mono);font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
-.about-list p{margin:0;font-size:15px;line-height:1.45;color:var(--text)}
-
-/* Image viewer */
-.lb{position:fixed;inset:0;z-index:30;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:12px;padding:calc(18px + env(safe-area-inset-top,0px)) 20px calc(18px + env(safe-area-inset-bottom,0px));background:rgba(0,0,0,.95)}
-.lb[hidden]{display:none}
-.lb-top{display:flex;justify-content:flex-end}
-.lb-top button{font-size:14px;color:var(--text)}
-.lb-img{min-height:0;display:grid;place-items:center}
-.lb-img img{max-width:100%;max-height:100%;object-fit:contain}
-.lb p{margin:0;text-align:center;font:10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--grey)}
-
 /* Flashing-light question: text on a darkened room */
 .safety{position:fixed;inset:0;z-index:25;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.72);text-shadow:var(--lift)}
 .safety[hidden]{display:none}
@@ -211,18 +141,12 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
 
 @media (max-width:1100px){body.ctl-open .c-bl{opacity:0;pointer-events:none}}
 @media (max-width:860px){
-  .p-top{grid-template-columns:minmax(0,1fr)}
-  .p-body{grid-template-columns:minmax(0,1fr)}
-  .gallery .g-a,.gallery .g-b{grid-column:span 6}
-  .sheets{grid-template-columns:minmax(0,1fr)}
-  .about-list{grid-template-columns:repeat(2,minmax(0,1fr))}
   .camread,.edge{display:none}
 }
 @media (max-width:560px){
   .c-tl{left:14px;top:calc(14px + env(safe-area-inset-top,0px));gap:14px}
   .keys{line-height:1.35}
   .c-tr{right:14px;top:calc(18px + env(safe-area-inset-top,0px));gap:16px}
-  body.sheet-open .c-tr i{display:none}
   .c-bl{left:14px;right:14px;bottom:calc(46px + env(safe-area-inset-bottom,0px));max-width:none}
   .c-bl p{font-size:14px;line-height:1.2;white-space:nowrap}
   .c-bl .meta{margin-top:4px;font-size:10.5px;line-height:1.35}
@@ -231,7 +155,6 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
   .c-tr button,.c-tr a,.c-br button{font-size:11px}
   .c-br{right:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px))}
   .ctl{right:14px;left:14px;width:auto;bottom:calc(50px + env(safe-area-inset-bottom,0px));max-height:calc(100svh - 190px)}
-  .about-list{grid-template-columns:minmax(0,1fr)}
 }
 @media (prefers-reduced-motion:reduce){.boot,.btn,.pad,.logo,.reset svg,.shade{transition:none}}
 </style>
@@ -248,7 +171,6 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
   <p class="keys needs-gl" aria-hidden="true"><span class="k-desk">WASD move · Q/E down/up</span><span class="k-desk">Drag turn · Right drag look</span><span class="k-touch">1 finger look</span><span class="k-touch">2 fingers move</span></p>
 </header>
 <nav class="c c-tr" aria-label="Sections">
-  <button type="button" class="to-room" id="to-room" hidden><i>(×)</i>Room</button>
   <a href="work.html">WORK</a>
   <a href="about.html">ABOUT</a>
 </nav>
@@ -353,11 +275,6 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
   </div>
 </section>
 
-<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Image">
-  <div class="lb-top"><button type="button" id="lb-close">Close</button></div>
-  <div class="lb-img" id="lb-img"><img alt=""></div>
-  <p id="lb-cap"></p>
-</div>
 
 <div class="safety" id="safety" hidden role="dialog" aria-modal="true" aria-labelledby="safety-title">
   <div class="safety-card">
@@ -371,26 +288,11 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
 </div>
 
 <script>
-/* Site behaviour that does not need WebGL: the two sheets, reloading, the image viewer */
+/* Site behaviour that does not need WebGL */
 (function () {
   // Show just the domain, not /index.html (only when served over http)
   if (location.protocol.startsWith('http') && location.pathname.endsWith('/index.html')) history.replaceState(null, '', location.pathname.slice(0, -10) + location.search + location.hash);
   const $ = (s) => document.querySelector(s);
-  const body = document.body;
-  window.__heroHidden = false;
-  window.__lbOpen = false;
-  let open = null;
-  function showSheet(id) {
-    for (const s of document.querySelectorAll('.sheet')) s.hidden = s.id !== id;
-    document.querySelectorAll('[data-sheet]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.sheet === id)));
-    open = id || null;
-    window.__heroHidden = !!open;
-    body.classList.toggle('sheet-open', !!open);
-    if (open) { const s = document.getElementById(open); s.scrollTop = 0; s.focus({ preventScroll: true }); }
-  }
-  document.querySelectorAll('.sheet').forEach((s) => s.setAttribute('tabindex', '-1'));
-  document.querySelectorAll('[data-sheet]').forEach((b) => b.addEventListener('click', () => showSheet(open === b.dataset.sheet ? null : b.dataset.sheet)));
-  $('#to-room').addEventListener('click', () => showSheet(null));
   // On phones the "Light Plot for …" line stays on one line: shrink it until it fits the screen width
   const plotLine = $('.c-bl p');
   const phone = matchMedia('(max-width:560px)');
@@ -405,36 +307,6 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
   addEventListener('resize', fitPlotLine);
   // The monogram reloads the room from scratch
   $('#home').addEventListener('click', () => location.reload());
-  // Buttons in the sheets that open Control go back to the room first
-  document.querySelectorAll('[data-ctl]').forEach((b) => b.addEventListener('click', () => {
-    showSheet(null);
-    if (window.hd3) window.hd3.control(true, b.dataset.ctl);
-  }));
-  // Image viewer
-  const lb = $('#lb'), lbImg = $('#lb-img'), lbCap = $('#lb-cap');
-  let opener = null;
-  function openLB(btn) {
-    opener = btn;
-    const img = lbImg.querySelector('img');
-    img.src = btn.dataset.full;
-    img.alt = btn.querySelector('img') ? btn.querySelector('img').alt : '';
-    lbCap.textContent = btn.dataset.cap || '';
-    lb.hidden = false; window.__lbOpen = true;
-    $('#lb-close').focus();
-  }
-  function closeLB() {
-    if (lb.hidden) return;
-    lb.hidden = true; window.__lbOpen = false;
-    if (opener) opener.focus();
-  }
-  document.querySelectorAll('.zoom').forEach((b) => b.addEventListener('click', () => openLB(b)));
-  $('#lb-close').addEventListener('click', closeLB);
-  lb.addEventListener('click', (e) => { if (e.target === lb || e.target === lbImg) closeLB(); });
-  addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape') return;
-    if (!lb.hidden) { closeLB(); e.stopImmediatePropagation(); }
-    else if (open) { showSheet(null); e.stopImmediatePropagation(); }
-  }, true);
 })();
 </script>
 
@@ -452,7 +324,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
 import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { MarchingCubes } from 'three/addons/objects/MarchingCubes.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 /* ==========================================================================
@@ -494,13 +366,12 @@ const FIX = {
     // Far side beam on the truss tower: narrow, crossing behind the stage like the renders
     { ch: 104, addr: '1.136', name: 'Side', base: [40.05, 2.62, 2.9], zoom: 6, tower: true, aim: [10.4, 1.55, 9.6] },
   ],
-  // Cameo Zenit W600 LED panels used as strobes: hung above the mirror cladding on the faces that
-  // look over the dance floor (the inner faces of the front pillars carry the speaker stacks)
+  // Cameo Zenit W600 LED panels used as strobes, one beside each mirror pillar
   zenits: [
-    { ch: 201, addr: '1.190', pillar: [13.9, 11.0], side: 1, row: 'front' },
-    { ch: 202, addr: '1.205', pillar: [23.85, 11.0], side: 1, row: 'front' },
-    { ch: 203, addr: '1.220', pillar: [13.9, 21.0], side: -1, row: 'back' },
-    { ch: 204, addr: '1.235', pillar: [23.85, 21.0], side: -1, row: 'back' },
+    { ch: 201, addr: '1.190', pillar: [13.9, 11.0], row: 'front' },
+    { ch: 202, addr: '1.205', pillar: [23.85, 11.0], row: 'front' },
+    { ch: 203, addr: '1.220', pillar: [13.9, 21.0], row: 'back' },
+    { ch: 204, addr: '1.235', pillar: [23.85, 21.0], row: 'back' },
     // One more hung from the ceiling in the middle, above the dance floor between the four mirror pillars
     { ch: 205, addr: '1.250', hang: [18.9, 16.0], row: 'mid' },
   ],
@@ -721,8 +592,7 @@ function solid(mat, w, h, d, x, y, z, ry = 0, kind = 'solid', cast = true) {
 }
 
 // Walls
-// The two long walls behind the stage are bare brick, as in the building: a metre-by-half-metre tile of bricks
-// (24 x 7 cm with 1 cm joints, every course offset by half a brick), each brick a slightly different fired red
+// The two long walls behind the stage are bare brick
 M.brick = (() => {
   const c = document.createElement('canvas'); c.width = 256; c.height = 128;
   const g = c.getContext('2d');
@@ -813,110 +683,16 @@ for (const [x, w, h] of [[18.38, 0.32, 0.1], [19.0, 0.32, 0.09], [19.62, 0.32, 0
   addStatic(M.screen, sc);
 }
 
-/* ---------------- The DJ: a faceless figure in black, after the sculptures in the reference ---------------- */
-// One continuous, softly curved surface rather than parts: the body is written as a single smooth distance field
-// (tapered limbs, torso, heels and a solid fall of hair blended into each other) and turned into one mesh
-// with marching cubes, once, at load. Local space has the feet at the origin, facing +z (the room); the figure
-// stands between the two tables, one arm raised with the hand behind the head, the other hand on the mixer.
-function buildFigureGeometry(N = 112) {
-  const clamp01 = (t) => (t < 0 ? 0 : t > 1 ? 1 : t);
-  // tapered capsule from a to b, radius r1 → r2
-  const seg = (px, py, pz, a, b, r1, r2) => {
-    const bx = b[0] - a[0], by = b[1] - a[1], bz = b[2] - a[2], ax = px - a[0], ay = py - a[1], az = pz - a[2];
-    const h = clamp01((ax * bx + ay * by + az * bz) / (bx * bx + by * by + bz * bz));
-    return Math.hypot(ax - bx * h, ay - by * h, az - bz * h) - (r1 + (r2 - r1) * h);
-  };
-  // the same, in a space squashed by sx, sz across, for oval sections (torso, skirt, the hair's fall)
-  const segS = (px, py, pz, a, b, r1, r2, sx, sz) => seg(px / sx, py, pz / sz, [a[0] / sx, a[1], a[2] / sz], [b[0] / sx, b[1], b[2] / sz], r1, r2) * Math.min(sx, sz, 1);
-  const ell = (px, py, pz, rx, ry, rz) => { const k0 = Math.hypot(px / rx, py / ry, pz / rz), k1 = Math.hypot(px / (rx * rx), py / (ry * ry), pz / (rz * rz)); return k1 ? (k0 * (k0 - 1)) / k1 : -Math.min(rx, ry, rz); };
-  const smin = (a, b, k) => { const h = Math.max(k - Math.abs(a - b), 0) / k; return Math.min(a, b) - h * h * k * 0.25; };
-  // the upper body leans forward a touch about the hips; the head tips down a little about the top of the neck
-  const rotX = (y, z, cy, cz, t) => { const c = Math.cos(t), s = Math.sin(t), dy = y - cy, dz = z - cz; return [cy + dy * c - dz * s, cz + dy * s + dz * c]; };
-  const LEAN = 0.06, TILT = 0.1, HIP = [0.97, 0], NECK = [1.53, 0.005];
-  const leanPt = (x, y, z) => { const [ly, lz] = rotX(y, z, HIP[0], HIP[1], LEAN); return [x, ly, lz]; };
-  // pose, after the silhouette reference: legs long and close, the right knee crossing a little in front;
-  // the left arm raised with the hand behind the head, the right hand on the mixer
-  const legs = [
-    { hip: [-0.08, 0.97, 0], knee: [-0.048, 0.535, 0.004], calf: [-0.05, 0.4, -0.002], ankle: [-0.054, 0.12, -0.012] },
-    { hip: [0.08, 0.97, 0], knee: [0.02, 0.54, 0.058], calf: [0.012, 0.41, 0.05], ankle: [0.002, 0.13, 0.03] },
-  ];
-  const chain = (px, py, pz, pts, radii, k) => { let d = 1e9; for (let i = 0; i < pts.length - 1; i++) d = smin(d, seg(px, py, pz, pts[i], pts[i + 1], radii[i], radii[i + 1]), k); return d; };
-  const armR = [leanPt(0.158, 1.36, 0.02), [0.22, 1.15, 0.17], [0.14, 1.09, 0.45], [0.12, 1.06, 0.55]];
-  const armL = [leanPt(-0.158, 1.365, 0.0), [-0.235, 1.6, 0.05], [-0.075, 1.7, -0.035], [-0.015, 1.69, -0.055]];
-  const lock = [[0.07, 1.62, 0.03], [0.105, 1.51, 0.062], [0.088, 1.41, 0.088], [0.116, 1.31, 0.082], [0.098, 1.2, 0.07]].map((p) => leanPt(...p));
+/* ---------------- The DJ: a faceless mannequin (img/mannequin.glb), at the decks ---------------- */
+// No collider, so the mid head's level beam is never stopped at its back
+const figureMat = new THREE.MeshStandardMaterial({ color: 0x3d3e41, roughness: 0.88, metalness: 0 });
+new GLTFLoader().load('img/mannequin.glb', (gltf) => {
+  gltf.scene.traverse((o) => { if (o.isMesh) { o.material = figureMat; o.castShadow = true; o.receiveShadow = true; } });
+  gltf.scene.position.set(19.1, 0, 9.18);
+  scene.add(gltf.scene);
+}, undefined, () => { /* opened from disk without a server: the room shows without the figure */ });
 
-  function sdf(x, y, z) {
-    let d = 1e9;
-    for (const L of legs) {
-      d = smin(d, chain(x, y, z, [L.hip, L.knee, L.calf, L.ankle], [0.082, 0.046, 0.049, 0.024], 0.012), 0.012);
-      const toe = [L.ankle[0], 0.018, L.ankle[2] + 0.17], heel = [L.ankle[0], 0.004, L.ankle[2] - 0.026];
-      d = smin(d, seg(x, y, z, L.ankle, toe, 0.026, 0.009), 0.02);                                              // arched foot in a pointed shoe
-      d = smin(d, seg(x, y, z, [L.ankle[0], L.ankle[1] - 0.02, L.ankle[2] - 0.02], heel, 0.011, 0.005), 0.01); // stiletto heel
-    }
-
-    // upper body, in its leaned frame: hips as wide as the shoulders, a narrow waist, the curve of the hips at the back
-    const [ly, lz] = rotX(y, z, HIP[0], HIP[1], -LEAN), lx = x;
-    let u = segS(lx, ly, lz, [0, 0.92, 0], [0, 1.08, 0.004], 0.138, 0.086, 1.24, 0.78);
-    u = smin(u, ell(lx, ly - 0.93, lz + 0.03, 0.13, 0.095, 0.078), 0.06);
-    u = smin(u, segS(lx, ly, lz, [0, 1.08, 0.004], [0, 1.32, 0.016], 0.086, 0.116, 1.22, 0.74), 0.07);
-    u = smin(u, segS(lx, ly, lz, [-0.13, 1.37, 0.004], [0.13, 1.37, 0.004], 0.052, 0.052, 1, 0.82), 0.08);
-    u = smin(u, seg(lx, ly, lz, [0, 1.38, 0], [0, 1.53, 0.008], 0.045, 0.037), 0.05);
-    const [hy, hz] = rotX(ly, lz, NECK[0], NECK[1], -TILT);
-    u = smin(u, ell(lx, hy - 1.628, hz - 0.018, 0.074, 0.1, 0.087), 0.035);                                    // smooth, faceless head
-    // hair: a cap set back from the face, a long fall down the back, a wavy lock over the right shoulder
-    let hair = ell(lx, hy - 1.64, hz + 0.012, 0.082, 0.105, 0.092);
-    hair = smin(hair, segS(lx, ly, lz, [0, 1.6, -0.035], [0, 1.12, -0.08], 0.072, 0.04, 1.7, 0.5), 0.07);
-    d = smin(d, smin(u, hair, 0.02), 0.05);
-    d = smin(d, chain(x, y, z, lock, [0.024, 0.022, 0.02, 0.018, 0.012], 0.03), 0.04);
-
-    d = smin(d, chain(x, y, z, armR, [0.04, 0.031, 0.022, 0.011], 0.015), 0.045);
-    d = smin(d, chain(x, y, z, armL, [0.04, 0.031, 0.022, 0.012], 0.015), 0.045);
-    return d;
-  }
-
-  // Sample the field on a grid over the figure's box and extract the surface
-  const C = [0, 0.9, 0.22], H = [0.36, 0.93, 0.44];
-  const mc = new MarchingCubes(N, new THREE.MeshBasicMaterial(), false, false, 160000);
-  mc.isolation = 0;
-  const f = mc.field, half = N / 2, at = (i, a) => C[a] + ((i - half) / half) * H[a];
-  // Most of the box is empty air: sample a coarse grid first, and only evaluate exactly within a band around the surface
-  const S = 4, Nc = Math.ceil((N - 1) / S) + 1, coarse = new Float32Array(Nc * Nc * Nc);
-  for (let k = 0; k < Nc; k++) for (let j = 0; j < Nc; j++) for (let i = 0; i < Nc; i++) coarse[i + j * Nc + k * Nc * Nc] = sdf(at(Math.min(i * S, N - 1), 0), at(Math.min(j * S, N - 1), 1), at(Math.min(k * S, N - 1), 2));
-  const band = (S / 2 + 2) * Math.hypot(H[0], H[1], H[2]) * 2 / N;   // the nearest coarse sample is at most S/2 cells away, plus two cells of margin
-  for (let k = 0; k < N; k++) for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
-    const dc = coarse[Math.round(i / S) + Math.round(j / S) * Nc + Math.round(k / S) * Nc * Nc];
-    f[i + j * N + k * N * N] = Math.abs(dc) > band ? -dc : -sdf(at(i, 0), at(j, 1), at(k, 2));
-  }
-  mc.update();
-  const n = mc.count, pos = new Float32Array(n * 3), nor = new Float32Array(n * 3);
-  for (let i = 0; i < n; i++) {
-    pos[i * 3] = C[0] + mc.positionArray[i * 3] * H[0];
-    pos[i * 3 + 1] = C[1] + mc.positionArray[i * 3 + 1] * H[1];
-    pos[i * 3 + 2] = C[2] + mc.positionArray[i * 3 + 2] * H[2];
-    // the grid was stretched by H, so normals scale by its inverse
-    const nx = mc.normalArray[i * 3] / H[0], ny = mc.normalArray[i * 3 + 1] / H[1], nz = mc.normalArray[i * 3 + 2] / H[2], l = Math.hypot(nx, ny, nz) || 1;
-    nor[i * 3] = nx / l; nor[i * 3 + 1] = ny / l; nor[i * 3 + 2] = nz / l;
-  }
-  const g = new THREE.BufferGeometry();
-  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  g.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
-  return g;
-}
-const figureMat = new THREE.MeshStandardMaterial({ color: 0x0c0c0d, roughness: 0.32, metalness: 0.16 });
-// Off for now: set to true to put the DJ figure back on the stage
-const SHOW_FIGURE = false;
-if (SHOW_FIGURE) {
-  const fig = new THREE.Mesh(buildFigureGeometry(tierName === 'low' ? 84 : 112), figureMat);
-  fig.position.set(19.0, 0, 8.95);
-  fig.castShadow = true; fig.receiveShadow = true;
-  scene.add(fig);
-  // No collider: the mid head's wide beam runs almost level through this spot and must not stop at the figure's back.
-  // The figure still catches the light and casts real shadows through the spotlights' shadow maps.
-}
-
-// PA against the inner faces of the two front pillars: an 18" sub on the floor as the base, a speaker pole rising
-// from it, and a 12" + horn top on the pole. Rounded cabinets, perforated steel grilles over the drivers (holes cut
-// with an alpha map, so the drivers show through), recessed handles, rubber feet, the pole's clamp collar and knob.
+// PA against the inner faces of the two front pillars: sub, speaker pole and top
 const grilleTex = (() => {
   const c = document.createElement('canvas'); c.width = c.height = 32;
   const g = c.getContext('2d');
@@ -1013,7 +789,7 @@ for (const hz of FIX.hazers) {
   solid(M.body, w, h, d, hz.pos[0], h / 2, hz.pos[2], hz.ry);
 }
 
-// Crowd barriers behind the stage
+// Crowd barriers
 function barrierGeo(len = 2.25, h = 1.1) {
   const parts = [];
   const rail = (y) => { const g = new THREE.CylinderGeometry(0.02, 0.02, len, 8); g.rotateZ(Math.PI / 2); g.translate(0, y, 0); parts.push(g); };
@@ -1080,9 +856,7 @@ function flightGeos(x0, x1, y0, y1, zc, out) {
   collider(33.8, 1.0, 17.3, 3.8, 1.0, 0.6, 0, 'solid');
 }
 
-/* ---------------- Ceiling services, as in the building: matte metal pipes, cable trays,
-   loose cables sagging between hangers, red sprinkler pipes, rows of switched-off louvred office lights on
-   rods, and the green exit signs. Everything hangs below the girders (underside 3.6 m). ---------------- */
+/* ---------------- Ceiling services ---------------- */
 {
   const canvasTex = (w, h, draw, rx, ry, srgb) => {
     const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h);
@@ -1093,7 +867,6 @@ function flightGeos(x0, x1, y0, y1, zc, out) {
   // everything up here is kept dark, so the ceiling sits back in the room instead of catching the eye
   M.service = new THREE.MeshStandardMaterial({ color: 0x2c2e32, roughness: 0.62, metalness: 0.45 });
   M.duct = new THREE.MeshStandardMaterial({ color: 0x1b1c1e, roughness: 0.86, metalness: 0.35 });   // matte dark metal pipe
-  // the louvres of the office lights: a fine bright steel grid of 5 cm cells
   M.troffer = new THREE.MeshStandardMaterial({ color: 0x4a4d52, roughness: 0.5, metalness: 0.4,
     map: canvasTex(64, 64, (g, w, h) => { g.fillStyle = '#141517'; g.fillRect(0, 0, w, h); g.fillStyle = '#7c8086'; for (let i = 0; i <= 8; i++) { g.fillRect(i * 8 - 1, 0, 2, h); g.fillRect(0, i * 8 - 1, w, 2); } }, 1 / 0.4, 1 / 0.4, true) });
   M.sprinkler = new THREE.MeshStandardMaterial({ color: 0x3a0e0b, roughness: 0.6, metalness: 0.25 });
@@ -1459,42 +1232,6 @@ const starTex = (() => {
   g.fillStyle = r; g.fillRect(0, 0, s, s);
   return new THREE.CanvasTexture(c);
 })();
-const ghostTex = (() => {
-  const s = 128, c = document.createElement('canvas'); c.width = c.height = s;
-  const g = c.getContext('2d');
-  const r = g.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
-  r.addColorStop(0, 'rgba(255,255,255,.18)'); r.addColorStop(0.72, 'rgba(255,255,255,.26)'); r.addColorStop(0.87, 'rgba(255,255,255,.7)'); r.addColorStop(0.94, 'rgba(255,255,255,.15)'); r.addColorStop(1, 'rgba(255,255,255,0)');
-  g.fillStyle = r; g.fillRect(0, 0, s, s);
-  return new THREE.CanvasTexture(c);
-})();
-// Ghosts: faint discs along the line from the brightest lens through the centre of the frame
-const flareScene = new THREE.Scene(), flareCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-const GHOSTS = [[0.42, 0.05, 0.03], [0.78, 0.025, 0.05], [1.18, 0.09, 0.022], [1.5, 0.04, 0.04], [1.95, 0.15, 0.014], [2.3, 0.07, 0.022]];
-const ghostMeshes = [];
-for (let s = 0; s < 2; s++) for (const gd of GHOSTS) {
-  const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: ghostTex, transparent: true, blending: THREE.AdditiveBlending, depthTest: false, depthWrite: false }));
-  m.visible = false; m.userData = { s, gd };
-  flareScene.add(m); ghostMeshes.push(m);
-}
-const flareCands = [], _fp = new THREE.Vector3();
-let flareOn = false;
-function updateGhosts() {
-  flareOn = false;
-  for (const m of ghostMeshes) m.visible = false;
-  return;   // no lens ghosts: the light only blooms
-  for (const m of ghostMeshes) {
-    const c = flareCands[m.userData.s];
-    if (!c) { m.visible = false; continue; }
-    _fp.copy(c.b.glow.position).project(camera);
-    if (_fp.z > 1 || Math.abs(_fp.x) > 1.1 || Math.abs(_fp.y) > 1.1) { m.visible = false; continue; }
-    const [f, size, k] = m.userData.gd;
-    m.position.set(_fp.x * (1 - f), _fp.y * (1 - f), 0);
-    m.scale.set(size * 2 / camera.aspect, size * 2, 1);
-    m.material.color.setScalar(Math.pow(Math.min(1, c.k), 1.5) * k * 0.6);
-    m.visible = true; flareOn = true;
-  }
-}
-
 /* ---------------- Fixture models ---------------- */
 function lensMesh(geo) { return new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x000000, fog: false })); }
 function makePainteModel() {
@@ -1598,9 +1335,7 @@ collider(19.0, 0.4, 3.3, 0.22, 0.4, 0.18); collider(15.0, 0.4, 8.6, 0.22, 0.4, 0
 
 /* ---------------- Strobes: Zenit W600 panels and the Atomic 3000 ---------------- */
 const strobes = [];
-// Rigging for a Zenit, the way it is flown: the fixture in its yoke, a coupler on top clamping a short pipe as long as
-// the fixture, and two round slings from the pipe's ends straight up to anchor plates on the structure above.
-// ax is the fixture's long side (horizontal, across its aim), so the rig follows whichever way it faces.
+// Zenit rigging: yoke, coupler, a pipe as long as the fixture, two slings up to the structure above
 function rigZenit(pos, dir, top) {
   const parts = { metal: [], body: [], sling: [] };
   let ax = new THREE.Vector3().crossVectors(dir, UP);
@@ -1647,10 +1382,7 @@ for (const f of FIX.zenits) {
     // the middle one hangs over the dance floor, straight down, from the slab
     pos = V(f.hang[0], 3.45, f.hang[1]); dir = V(0, -1, 0); top = CEIL;
   } else {
-    // the pillar ones hang just inside their pillar, on the pillar row, upright in their yokes (the panel face
-    // vertical) at mirror height, above the PA top on the front row, facing the mirror on that pillar's inner face right
-    // beside them; a slight downward tilt sends each flash's bounce back out across the room as its own reflected beam
-    // through the haze. Long side horizontal; slung from the slab.
+    // the pillar ones hang upright beside their pillar facing its mirror, tilted slightly down so the bounce crosses the room
     const [px, pz] = f.pillar, s = px < 18.9 ? 1 : -1;
     pos = V(px + s * (PS / 2 + 0.35), 2.6, pz);
     dir = V(-s, -0.12, 0).normalize();
@@ -1703,7 +1435,7 @@ for (const f of FIX.ax9) {
 
 const hemi = new THREE.HemisphereLight(0x383b41, 0x3b3c40, 1.6);
 scene.add(hemi);
-// A dim studio reflection only on the glossy black kit, so speakers and fixtures keep their shape in the dark
+// A dim studio reflection on the kit, so speakers and fixtures keep their shape in the dark
 {
   const pmrem = new THREE.PMREMGenerator(renderer);
   const env = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
@@ -2890,8 +2622,8 @@ function padState() { $$('[data-pattern]').forEach((b) => b.classList.toggle('on
 /* --------------------------------------------------------------------------
    Sequence: a club scene that runs by itself and loops, written as a cue list.
    It sets each head's output level (h.lv), fires the strobes and pushes the fog
-   machines. Until a visitor allows flashing light, every flash is softened into
-   a slow pulse, never more than two a second.
+   machines. With Strobe Full off, every flash is softened into a slow pulse,
+   never more than two a second.
    -------------------------------------------------------------------------- */
 const SEQ_LEN = 117;
 const CUES = [
@@ -2913,10 +2645,9 @@ const ZG = {
   diagA: [ZN.FL, ZN.BR], diagB: [ZN.FR, ZN.BL], ring: [ZN.FL, ZN.FR, ZN.BR, ZN.BL], center: [ZN.C],
   corners: [ZN.FL, ZN.FR, ZN.BL, ZN.BR], all: [ZN.FL, ZN.FR, ZN.BL, ZN.BR, ZN.C],
 };
-// Where the two stage heads point for the opening cue: the artist, standing between the two DJ tables;
-// the beams cross there and run on up to the ceiling instead of stopping on a table
-const ARTIST = [19.0, 1.6, 8.95];
-const seq = { on: false, t: 0, prevT: 0, cue: -1, next: 0, ph: 0, phN: -1, n: 0, q: [], hits: [], swell: 0, atmosHand: false, flk: 1, flkN: -1, intro: 0, introNext: 0 };
+// Where the two stage heads point for the opening cue: the mannequin at the decks
+const ARTIST = [19.1, 1.55, 9.2];
+const seq = { on: false, t: 0, prevT: 0, cue: -1, next: 0, ph: 0, phN: -1, n: 0, q: [], hits: [], swell: 0, atmosHand: false, flk: 1, flkN: -1, intro: 0 };
 for (const s of strobes) { s.soft = 0; s.softT = 0; s.softAt = -9; s.hold = 0; s.holdNow = 0; }
 const seqFull = () => flashOK === true;
 // Candle flicker for the slow dim-ins: an irregular wobble a few times a second with the odd dip,
@@ -2967,7 +2698,7 @@ function aimHead(h, x, y, z) { h.follow = false; const [p, t] = solveAim(h, _v4.
 // The far beam's sweep: from the stage-left wall, over the dance floor, to the back of the room and back
 const SWEEP_A = [9.0, 2.2, 7.0], SWEEP_B = [14.0, 2.5, 29.0], SWEEP_T = 11;
 function sweepAt(k, wob) { aimHead(SIDE, SWEEP_A[0] + (SWEEP_B[0] - SWEEP_A[0]) * k, SWEEP_A[1] + (SWEEP_B[1] - SWEEP_A[1]) * k + wob, SWEEP_A[2] + (SWEEP_B[2] - SWEEP_A[2]) * k); }
-// A single hard burst from both fog machines as the strobes come in: full output at once, a thick plume out of each nozzle
+// A hard burst from the fog machines: full output at once, a thick plume out of each nozzle
 const FOG_BLAST_CUES = [2, 4, 9, 11, 16];
 function fogBlast(jets = JETS, plume = 28, hold = 2.5) {
   fogBoost = Math.max(fogBoost, 5);
@@ -3270,7 +3001,7 @@ function seqLine() {
 // On or off, the rig starts from its defaults; off leaves it there
 function setSeq(on) {
   seq.on = !!on;
-  Object.assign(seq, { t: 0, prevT: 0, cue: -1, next: 0, ph: 0, phN: -1, n: 0, swell: 0, intro: 0, introNext: 0 });
+  Object.assign(seq, { t: 0, prevT: 0, cue: -1, next: 0, ph: 0, phN: -1, n: 0, swell: 0, intro: 0 });
   seq.q.length = 0; seq.hits.length = 0;
   headDefaults();
   if (!seq.on) {
@@ -3524,7 +3255,7 @@ $('#tap').addEventListener('click', () => {
 });
 
 const conEl = $('#ctl');
-// Control is closed until the monogram is pressed; selecting a head in the room opens it on Heads
+// Control is closed until CONTROL is pressed; selecting a head in the room opens it on Heads
 function showTab(name) {
   $$('[data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
   $$('[data-pane]').forEach((p) => { p.hidden = p.dataset.pane !== name; });
@@ -3674,9 +3405,9 @@ canvas.addEventListener('wheel', (e) => {
   nav.glide = null;
   navDolly(m);
 }, { passive: false });
-// Keys work while the room is showing (not while typing, or with a sheet or the image viewer open)
+// Keys work while the room is showing (not while typing)
 addEventListener('keydown', (e) => {
-  if (window.__heroHidden || window.__lbOpen || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.target instanceof HTMLInputElement || !safetyEl.hidden) { if (e.key === 'Escape' && !safetyEl.hidden) answerSafety(false); return; }
   if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyQ', 'KeyE', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
     if (viewName !== 'plan' && (!nav.active || tween)) navFromLook();
@@ -3780,17 +3511,13 @@ function step(dt) {
 }
 function loop(now) {
   requestAnimationFrame(loop);
-  // Nothing to draw while a sheet covers the room
-  if (siteMode && window.__heroHidden && booted) { last = now; return; }
   const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));
   last = now;
   step(dt);
   simFog(dt);
   updatePuffs(dt);
   for (const b of beams) syncBeam(b);
-  flareCands.length = 0;
   for (const b of beams) syncGlow(b, camera.position);
-  updateGhosts();
   renderFrame(dt, clock, frame++);
   if (clock > uiNext) { uiNext = clock + 0.1; syncConsole(false); camRead(); }
   updateMarks();
@@ -3824,7 +3551,6 @@ window.hd3 = {
   control: (open, tab) => setConsole(open, tab),
   fire: (on) => { fireHeld = !!on; },
   machines: () => JETS.filter((j) => j.mach).map((j) => ({ on: j.mach.on, level: +j.mach.level.toFixed(2) })),
-  get flare() { return { on: flareOn, cands: flareCands.map((c) => +c.k.toFixed(2)) }; },
   follow: (on) => toggleFollow(on),
   aimNDC: (x, y) => { pointer.ndc.set(x, y); pointer.inside = true; },
   flashes: (ok) => { flashOK = ok; safetyLabel(); },

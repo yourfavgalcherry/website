@@ -9,8 +9,7 @@ document.addEventListener('contextmenu', (e) => { if (e.target.tagName === 'IMG'
 document.addEventListener('dragstart', (e) => e.preventDefault());
 document.addEventListener('selectstart', (e) => e.preventDefault());
 
-// Project pages with a mouse: a click anywhere outside a link goes back to Work (back in history if we came from there,
-// so the list keeps its scroll position). Touch screens use the WORK menu link instead, so a tap while scrolling can't leave.
+// Project pages with a mouse: a click outside a link goes back to Work
 const backLink = document.querySelector('.proj') && document.querySelector('.nav a[href$="work.html"]');
 if (backLink && matchMedia('(hover: hover) and (pointer: fine)').matches) {
   document.body.classList.add('click-back');
@@ -24,8 +23,7 @@ if (backLink && matchMedia('(hover: hover) and (pointer: fine)').matches) {
 
 const list = document.querySelector('.work-list');
 
-// Work index on phones: a + on each row opens that project's photos (as a swipe slider) and text in place.
-// They are read from the project's own page, so each project is only ever written once.
+// Work index on phones: a + on each row opens the project's photos and text, read from its own page
 if (list) {
   for (const li of list.querySelectorAll('li')) {
     const a = li.querySelector('a');

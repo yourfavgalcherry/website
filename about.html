@@ -27,9 +27,6 @@
     box-sizing: border-box;
 }
 
-/* ======================== */
-/*        기본 스타일       */
-/* ======================== */
 body {
     background-color: black;
     font-family: var(--sans);
@@ -57,11 +54,6 @@ select {
 
 body, html {
     cursor: none !important;
-}
-
-.container,
-.bg-click {
-    pointer-events: none;
 }
 
 ::-webkit-scrollbar { width: 0; height: 0; }
@@ -100,14 +92,7 @@ body, html {
     cursor: none;
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
-.navbar a i {
-    font: 11px var(--mono);
-    font-style: normal;
-    color: var(--dim);
-    margin-right: 6px;
-}
 
-.navbar a.beam-hover,
 .navbar a:hover,
 .navbar a[aria-current="page"] {
     color: white !important;
@@ -122,9 +107,6 @@ body, html {
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Ccircle cx='5' cy='5' r='3' fill='white'/%3E%3C/svg%3E") 5 5, auto;
 }
 
-/* ======================== */
-/*   모바일 네비게이션 축소 */
-/* ======================== */
 @media (max-width: 768px) {
     .home-logo {
         top: 14px;
@@ -142,16 +124,12 @@ body, html {
         letter-spacing: -0.01em;
     }
 
-    /* 터치 영역도 같이 줄여줌 (before 영역) */
     .navbar {
         gap: 16px;
     }
 }
 
 
-/* ======================== */
-/*        빔 라이트         */
-/* ======================== */
 .beam {
     position: fixed;
     top: 0;
@@ -208,9 +186,6 @@ body, html {
     .beam { animation: flickerMobile 0.25s infinite; }
 }
 
-/* ======================== */
-/*        텍스트 영역       */
-/* ======================== */
 .intro-text {
     max-width: 800px;
     margin: 230px auto 10px auto;
@@ -239,9 +214,6 @@ body, html {
     filter: blur(0.3px);
 }
 
-/* ======================== */
-/*     Any inquiries 폼     */
-/* ======================== */
 .inquiry {
     max-width: 800px;
     font-family: var(--sans);
@@ -337,9 +309,6 @@ body, html {
   opacity: 1;
 }
 
-/* ======================== */
-/*        슬라이드 푸터     */
-/* ======================== */
 .footer-marquee {
   position: fixed;
   left: 0;
@@ -401,9 +370,6 @@ body, html {
   );
 }
 
-/* ======================== */
-/*        모바일 처리       */
-/* ======================== */
 @media (max-width: 768px) {
     body {
         overflow-y: auto;
@@ -423,7 +389,6 @@ body, html {
         letter-spacing: -0.01em;
     }
 
-    /* 터치 영역도 같이 줄여줌 (before 영역) */
     .navbar {
         gap: 16px;
     }
@@ -481,10 +446,7 @@ body, html {
     .contact-email { font-size: 0.70rem; }
 }
 
-/* ======================== */
-/*  Layout shared with Work and the project pages: full-height column lines,
-    contact on the left (1/3), the bio on the right (2/3), small thin type, uppercase labels */
-/* ======================== */
+/* Layout shared with Work and the project pages */
 .about {
   --grid: rgba(255,255,255,.32);
   display: grid;

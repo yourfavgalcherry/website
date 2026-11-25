@@ -28,8 +28,7 @@ img{display:block;max-width:100%;height:auto;-webkit-user-drag:none}
 .nav a::before{content:'';position:absolute;inset:-12px -10px}
 .nav a:hover,.nav a[aria-current="page"]{color:var(--white);text-shadow:0 0 10px #fff,0 0 20px #fff,0 0 40px #fff}
 
-/* Work index: a line grid, one row per project (newest first). The column lines run the full height of the
-   page; text is uppercase and sits tight in the top-left corner of each cell. */
+/* Work index */
 .work{--grid:rgba(255,255,255,.32);--cols:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);min-height:100vh;padding:clamp(110px,14vw,170px) 20px 80px;text-transform:uppercase}
 .work::before{content:'';position:fixed;top:0;bottom:0;left:20px;right:20px;z-index:0;pointer-events:none;background:
   linear-gradient(var(--grid),var(--grid)) 0 0/1px 100% no-repeat,
@@ -60,8 +59,7 @@ img{display:block;max-width:100%;height:auto;-webkit-user-drag:none}
   .marquee-text-track .separator{font-size:.65rem}
 }
 
-/* Project page: an info column on the left that stays put, the photos large on the right, every line of type
-   the same small size. Full-height column lines frame it, like the Work page. */
+/* Project page */
 .proj{--grid:rgba(255,255,255,.32);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);min-height:100vh;padding:0 20px}
 .proj::before{content:'';position:fixed;top:0;bottom:0;left:20px;right:20px;z-index:0;pointer-events:none;background:
   linear-gradient(var(--grid),var(--grid)) 0 0/1px 100% no-repeat,
@@ -89,8 +87,7 @@ body.click-back{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2
   .nav a{font-size:11px}
   .work,.proj{padding-left:14px;padding-right:14px}
   .work-head{display:none}
-  /* One line per project: title, category, year, then a + that opens the text and a photo slider in place.
-     The column lines are left out on phones; they would not match this narrower layout. */
+  /* Work index on phones */
   .work::before{display:none}
   .work-list li{display:flex;flex-wrap:wrap;align-items:flex-start}
   .work-list a{flex:1;min-width:0;grid-template-columns:minmax(0,1fr) auto 30px;gap:10px}
