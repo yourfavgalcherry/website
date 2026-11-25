@@ -43,9 +43,9 @@ body.nogl-site .needs-gl{display:none!important}
 /* Corners */
 .c{position:fixed;z-index:10;text-shadow:var(--lift)}
 .c-tl{top:calc(18px + env(safe-area-inset-top,0px));left:20px;display:flex;align-items:center;gap:13px}
-.logo{position:relative;display:block;width:36px;height:36px;filter:drop-shadow(0 0 8px rgba(0,0,0,.8));transition:transform .5s ease}
+.logo{position:relative;display:block;width:36px;height:36px;filter:drop-shadow(0 0 8px rgba(0,0,0,.8));transition:filter .15s ease}
 .logo img{width:36px;height:36px}
-.logo:hover{transform:rotate(-24deg)}
+.logo:hover{filter:drop-shadow(0 0 5px rgba(255,255,255,.9)) drop-shadow(0 0 14px rgba(255,255,255,.7)) drop-shadow(0 0 30px rgba(255,255,255,.45))}
 .logo::before{content:'';position:absolute;inset:-14px}
 .keys{margin:0;font:250 10px/1.55 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--grey)}
 .keys span{display:block}
@@ -60,7 +60,7 @@ body.sheet-open .keys{visibility:hidden}
 .c-bl{left:20px;bottom:calc(18px + env(safe-area-inset-bottom,0px));max-width:min(640px,calc(100% - 150px));transition:opacity .3s ease}
 .c-bl p{margin:0;font:250 19px/1.3 var(--sans);letter-spacing:-.01em;opacity:.7}
 .c-bl p b{font-style:normal;font-weight:500}
-.c-bl .meta{margin-top:9px;font:250 11px/1.5 var(--sans);font-style:normal;letter-spacing:-.01em;color:var(--grey)}
+.c-bl .meta{margin-top:9px;font:250 12px/1.5 var(--sans);font-style:normal;letter-spacing:-.01em;color:var(--grey)}
 .seqline{display:flex;flex-wrap:wrap;gap:2px 14px;margin-top:3px;font:250 10px/1.45 var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--grey)}
 .seqline[hidden]{display:none}
 .seqline b{font-weight:400;color:var(--white)}
@@ -220,12 +220,13 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
 }
 @media (max-width:560px){
   .c-tl{left:14px;top:calc(14px + env(safe-area-inset-top,0px));gap:14px}
-  .keys{line-height:1.9}
+  .keys{line-height:1.35}
   .c-tr{right:14px;top:calc(18px + env(safe-area-inset-top,0px));gap:16px}
   body.sheet-open .c-tr i{display:none}
-  .c-bl{left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));max-width:calc(100% - 120px)}
-  .c-bl p{font-size:14px}
-  .c-bl .meta{font-size:10.5px}
+  .c-bl{left:14px;right:14px;bottom:calc(46px + env(safe-area-inset-bottom,0px));max-width:none}
+  .c-bl p{font-size:14px;line-height:1.2;white-space:nowrap}
+  .c-bl .meta{margin-top:4px;font-size:10.5px;line-height:1.35}
+  .seqline{margin-top:2px;line-height:1.35}
   .keys,.seqline{font-size:9px}
   .c-tr button,.c-tr a,.c-br button{font-size:11px}
   .c-br{right:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px))}
@@ -387,6 +388,18 @@ figcaption{margin-top:9px;font:10.5px/1.45 var(--mono);letter-spacing:.1em;text-
   document.querySelectorAll('.sheet').forEach((s) => s.setAttribute('tabindex', '-1'));
   document.querySelectorAll('[data-sheet]').forEach((b) => b.addEventListener('click', () => showSheet(open === b.dataset.sheet ? null : b.dataset.sheet)));
   $('#to-room').addEventListener('click', () => showSheet(null));
+  // On phones the "Light Plot for …" line stays on one line: shrink it until it fits the screen width
+  const plotLine = $('.c-bl p');
+  const phone = matchMedia('(max-width:560px)');
+  function fitPlotLine() {
+    plotLine.style.fontSize = '';
+    if (!phone.matches) return;
+    let size = parseFloat(getComputedStyle(plotLine).fontSize);
+    while (plotLine.scrollWidth > plotLine.clientWidth && size > 8) { size -= 0.25; plotLine.style.fontSize = size + 'px'; }
+  }
+  fitPlotLine();
+  if (document.fonts) document.fonts.ready.then(fitPlotLine);
+  addEventListener('resize', fitPlotLine);
   // The monogram reloads the room from scratch
   $('#home').addEventListener('click', () => location.reload());
   // Buttons in the sheets that open Control go back to the room first
@@ -512,7 +525,8 @@ const FIX = {
 
 // Camera presets, roughly matching the Cank renders
 const VIEWS = {
-  floor:  { pos: [17.48, 1.61, 30.71], look: [19.15, 2.05, 9.0], fov: 60 },
+  // centred between the pillar pairs: on a landscape screen the back pair fills the frame, on a portrait phone the stage pair
+  floor:  { pos: [18.88, 1.61, 25.8], portraitPos: [18.88, 1.61, 23.4], look: [18.95, 2.05, 9.0], fov: 60 },
   stage:  { pos: [21.2, 1.25, 15.2], look: [19.0, 1.85, 8.6], fov: 44 },
   mirror: { pos: [22.3, 1.6, 24.1], look: [22.9, 1.85, 14.0], fov: 52 },
   side:   { pos: [31.4, 1.4, 24.4], look: [20.2, 2.1, 11.8], fov: 50 },
@@ -2266,7 +2280,8 @@ function setView(name, instant = false) {
   const v = VIEWS[name]; if (!v) return;
   viewName = name;
   nav.active = false; nav.glide = null;
-  tween = { a: { pos: cam.pos.clone(), look: cam.look.clone(), fov: cam.fov }, b: { pos: V(...v.pos), look: V(...v.look), fov: v.fov }, t: instant || reduceMotion ? 1 : 0, dur: 1.9 };
+  const pos = v.portraitPos && innerWidth < innerHeight ? v.portraitPos : v.pos;
+  tween = { a: { pos: cam.pos.clone(), look: cam.look.clone(), fov: cam.fov }, b: { pos: V(...pos), look: V(...v.look), fov: v.fov }, t: instant || reduceMotion ? 1 : 0, dur: 1.9 };
   if (tween.t >= 1) { cam.pos.copy(tween.b.pos); cam.look.copy(tween.b.look); cam.fov = tween.b.fov; tween = null; }
   $$('[data-view]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === name)));
 }
@@ -2552,7 +2567,7 @@ const ZG = {
 // Where the two stage heads point for the opening cue: the artist, standing between the two DJ tables;
 // the beams cross there and run on up to the ceiling instead of stopping on a table
 const ARTIST = [19.0, 1.6, 8.95];
-const seq = { on: false, t: 0, prevT: 0, cue: -1, next: 0, ph: 0, phN: -1, n: 0, q: [], hits: [], swell: 0, atmosHand: false, flk: 1, flkN: -1 };
+const seq = { on: false, t: 0, prevT: 0, cue: -1, next: 0, ph: 0, phN: -1, n: 0, q: [], hits: [], swell: 0, atmosHand: false, flk: 1, flkN: -1, intro: 0, introNext: 0 };
 for (const s of strobes) { s.soft = 0; s.softT = 0; s.softAt = -9; s.hold = 0; s.holdNow = 0; }
 const seqFull = () => flashOK === true;
 // Candle flicker for the slow dim-ins: an irregular wobble a few times a second with the odd dip,
@@ -2629,7 +2644,7 @@ function seqCue(i) {
   // and back home once that cue is over; the far beam goes to its start before the sweep and home after it
   MID.tPan = MID.def.pan; MID.tTilt = MID.def.tilt;
   // Mid already faces the audience: for its gobo cue it only changes to the dot gobo, which stays still
-  const dots = i === 13;
+  const dots = i === 13 || i <= 1;   // cues 01-02 keep the opening's dot gobo while it dims out
   MID.spinSpeed = 0;
   if ((MID.gobo === 1) !== dots) { MID.gobo = dots ? 1 : 0; MID.goboAngle = 0; drawGobo(MID); }
   MID.zoom = MID.def.zoom;
@@ -2645,6 +2660,28 @@ function seqCue(i) {
   $('#seq-cue').textContent = num; $('#seq-name').textContent = name;
   $('#seq-cue-v').textContent = num + ' ' + name;
 }
+// Opening, before cue 01: only the mid head, on its dot gobo. It fades in smoothly under a fast, shallow flicker
+// (about the pace of cue 04, but never down to black); with flashing soft the flicker only drifts slowly.
+const INTRO = 9;
+const introFlicker = (dt) => (seqFull() ? wander('intro', dt, 0.62, 1, 0.025, 0.07, 0.018) : wander('intro', dt, 0.85, 1, 0.4, 1.0, 0.3));
+function seqIntro(dt) {
+  if (seq.intro === 0) {
+    for (const h of [LEFT, RIGHT, SIDE]) { h.tPan = h.def.pan; h.tTilt = h.def.tilt; h.zoom = h.def.zoom; }
+    MID.tPan = MID.def.pan; MID.tTilt = MID.def.tilt; MID.zoom = MID.def.zoom; MID.spinSpeed = 0;
+    if (MID.gobo !== 1) { MID.gobo = 1; MID.goboAngle = 0; drawGobo(MID); }
+    $('#seq-cue').textContent = '00'; $('#seq-name').textContent = 'Gobo Flicker';
+    $('#seq-cue-v').textContent = '00 Gobo Flicker';
+  }
+  seq.intro += dt;
+  const u = Math.min(1, seq.intro / INTRO);
+  const rise = 0.06 + 0.94 * ease(u);
+  const flick = introFlicker(dt);
+  upLv = 0;
+  seqAir(0);
+  MID.lv = Math.max(rise * flick, MID.fl, MID.fs);
+  LEFT.lv = RIGHT.lv = SIDE.lv = 0;
+  if (Math.abs(MID.vPan) + Math.abs(MID.vTilt) > 0.03) MID.lv = 0;
+}
 function seqStep(dt) {
   for (const h of heads) {
     h.fl *= Math.exp(-dt / 0.028);
@@ -2654,9 +2691,11 @@ function seqStep(dt) {
   fogBoost += (1 - fogBoost) * (1 - Math.exp(-dt / 7));
   for (const s of strobes) s.hold = 0;
   if (!seq.on) { upLv = 1; return; }
+  if (seq.intro < INTRO) { seqIntro(dt); return; }
   seq.prevT = seq.t;
   seq.t += dt;
-  if (seq.t >= SEQ_LEN) { seq.t -= SEQ_LEN; seq.prevT = -1; seq.cue = -1; }
+  // End of the loop: back to the opening, then the cue list from the top
+  if (seq.t >= SEQ_LEN) { seq.t = 0; seq.prevT = -1; seq.cue = -1; seq.intro = 0; return; }
   const T = seq.t, full = seqFull(), beat = 60 / bpm;
   let ci = 0;
   for (let i = 0; i < CUES.length; i++) if (T >= CUES[i][0]) ci = i;
@@ -2810,6 +2849,8 @@ function seqStep(dt) {
     atomic.hold = 0.16 * k * rough('fa', dt, 0.4);
     ZG.all.forEach((s, i) => { s.hold = 0.55 * k * rough('fz' + i, dt, 0.45); });
   }
+  // The opening's gobo flicker dims out over the first seconds of the cue list, overlapping the artist fade-in at 3s
+  if (T < 6.5) mid = Math.max(mid, (1 - smooth(0.5, 6.5, T)) * introFlicker(dt));
   seqAir(T);
   MID.lv = Math.max(mid, MID.fl, MID.fs);
   LEFT.lv = Math.max(lrL >= 0 ? lrL : lr, LEFT.fl, LEFT.fs);
@@ -2869,7 +2910,7 @@ function seqLine() {
 // On or off, the rig starts from its defaults; off leaves it there
 function setSeq(on) {
   seq.on = !!on;
-  Object.assign(seq, { t: 0, prevT: 0, cue: -1, next: 0, ph: 0, phN: -1, n: 0, swell: 0 });
+  Object.assign(seq, { t: 0, prevT: 0, cue: -1, next: 0, ph: 0, phN: -1, n: 0, swell: 0, intro: 0, introNext: 0 });
   seq.q.length = 0; seq.hits.length = 0;
   headDefaults();
   if (!seq.on) {
@@ -3414,7 +3455,7 @@ window.hd3 = {
   setBlower: (v) => { motionLevel = clamp(v, 0, 1); el.blower.value = Math.round(motionLevel * 100); el.blowerV.textContent = el.blower.value; },
   get puffs() { return puffs.length; },
   get seq() { return { on: seq.on, t: +seq.t.toFixed(2), cue: seq.cue + 1, room: +roomLight.toFixed(2), lv: heads.map((h) => +h.lv.toFixed(2)), strobes: strobes.map((s) => +s.level.toFixed(2)), sideZoom: +SIDE.zoom.toFixed(1), air: [+hazeLevel.toFixed(2), +fogLevel.toFixed(2)], hand: seq.atmosHand }; },
-  setSeq, seqJump: (t) => { seq.t = t; seq.prevT = t; seq.cue = -1; seq.next = t; },
+  setSeq, seqJump: (t) => { seq.intro = INTRO; seq.t = t; seq.prevT = t; seq.cue = -1; seq.next = t; },
   puffList: (n = 8) => puffs.slice(-n).map((P) => [+P.x.toFixed(2), +P.y.toFixed(2), +P.z.toFixed(2), +P.age.toFixed(2), +pfA[puffs.indexOf(P)].toFixed(3)]),
   project: (x, y, z) => { const v = new THREE.Vector3(x, y, z).project(camera); return [Math.round((v.x + 1) / 2 * innerWidth), Math.round((1 - v.y) / 2 * innerHeight), +v.z.toFixed(4)]; },
   get nav() { return { active: nav.active, yaw: +nav.yaw.toFixed(3), pitch: +nav.pitch.toFixed(3), pos: cam.pos.toArray().map((v) => +v.toFixed(2)) }; },

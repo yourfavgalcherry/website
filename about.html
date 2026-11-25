@@ -75,10 +75,10 @@ body, html {
     width: 36px;
     height: 36px;
     filter: drop-shadow(0 0 8px rgba(0,0,0,.8));
-    transition: transform .5s ease;
+    transition: filter .15s ease;
 }
 .home-logo img { display: block; width: 36px; height: 36px; }
-.home-logo:hover { transform: rotate(-24deg); }
+.home-logo:hover { filter: drop-shadow(0 0 5px rgba(255,255,255,.9)) drop-shadow(0 0 14px rgba(255,255,255,.7)) drop-shadow(0 0 30px rgba(255,255,255,.45)); }
 .home-logo::before { content: ''; position: absolute; inset: -14px; }
 
 .navbar {
@@ -571,7 +571,7 @@ body, html {
   .about .intro-text { font-size: 12px; margin: 0; padding: 0; }
   .about-info { position: static; min-height: 0; padding: 36px 0 90px; }
   .about .inquiry { margin: 32px 0 0; }
-  .about .inquiry input, .about .inquiry textarea { font-size: 16px; }
+  .about .inquiry input, .about .inquiry textarea { font-size: 12px; }
 }
 </style>
 </head>
